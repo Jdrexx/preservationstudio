@@ -1,0 +1,155 @@
+{% extends "studio/base.html" %}
+{% block title %}Custom Framing Intensive — preservation.studio{% endblock %}
+{% block meta_description %}A 6-week hands-on program in custom framing. Los Angeles. Cohort of 6. Application-based. $2,500, all materials included.{% endblock %}
+{% block content %}
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-eyebrow">
+      <span class="rule-tick"></span>
+      <span class="mono-label">Los Angeles · Application-based</span>
+    </div>
+    <h1>Custom Framing Intensive</h1>
+    <p class="lede">A 6-week hands-on program in custom framing. Los Angeles. Cohort of 6. Application-based.</p>
+    <div class="hero-meta">
+      <span><b>6 weeks</b> · 2–2.5 hr sessions</span>
+      <span><b>Cohort of 6</b> · all materials included</span>
+      <span><b>$2,500</b> · payment plans available</span>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="intro-copy">
+      <span class="section-num">№ 01 — The Program</span>
+      <p class="lede">Custom framing is a trade. This is a structured way to learn it.</p>
+      <p>Over six weeks you'll work with real tools and archival materials — mat cutting, mounting, glazing, float frames, shadow boxes, conservation basics, and the business side of the trade.</p>
+      <p>Every session is hands on. You leave with a finished, framed piece you built yourself.</p>
+      <p>Materials are included. The cohort is capped at 6 people.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt section-rule">
+  <div class="container">
+    <span class="section-num">№ 02 — Sessions</span>
+    <h2>The six weeks</h2>
+    <ol class="session-list">
+      <li><span class="wk">Week 1</span> Measuring, Tools, &amp; First Cuts</li>
+      <li><span class="wk">Week 2</span> Mat Cutting</li>
+      <li><span class="wk">Week 3</span> Mounting &amp; Hinging</li>
+      <li><span class="wk">Week 4</span> Glazing &amp; Full Assembly</li>
+      <li><span class="wk">Week 5</span> Float Frames &amp; Shadow Boxes</li>
+      <li><span class="wk">Week 6</span> Conservation, Pricing &amp; Showcase</li>
+    </ol>
+
+    <h3>What you walk away with</h3>
+    <ul class="takeaway-list">
+      <li>A finished, framed piece you built</li>
+      <li>Full trade knowledge across all major techniques</li>
+      <li>Archival and conservation standards</li>
+      <li>How to price and quote framing work</li>
+      <li>A reference letter from the instructor</li>
+      <li>Alumni community and show access</li>
+    </ul>
+  </div>
+</section>
+
+<section class="section section-rule">
+  <div class="container">
+    <span class="section-num">№ 03 — Pricing</span>
+    <h2>Pricing &amp; payment</h2>
+    <div class="intro-copy">
+      <p><strong>Founding Cohort Tuition: $2,500.</strong> All materials included.</p>
+      <p>Payment plans are available. A $500 deposit holds your spot. Remaining balance due before Week 1. A $50 admin fee applies to payment plans.</p>
+      <p>Tuition is non-refundable once your spot is confirmed.</p>
+    </div>
+
+    <div class="sponsor-band">
+      <div>
+        <h3>Sponsored Seat</h3>
+        <p>One sponsored seat is available per cohort, reserved for a QTPOC artist demonstrating financial need and a serious commitment to the work. Full tuition covered. Applications considered alongside paid enrollment.</p>
+        <p class="muted" style="margin-top:0.6rem;">Interested in sponsoring a seat? <a href="{% url 'studio:contact' %}">Email us</a>.</p>
+      </div>
+      <a class="btn btn-yellow" href="#apply">Apply Now →</a>
+    </div>
+  </div>
+</section>
+
+<section class="section section-rule" id="apply">
+  <div class="container">
+    <span class="section-num">№ 04 — Application</span>
+    <h2>Apply</h2>
+    <p class="muted">Applications are open. The cohort is limited to 6 people. You will hear back within one week with next steps. If you are shortlisted you will receive an invitation to schedule your 10-minute interview.</p>
+
+    {% if form.errors or form.non_field_errors %}
+      <div class="form-errors">
+        <strong>Almost there.</strong> A few fields need attention below.
+      </div>
+    {% endif %}
+
+    <form method="post" action="{% url 'studio:intensive' %}" class="form-card" novalidate>
+      {% csrf_token %}
+      {{ form.honeypot }}
+
+      <div class="form-section">
+        <h3>Application</h3>
+        {% include "studio/partials/field.html" with field=form.first_name %}
+        {% include "studio/partials/field.html" with field=form.last_name %}
+        {% include "studio/partials/field.html" with field=form.email %}
+        {% include "studio/partials/field.html" with field=form.phone %}
+        {% include "studio/partials/field.html" with field=form.instagram_or_website %}
+        {% include "studio/partials/field.html" with field=form.about_yourself %}
+        {% include "studio/partials/field.html" with field=form.prior_experience %}
+        {% include "studio/partials/field.html" with field=form.why_framing %}
+        {% include "studio/partials/field.html" with field=form.goals %}
+        {% include "studio/partials/field.html" with field=form.accommodations %}
+        {% include "studio/partials/field.html" with field=form.questions %}
+      </div>
+
+      <div class="form-section">
+        <h3>Payment</h3>
+        <p class="muted" style="margin-bottom:1rem;">Founding cohort tuition is $2,500. A non-refundable deposit of $500 is required upon acceptance to hold your spot. The remaining balance is due before Week 1. Payment plans are available; a $50 administrative fee applies.</p>
+        <p class="muted" style="margin-bottom:1rem;"><strong style="color:var(--ink);">Option A</strong> — total $2,550: $550 deposit upon acceptance · $1,000 before Week 1 · $1,050 before Week 4 (includes $50 admin fee)</p>
+        <p class="muted" style="margin-bottom:1.2rem;"><strong style="color:var(--ink);">Option B</strong> — total $2,550: $500 deposit upon acceptance · $700 before Week 1 · $700 before Week 3 · $650 before Week 6 (includes $50 admin fee)</p>
+        {% include "studio/partials/field.html" with field=form.payment_plan_needed %}
+        {% include "studio/partials/field.html" with field=form.payment_plan_choice %}
+      </div>
+
+      <div class="form-section">
+        <h3>Sponsored Seat</h3>
+        <p class="muted" style="margin-bottom:1rem;">One sponsored seat is available this cohort, reserved for a QTPOC artist demonstrating financial need and a serious commitment to the work. The sponsored seat covers full tuition. Selection is based on demonstrated need and commitment — all applicants are considered.</p>
+        {% include "studio/partials/field.html" with field=form.sponsored_seat_consideration %}
+        {% include "studio/partials/field.html" with field=form.sponsored_seat_statement %}
+        {% include "studio/partials/field.html" with field=form.attendance_commitment %}
+      </div>
+
+      <div class="form-section">
+        <h3>Interview</h3>
+        <p class="muted" style="margin-bottom:1rem;">Shortlisted applicants will be invited to an informal 10-minute interview before final acceptance. This is a chance to ask questions and for us to connect briefly before the cohort begins.</p>
+        {% include "studio/partials/field.html" with field=form.interview_availability %}
+        {% include "studio/partials/field.html" with field=form.interview_format %}
+      </div>
+
+      <div class="form-section">
+        <h3>Application Fee</h3>
+        <p class="muted" style="margin-bottom:1rem;">A $25 non-refundable application fee is required to be considered. This goes toward admin and review time. Fee waivers are available — no questions asked. If you need one, email <a href="mailto:hello@preservation.studio">hello@preservation.studio</a> before submitting. Please submit your fee before submitting this form.</p>
+        {% include "studio/partials/field.html" with field=form.application_fee_status %}
+      </div>
+
+      <div class="form-section">
+        <h3>Liability</h3>
+        <p class="muted" style="margin-bottom:1rem;">Custom framing involves sharp tools and glass. Safety is taken seriously. A liability waiver is required before your spot is confirmed.</p>
+        {% include "studio/partials/field.html" with field=form.liability_consent %}
+      </div>
+
+      <div class="btn-row">
+        <button type="submit" class="btn btn-yellow">Submit application</button>
+      </div>
+      <p class="muted" style="margin-top:1rem; font-size:0.9rem;">Questions? Reach out directly at <a href="mailto:hello@preservation.studio">hello@preservation.studio</a>.</p>
+    </form>
+  </div>
+</section>
+
+{% endblock %}

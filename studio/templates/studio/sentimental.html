@@ -1,0 +1,57 @@
+{% extends "studio/base.html" %}
+{% block title %}Sentimental Value — preservation.studio{% endblock %}
+{% block meta_description %}An ongoing series documenting the objects people choose to frame and the stories behind them. Selected participants have their piece framed at no cost and their story documented on film.{% endblock %}
+{% block content %}
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-eyebrow">
+      <span class="rule-tick"></span>
+      <span class="mono-label">An ongoing series</span>
+    </div>
+    <h1>Sentimental Value</h1>
+    <p class="lede">Every object has a story worth preserving.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="intro-copy">
+      <span class="section-num">№ 01 — The Series</span>
+      <p class="lede">Sentimental Value is an ongoing series documenting the objects people choose to frame and the stories behind them.</p>
+      <p>A photograph, a letter, an heirloom, something passed down.</p>
+      <p>If you have a piece with a story, apply below.</p>
+      <p><strong>Selected participants will have their piece framed at no cost and their story documented on film.</strong></p>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt section-rule" id="apply">
+  <div class="container">
+    <span class="section-num">№ 02 — Application</span>
+    <h2>Apply</h2>
+
+    {% if form.errors %}
+      <div class="form-errors">
+        <strong>Almost there.</strong> A few fields need attention below.
+      </div>
+    {% endif %}
+
+    <form method="post" action="{% url 'studio:sentimental' %}" enctype="multipart/form-data" class="form-card">
+      {% csrf_token %}
+      {{ form.honeypot }}
+      {% include "studio/partials/field.html" with field=form.name %}
+      {% include "studio/partials/field.html" with field=form.email %}
+      {% include "studio/partials/field.html" with field=form.instagram %}
+      {% include "studio/partials/field.html" with field=form.object_description %}
+      {% include "studio/partials/field.html" with field=form.why_it_matters %}
+      {% include "studio/partials/field.html" with field=form.origin %}
+      {% include "studio/partials/field.html" with field=form.photo %}
+      <div class="btn-row">
+        <button type="submit" class="btn btn-yellow">Share your story</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" fill="#F3EEE3"/>
+  <rect x="7" y="7" width="50" height="50" fill="none" stroke="#2A251D" stroke-width="3"/>
+  <rect x="13" y="13" width="38" height="38" fill="none" stroke="#E3B93C" stroke-width="3"/>
+  <text x="32" y="41" font-family="Georgia, 'Times New Roman', serif" font-style="italic" font-size="24" text-anchor="middle" fill="#2A251D">ps</text>
+</svg>

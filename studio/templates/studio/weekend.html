@@ -1,0 +1,52 @@
+{% extends "studio/base.html" %}
+{% block title %}Custom Framing Weekend — preservation.studio{% endblock %}
+{% block meta_description %}The full Custom Framing Intensive curriculum compressed into two days. Traveling cohorts in select cities. Friday evening through Sunday afternoon.{% endblock %}
+{% block content %}
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-eyebrow">
+      <span class="rule-tick"></span>
+      <span class="mono-label">Traveling cohorts</span>
+    </div>
+    <h1>Custom Framing Weekend</h1>
+    <p class="lede">The full Custom Framing Intensive curriculum compressed into two days. Traveling cohorts in select cities.</p>
+    <div class="hero-meta">
+      <span><b>Fri evening – Sun afternoon</b></span>
+      <span><b>6 people max</b></span>
+      <span><b>All materials included</b></span>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="intro-copy">
+      <span class="section-num">№ 01 — Upcoming Locations</span>
+      <h2>Where we're headed</h2>
+      <p>New York · New Jersey · Philadelphia · Seattle · Albuquerque · Santa Fe</p>
+      <p class="muted">Dates TBD.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt section-rule" id="interest">
+  <div class="container">
+    <span class="section-num">№ 02 — Interest List</span>
+    <h2>Join the interest list</h2>
+    <p class="muted" style="max-width:46rem;">We'll reach out when a weekend intensive is coming to your city.</p>
+
+    <form method="post" action="{% url 'studio:weekend' %}" class="form-card">
+      {% csrf_token %}
+      {{ form.honeypot }}
+      {% include "studio/partials/field.html" with field=form.name %}
+      {% include "studio/partials/field.html" with field=form.email %}
+      {% include "studio/partials/field.html" with field=form.city %}
+      <div class="btn-row">
+        <button type="submit" class="btn btn-blue">Submit</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+{% endblock %}

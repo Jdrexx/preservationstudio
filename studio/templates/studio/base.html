@@ -1,0 +1,44 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}preservation.studio{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %}Preservation Studio is a custom framing program based in Los Angeles for artists and makers.{% endblock %}">
+  <link rel="icon" type="image/svg+xml" href="{% static 'studio/favicon.svg' %}">
+  <link rel="alternate icon" href="{% static 'studio/favicon.svg' %}">
+  <link rel="stylesheet" href="{% static 'studio/css/site.css' %}?v=1">
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="wordmark" href="{% url 'studio:home' %}">preservation<span class="wordmark-dot">.</span>studio</a>
+      <nav class="site-nav" aria-label="Main">
+        <a href="{% url 'studio:intensive' %}">Intensive</a>
+        <a href="{% url 'studio:weekend' %}">Weekend</a>
+        <a href="{% url 'studio:sentimental' %}">Sentimental Value</a>
+        <a href="{% url 'studio:about' %}">About</a>
+        <a href="{% url 'studio:contact' %}">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-mark">
+        <span class="stamp">preservation.studio</span>
+        <span class="footer-line">Custom framing program &amp; preservation studio — Los Angeles</span>
+      </div>
+      <div class="footer-links">
+        <a href="mailto:hello@preservation.studio">hello@preservation.studio</a>
+        <a href="https://instagram.com/preservation.studio" rel="noopener" target="_blank">@preservation.studio</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

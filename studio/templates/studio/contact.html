@@ -1,0 +1,60 @@
+{% extends "studio/base.html" %}
+{% block title %}Contact — preservation.studio{% endblock %}
+{% block meta_description %}Get in touch with Preservation Studio — general questions, private sessions, corporate workshops, and sponsorship inquiries.{% endblock %}
+{% block content %}
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-eyebrow">
+      <span class="rule-tick"></span>
+      <span class="mono-label">Contact</span>
+    </div>
+    <h1>Get in touch</h1>
+    <p class="lede">General questions, private sessions, corporate workshops, or sponsorship — we read everything.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container contact-grid">
+    <div>
+      <span class="section-num">№ 01 — Direct</span>
+      <h2>Reach us directly</h2>
+      <ul class="contact-methods">
+        <li>
+          <span class="mono-label">Email</span>
+          <a href="mailto:hello@preservation.studio">hello@preservation.studio</a>
+        </li>
+        <li>
+          <span class="mono-label">Instagram</span>
+          <a href="https://instagram.com/preservation.studio" rel="noopener" target="_blank">@preservation.studio</a>
+        </li>
+      </ul>
+      <p class="muted" style="margin-top:1.6rem;">For private sessions, corporate workshops, or sponsorship inquiries email directly — or use the form.</p>
+    </div>
+
+    <div>
+      <span class="section-num">№ 02 — Message</span>
+      <h2>Send a message</h2>
+
+      {% if form.errors %}
+        <div class="form-errors">
+          <strong>Almost there.</strong> A few fields need attention below.
+        </div>
+      {% endif %}
+
+      <form method="post" action="{% url 'studio:contact' %}" class="form-card" style="margin-top:0;">
+        {% csrf_token %}
+        {{ form.honeypot }}
+        {% include "studio/partials/field.html" with field=form.name %}
+        {% include "studio/partials/field.html" with field=form.email %}
+        {% include "studio/partials/field.html" with field=form.kind %}
+        {% include "studio/partials/field.html" with field=form.message %}
+        <div class="btn-row">
+          <button type="submit" class="btn btn-yellow">Send</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

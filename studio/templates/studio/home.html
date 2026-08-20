@@ -1,0 +1,87 @@
+{% extends "studio/base.html" %}
+{% block title %}preservation.studio{% endblock %}
+{% block content %}
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-eyebrow">
+      <span class="rule-tick"></span>
+      <span class="mono-label">Los Angeles · Est. 2026</span>
+    </div>
+    <h1>preservation.studio</h1>
+    <p class="lede">A custom framing program and preservation studio based in Los Angeles — for artists, makers, and the things they carry.</p>
+    <div class="hero-meta">
+      <span><b>Custom Framing Intensive</b> — 6 weeks · cohort of 6</span>
+      <span><b>Custom Framing Weekend</b> — 2 days · traveling</span>
+    </div>
+    <div class="btn-row">
+      <a class="btn btn-yellow" href="{% url 'studio:intensive' %}">Apply for the Intensive</a>
+      <a class="btn" href="#waitlist">Join the waitlist</a>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container intro-copy">
+    <span class="section-num">№ 01 — About</span>
+    <p class="lede">Preservation Studio is a custom framing program based in Los Angeles for artists and makers.</p>
+    <p>Come out knowing how to frame the things you've actually been carrying. The photo that made it through three moves. The letter you've read a hundred times. The stuff you've kept for reasons you can't fully explain.</p>
+    <div class="btn-row">
+      <a class="btn" href="{% url 'studio:about' %}">About the studio</a>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt section-rule">
+  <div class="container">
+    <span class="section-num">№ 02 — Offerings</span>
+    <h2>Two ways in</h2>
+    <div class="cards">
+      <article class="card">
+        <h3>Custom Framing Intensive</h3>
+        <p class="card-stats">6 weeks · Cohort of 6 · $2,500</p>
+        <p>The full trade, start to finish. Six weeks of hands-on work with real tools and archival materials — mat cutting, mounting, glazing, float frames, shadow boxes, conservation basics, and the business side of the trade.</p>
+        <div class="btn-row">
+          <a class="btn btn-yellow" href="{% url 'studio:intensive' %}">Learn more / Apply</a>
+        </div>
+      </article>
+      <article class="card card-blue">
+        <h3>Custom Framing Weekend</h3>
+        <p class="card-stats">2 days · Traveling cohorts</p>
+        <p>The full curriculum, compressed. Friday evening through Sunday afternoon in select cities — six people maximum, all materials included.</p>
+        <div class="btn-row">
+          <a class="btn btn-blue" href="{% url 'studio:weekend' %}">Learn more</a>
+        </div>
+      </article>
+    </div>
+
+    <div class="sponsor-band">
+      <div>
+        <h3>Sponsor a Seat</h3>
+        <p>One sponsored seat is available per cohort, reserved for a QTPOC artist demonstrating financial need and a serious commitment to the work. Full tuition covered.</p>
+      </div>
+      <a class="btn" href="{% url 'studio:contact' %}">Learn more</a>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="waitlist">
+  <div class="container">
+    <div class="waitlist-strip">
+      <span class="section-num">№ 03 — Waitlist</span>
+      <h2>Join the waitlist</h2>
+      <p class="muted">We'll let you know when the next cohort opens.</p>
+      <form method="post" action="{% url 'studio:home' %}" class="inline-form">
+        {% csrf_token %}
+        {{ form.honeypot }}
+        {{ form.email }}
+        {% if form.email.errors %}
+          <p class="error">{{ form.email.errors.0 }}</p>
+        {% endif %}
+        <button type="submit" class="btn btn-yellow">Submit</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

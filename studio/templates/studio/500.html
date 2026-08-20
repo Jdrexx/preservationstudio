@@ -1,0 +1,13 @@
+{% extends "studio/base.html" %}
+{% block title %}500 — preservation.studio{% endblock %}
+{% block content %}
+<section class="error-page">
+  <div class="container">
+    <h1>500</h1>
+    <p class="muted">Something went wrong on our end. Try again in a moment.</p>
+    <div class="btn-row">
+      <a class="btn" href="{% url 'studio:home' %}">Back to home</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

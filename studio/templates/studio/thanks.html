@@ -1,0 +1,18 @@
+{% extends "studio/base.html" %}
+{% block title %}Thank you — preservation.studio{% endblock %}
+{% block content %}
+
+<section class="section">
+  <div class="container">
+    <div class="thanks-block">
+      <span class="stamp">preservation.studio</span>
+      <h1 style="font-size:1.9rem;">Thank you.</h1>
+      <p class="lede" style="font-size:1.1rem;">{{ message }}</p>
+      <div class="btn-row" style="justify-content:center;">
+        <a class="btn" href="{% url 'studio:home' %}">Back to home</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
