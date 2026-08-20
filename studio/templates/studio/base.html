@@ -15,11 +15,12 @@
     <div class="container header-inner">
       <a class="wordmark" href="{% url 'studio:home' %}">preservation<span class="wordmark-dot">.</span>studio</a>
       <nav class="site-nav" aria-label="Main">
-        <a href="{% url 'studio:intensive' %}">Intensive</a>
-        <a href="{% url 'studio:weekend' %}">Weekend</a>
-        <a href="{% url 'studio:sentimental' %}">Sentimental Value</a>
-        <a href="{% url 'studio:about' %}">About</a>
-        <a href="{% url 'studio:contact' %}">Contact</a>
+        <a href="{% url 'studio:home' %}"{% if request.resolver_match.url_name == 'home' %} aria-current="page"{% endif %}>Home</a>
+        <a href="{% url 'studio:intensive' %}"{% if request.resolver_match.url_name == 'intensive' %} aria-current="page"{% endif %}>Intensive</a>
+        <a href="{% url 'studio:weekend' %}"{% if request.resolver_match.url_name == 'weekend' %} aria-current="page"{% endif %}>Weekend</a>
+        <a href="{% url 'studio:sentimental' %}"{% if request.resolver_match.url_name == 'sentimental' %} aria-current="page"{% endif %}>Sentimental Value</a>
+        <a href="{% url 'studio:about' %}"{% if request.resolver_match.url_name == 'about' %} aria-current="page"{% endif %}>About</a>
+        <a href="{% url 'studio:contact' %}"{% if request.resolver_match.url_name == 'contact' %} aria-current="page"{% endif %}>Contact</a>
       </nav>
     </div>
   </header>

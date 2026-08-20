@@ -123,6 +123,38 @@ class NestedStructureTests(TestCase):
         self.assertContains(resp, 'name="email"')
 
 
+class HomePageTests(TestCase):
+    """The Home page is labeled in the nav and carries the brief's copy."""
+
+    def test_nav_has_home_link(self):
+        resp = client().get(reverse("studio:home"))
+        self.assertContains(resp, 'href="/"')
+        self.assertContains(resp, ">Home</a>")
+
+    def test_brief_intro_copy_present(self):
+        resp = client().get(reverse("studio:home"))
+        self.assertContains(resp, "Come out knowing how to frame the things")
+        self.assertContains(resp, "The photo that made it through three moves.")
+        self.assertContains(resp, "The letter you've read a hundred times.")
+
+    def test_offering_cards_present(self):
+        resp = client().get(reverse("studio:home"))
+        self.assertContains(resp, "The full trade, start to finish.")
+        self.assertContains(resp, "The full curriculum, compressed.")
+        self.assertContains(resp, "6 weeks")
+        self.assertContains(resp, "2 days")
+
+    def test_sponsor_seat_copy_present(self):
+        resp = client().get(reverse("studio:home"))
+        self.assertContains(resp, "One sponsored seat is available per cohort")
+        self.assertContains(resp, "QTPOC artist")
+
+    def test_waitlist_copy_present(self):
+        resp = client().get(reverse("studio:home"))
+        self.assertContains(resp, "Join the waitlist")
+        self.assertContains(resp, "when the next cohort opens")
+
+
 class WaitlistTests(TestCase):
     def test_valid_submission_saves_and_redirects(self):
         resp = client().post(
