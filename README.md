@@ -21,6 +21,35 @@ Nested page layout — parent pages hold the info, child pages hold the forms.
 Every submission is stored in the database and reviewed in the Django admin
 (admin is mounted at a secret path set by `DJANGO_ADMIN_URL` — unset = admin disabled).
 
+## Submission notifications (email + admin)
+
+Every inquiry is **always** saved to the database and visible in the admin —
+the email is an extra alert on top.
+
+| Submission | Admin model | Email subject |
+|---|---|---|
+| Home waitlist | `WaitlistEntry` | New waitlist signup |
+| Weekend interest | `WeekendInterest` | New Custom Framing Weekend interest |
+| Intensive application | `IntensiveApplication` | New Custom Framing Intensive application |
+| Sentimental Value application | `SentimentalValueApplication` | New Sentimental Value application |
+| Contact message | `ContactMessage` | New contact message |
+| Sponsor seat inquiry | `ContactMessage` (kind=sponsorship) | New sponsored seat inquiry |
+
+To receive email alerts, set on Railway:
+
+| Variable | Example | Purpose |
+|---|---|---|
+| `DJANGO_NOTIFY_EMAIL` | `alerts@yourdomain.com` | Where summaries are sent. Empty/unset = no emails, submissions still saved |
+| `DJANGO_EMAIL_HOST` | `smtp.gmail.com` / `smtp.sendgrid.net` / `smtp.resend.com` | SMTP server of any provider |
+| `DJANGO_EMAIL_PORT` | `587` | SMTP port (default 587) |
+| `DJANGO_EMAIL_USER` | your SMTP username | |
+| `DJANGO_EMAIL_PASSWORD` | your SMTP password | |
+| `DJANGO_EMAIL_USE_TLS` | `1` | TLS on (default) |
+| `DJANGO_FROM_EMAIL` | `preservation.studio <no-reply@...>` | From address (optional) |
+
+Email sending is best-effort: if the mail server is unreachable the submission
+still saves and the visitor still sees the thank-you page (failure is logged).
+
 ## Local development
 
 ```bash

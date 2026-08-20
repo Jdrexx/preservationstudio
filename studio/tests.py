@@ -15,8 +15,10 @@ Nested page structure under test:
 """
 
 from io import BytesIO
+from unittest import mock
 
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.core import mail
 from django.test import Client, TestCase
 from django.urls import reverse
 from PIL import Image
@@ -307,6 +309,86 @@ class IntensiveApplicationTests(TestCase):
         self.assertRedirects(resp, reverse("studio:thanks", kwargs={"kind": "intensive"}))
         app = IntensiveApplication.objects.get()
         self.assertFalse(app.payment_plan_needed)
+
+
+class NotificationTests(TestCase):
+    """Every submission emails the notify address when configured, and the
+    submission itself never breaks if email fails."""
+
+    EMAIL_SETTINGS = {
+        "NOTIFY_EMAIL": "alerts@preservation.studio",
+        "EMAIL_BACKEND": "django.core.mail.backends.locmem.EmailBackend",
+    }
+
+    def test_waitlist_emails_notify_when_configured(self):
+        with self.settings(**self.EMAIL_SETTINGS):
+            resp = client().post(
+                reverse("studio:home"),
+                {"email": "notify@example.com"},
+            )
+        self.assertRedirects(resp, reverse("studio:thanks", kwargs={"kind": "waitlist"}))
+        self.assertEqual(len(mail.outbox), 1)
+        msg = mail.outbox[0]
+        self.assertEqual(msg.to, ["alerts@preservation.studio"])
+        self.assertIn("New waitlist signup", msg.subject)
+        self.assertIn("notify@example.com", msg.body)
+        self.assertIn("Review in the admin", msg.body)
+
+    def test_intensive_application_emails_full_summary(self):
+        with self.settings(**self.EMAIL_SETTINGS):
+            resp = client().post(reverse("studio:intensive_apply"), IntensiveApplicationTests.VALID)
+        self.assertEqual(resp.status_code, 302)
+        self.assertEqual(len(mail.outbox), 1)
+        msg = mail.outbox[0]
+        self.assertIn("New Custom Framing Intensive application", msg.subject)
+        self.assertIn("Jon", msg.body)
+        self.assertIn("Option A", msg.body)
+        self.assertIn("Video", msg.body)
+
+    def test_sponsor_inquiry_emails_as_sponsor(self):
+        with self.settings(**self.EMAIL_SETTINGS):
+            resp = client().post(
+                reverse("studio:contact_sponsor"),
+                {"name": "A Gallery", "email": "g@example.com",
+                 "message": "We'd like to fund a seat."},
+            )
+        self.assertEqual(resp.status_code, 302)
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertIn("New sponsored seat inquiry", mail.outbox[0].subject)
+
+    def test_contact_message_emails_as_contact(self):
+        with self.settings(**self.EMAIL_SETTINGS):
+            resp = client().post(
+                reverse("studio:contact"),
+                {"name": "A Friend", "email": "f@example.com",
+                 "kind": "general", "message": "When is the next cohort?"},
+            )
+        self.assertEqual(resp.status_code, 302)
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertIn("New contact message", mail.outbox[0].subject)
+
+    def test_no_email_when_notify_unset(self):
+        """Default config (no notify address) sends nothing but still saves."""
+        resp = client().post(
+            reverse("studio:home"),
+            {"email": "quiet@example.com"},
+        )
+        self.assertRedirects(resp, reverse("studio:thanks", kwargs={"kind": "waitlist"}))
+        self.assertEqual(len(mail.outbox), 0)
+        self.assertEqual(WaitlistEntry.objects.filter(email="quiet@example.com").count(), 1)
+
+    def test_email_failure_does_not_break_submission(self):
+        with self.settings(**self.EMAIL_SETTINGS):
+            with mock.patch(
+                "studio.notifications.send_mail",
+                side_effect=RuntimeError("smtp down"),
+            ):
+                resp = client().post(
+                    reverse("studio:home"),
+                    {"email": "brave@example.com"},
+                )
+        self.assertRedirects(resp, reverse("studio:thanks", kwargs={"kind": "waitlist"}))
+        self.assertEqual(WaitlistEntry.objects.filter(email="brave@example.com").count(), 1)
 
 
 class ContactTests(TestCase):
