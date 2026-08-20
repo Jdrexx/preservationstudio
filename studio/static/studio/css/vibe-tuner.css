@@ -3,6 +3,11 @@
    Live palette + type tuning. Never rendered without ?vibe=1.
    ============================================================ */
 
+/* The hidden attribute must always win over display rules below */
+#vibe-fab[hidden], #vibe-panel[hidden], #vibe-modal[hidden] {
+  display: none !important;
+}
+
 #vibe-fab {
   position: fixed;
   right: 1.2rem;
