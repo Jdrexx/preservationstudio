@@ -42,120 +42,13 @@
 
 <section class="section section-rule">
   <div class="container">
-    <span class="section-num">№ 03 — FAQ</span>
-    <h2>Frequently asked</h2>
-    <div class="faq">
-
-      <details>
-        <summary>Do I need experience?</summary>
-        <div class="faq-body"><p>No prior experience needed. If you can read a ruler and follow direction you're ready.</p></div>
-      </details>
-
-      <details>
-        <summary>How old do I have to be?</summary>
-        <div class="faq-body"><p>This program is intended for adults 18 and older.</p></div>
-      </details>
-
-      <details>
-        <summary>What do I bring?</summary>
-        <div class="faq-body"><p>One photo or print to frame for your final piece. The piece should be no larger than 12x16. Everything else — tools, materials, and glazing — are provided.</p></div>
-      </details>
-
-      <details>
-        <summary>Why is it application-based?</summary>
-        <div class="faq-body"><p>The cohort is small and the instruction is hands-on. Applications help ensure everyone in the room is genuinely ready to commit to six weeks of real work. The process is straightforward — there are no wrong answers!</p></div>
-      </details>
-
-      <details>
-        <summary>Will this help me get a job?</summary>
-        <div class="faq-body">
-          <p>This program will not place you in a job directly. What it will do is give you the foundational skills and confidence to walk into almost any frame shop and be useful from day one.</p>
-          <p>Most shops don't have the bandwidth to train from scratch — arriving with real knowledge changes that conversation entirely.</p>
-        </div>
-      </details>
-
-      <details>
-        <summary>Why only 6 people?</summary>
-        <div class="faq-body"><p>Framing requires repetition, attention to detail, and individual feedback. A smaller group means more hands-on time and instruction.</p></div>
-      </details>
-
-      <details>
-        <summary>What does a typical session look like?</summary>
-        <div class="faq-body">
-          <p>Each session ranges from 2–2.5 hours. The first portion is a demo and brief discussion.</p>
-          <p>The majority of the time is hands-on practice. By the end of the program sessions shift to individual work on your final piece with direct guidance.</p>
-        </div>
-      </details>
-
-      <details>
-        <summary>What will I walk away with?</summary>
-        <div class="faq-body">
-          <p>A finished, framed piece you built yourself.</p>
-          <p>Working knowledge of major framing techniques and an understanding of archival and conservation standards.</p>
-          <p>The ability to price and quote framing work, and alumni access to future cohorts and any group shows.</p>
-        </div>
-      </details>
-
-      <details>
-        <summary>Is tuition refundable?</summary>
-        <div class="faq-body">
-          <p>The $500 deposit is non-refundable once your spot is confirmed.</p>
-          <p>If something comes up before the program begins reach out directly — situations are handled case by case.</p>
-        </div>
-      </details>
-
-      <details>
-        <summary>Is there a payment plan?</summary>
-        <div class="faq-body">
-          <p>Payment plans are available. A $50 administrative fee applies.</p>
-          <p><strong>Option A</strong> — total $2,550: $550 deposit (due upon acceptance, non-refundable, holds your spot) · $1,000 before Week 1 · $1,050 before Week 4 (includes $50 admin fee)</p>
-          <p><strong>Option B</strong> — total $2,550: $500 deposit upon acceptance · $700 before Week 1 · $700 before Week 3 · $650 before Week 6 (includes $50 admin fee)</p>
-        </div>
-      </details>
-
-      <details>
-        <summary>Is there an application fee?</summary>
-        <div class="faq-body"><p>Yes, a $25 non-refundable application fee is required to be considered. Fee waivers are available, no questions asked. Email us before submitting if you need one.</p></div>
-      </details>
-
-      <details>
-        <summary>What is the sponsored seat?</summary>
-        <div class="faq-body">
-          <p>Up to two sponsored seats may be available per cohort for QTPOC artists demonstrating financial need and a serious commitment to the work.</p>
-          <p>Full tuition is covered when a seat is funded. Sponsored seats are made possible through private donors, organizations, and grants.</p>
-          <p>Availability varies by cohort. If you'd like to be considered, indicate it on your application — we'll reach out if a sponsored seat is available for your cohort.</p>
-        </div>
-      </details>
-
-      <details>
-        <summary>Can organizations sponsor a seat?</summary>
-        <div class="faq-body">
-          <p>Yes. If your organization is interested in sponsoring a seat for a QTPOC artist, <a href="{% url 'studio:contact' %}">reach out directly</a>.</p>
-          <p>Sponsoring organizations and donors receive named recognition on the program page and all relevant cohort materials, social media acknowledgment, and named recognition in the annual group show program. Sponsors are invited to the end of year group show.</p>
-          <p>For grant-funded sponsorships a formal letter of acknowledgment and outcome documentation is provided for reporting purposes.</p>
-        </div>
-      </details>
-
-      <details>
-        <summary>What if I miss a session?</summary>
-        <div class="faq-body"><p>Because the cohort is small and the sessions build on each other, consistent attendance is expected. It matters for your own learning and for the group. However, if something comes up please reach out as early as possible.</p></div>
-      </details>
-
-      <details>
-        <summary>Do I need my own tools after the program?</summary>
-        <div class="faq-body"><p>The program gives you the knowledge to work with tools in any shop. If you want to practice independently after the program, a basic starter kit is a relatively small investment — happy to advise on what to prioritize.</p></div>
-      </details>
-
-      <details>
-        <summary>Where is it located?</summary>
-        <div class="faq-body"><p>Los Angeles. The exact location is shared with accepted applicants.</p></div>
-      </details>
-
-      <details>
-        <summary>Do you offer the program outside of LA?</summary>
-        <div class="faq-body"><p>Yes — traveling weekend intensives happen periodically throughout the year. <a href="{% url 'studio:weekend' %}">Join the mailing list</a> to be notified when one is coming to your city.</p></div>
-      </details>
-
+    <div class="apply-band">
+      <div>
+        <span class="section-num">№ 03 — FAQ</span>
+        <h2>Questions, answered</h2>
+        <p class="muted" style="max-width:52ch;">Experience, age, what to bring, payment plans, the sponsored seat, attendance — everything you'd want to know before applying.</p>
+      </div>
+      <a class="btn" href="{% url 'studio:about_faq' %}">Read the FAQ</a>
     </div>
   </div>
 </section>

@@ -16,6 +16,9 @@
       <span><b>Cohort of 6</b> · all materials included</span>
       <span><b>$2,500</b> · payment plans available</span>
     </div>
+    <div class="btn-row">
+      <a class="btn btn-yellow" href="{% url 'studio:intensive_apply' %}">Apply Now →</a>
+    </div>
   </div>
 </section>
 
@@ -70,85 +73,23 @@
       <div>
         <h3>Sponsored Seat</h3>
         <p>One sponsored seat is available per cohort, reserved for a QTPOC artist demonstrating financial need and a serious commitment to the work. Full tuition covered. Applications considered alongside paid enrollment.</p>
-        <p class="muted" style="margin-top:0.6rem;">Interested in sponsoring a seat? <a href="{% url 'studio:contact' %}">Email us</a>.</p>
+        <p class="muted" style="margin-top:0.6rem;">Interested in sponsoring a seat? <a href="{% url 'studio:contact_sponsor' %}">Make an inquiry</a>.</p>
       </div>
-      <a class="btn btn-yellow" href="#apply">Apply Now →</a>
+      <a class="btn" href="{% url 'studio:contact_sponsor' %}">Sponsor a seat</a>
     </div>
   </div>
 </section>
 
 <section class="section section-rule" id="apply">
   <div class="container">
-    <span class="section-num">№ 04 — Application</span>
-    <h2>Apply</h2>
-    <p class="muted">Applications are open. The cohort is limited to 6 people. You will hear back within one week with next steps. If you are shortlisted you will receive an invitation to schedule your 10-minute interview.</p>
-
-    {% if form.errors or form.non_field_errors %}
-      <div class="form-errors">
-        <strong>Almost there.</strong> A few fields need attention below.
+    <div class="apply-band">
+      <div>
+        <span class="section-num">№ 04 — Application</span>
+        <h2>Applications are open</h2>
+        <p class="muted" style="max-width:52ch;">The cohort is limited to 6 people. Applications are reviewed within one week — shortlisted applicants are invited to an informal 10-minute interview.</p>
       </div>
-    {% endif %}
-
-    <form method="post" action="{% url 'studio:intensive' %}" class="form-card" novalidate>
-      {% csrf_token %}
-      {{ form.honeypot }}
-
-      <div class="form-section">
-        <h3>Application</h3>
-        {% include "studio/partials/field.html" with field=form.first_name %}
-        {% include "studio/partials/field.html" with field=form.last_name %}
-        {% include "studio/partials/field.html" with field=form.email %}
-        {% include "studio/partials/field.html" with field=form.phone %}
-        {% include "studio/partials/field.html" with field=form.instagram_or_website %}
-        {% include "studio/partials/field.html" with field=form.about_yourself %}
-        {% include "studio/partials/field.html" with field=form.prior_experience %}
-        {% include "studio/partials/field.html" with field=form.why_framing %}
-        {% include "studio/partials/field.html" with field=form.goals %}
-        {% include "studio/partials/field.html" with field=form.accommodations %}
-        {% include "studio/partials/field.html" with field=form.questions %}
-      </div>
-
-      <div class="form-section">
-        <h3>Payment</h3>
-        <p class="muted" style="margin-bottom:1rem;">Founding cohort tuition is $2,500. A non-refundable deposit of $500 is required upon acceptance to hold your spot. The remaining balance is due before Week 1. Payment plans are available; a $50 administrative fee applies.</p>
-        <p class="muted" style="margin-bottom:1rem;"><strong style="color:var(--ink);">Option A</strong> — total $2,550: $550 deposit upon acceptance · $1,000 before Week 1 · $1,050 before Week 4 (includes $50 admin fee)</p>
-        <p class="muted" style="margin-bottom:1.2rem;"><strong style="color:var(--ink);">Option B</strong> — total $2,550: $500 deposit upon acceptance · $700 before Week 1 · $700 before Week 3 · $650 before Week 6 (includes $50 admin fee)</p>
-        {% include "studio/partials/field.html" with field=form.payment_plan_needed %}
-        {% include "studio/partials/field.html" with field=form.payment_plan_choice %}
-      </div>
-
-      <div class="form-section">
-        <h3>Sponsored Seat</h3>
-        <p class="muted" style="margin-bottom:1rem;">One sponsored seat is available this cohort, reserved for a QTPOC artist demonstrating financial need and a serious commitment to the work. The sponsored seat covers full tuition. Selection is based on demonstrated need and commitment — all applicants are considered.</p>
-        {% include "studio/partials/field.html" with field=form.sponsored_seat_consideration %}
-        {% include "studio/partials/field.html" with field=form.sponsored_seat_statement %}
-        {% include "studio/partials/field.html" with field=form.attendance_commitment %}
-      </div>
-
-      <div class="form-section">
-        <h3>Interview</h3>
-        <p class="muted" style="margin-bottom:1rem;">Shortlisted applicants will be invited to an informal 10-minute interview before final acceptance. This is a chance to ask questions and for us to connect briefly before the cohort begins.</p>
-        {% include "studio/partials/field.html" with field=form.interview_availability %}
-        {% include "studio/partials/field.html" with field=form.interview_format %}
-      </div>
-
-      <div class="form-section">
-        <h3>Application Fee</h3>
-        <p class="muted" style="margin-bottom:1rem;">A $25 non-refundable application fee is required to be considered. This goes toward admin and review time. Fee waivers are available — no questions asked. If you need one, email <a href="mailto:hello@preservation.studio">hello@preservation.studio</a> before submitting. Please submit your fee before submitting this form.</p>
-        {% include "studio/partials/field.html" with field=form.application_fee_status %}
-      </div>
-
-      <div class="form-section">
-        <h3>Liability</h3>
-        <p class="muted" style="margin-bottom:1rem;">Custom framing involves sharp tools and glass. Safety is taken seriously. A liability waiver is required before your spot is confirmed.</p>
-        {% include "studio/partials/field.html" with field=form.liability_consent %}
-      </div>
-
-      <div class="btn-row">
-        <button type="submit" class="btn btn-yellow">Submit application</button>
-      </div>
-      <p class="muted" style="margin-top:1rem; font-size:0.9rem;">Questions? Reach out directly at <a href="mailto:hello@preservation.studio">hello@preservation.studio</a>.</p>
-    </form>
+      <a class="btn btn-yellow" href="{% url 'studio:intensive_apply' %}">Apply Now →</a>
+    </div>
   </div>
 </section>
 

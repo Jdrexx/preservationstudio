@@ -3,6 +3,15 @@
 Runs against SQLite with the local env defaults. The test client pins
 HTTP_HOST=localhost because ALLOWED_HOSTS is env-driven and does not
 include Django's default 'testserver'.
+
+Nested page structure under test:
+
+  /                           home (waitlist inline)
+  /intensive/                 program info        /intensive/apply/    form
+  /weekend/                   info + interest list form (inline)
+  /sentimental-value/         series info         /sentimental-value/apply/ form
+  /about/                     bio + philosophy    /about/faq/          FAQ
+  /contact/                   email + message     /contact/sponsor/    sponsor inquiry
 """
 
 from io import BytesIO
@@ -22,13 +31,18 @@ from .models import (
 
 HOST = {"HTTP_HOST": "localhost"}
 
+# (url name, marker that must appear on the page)
 PAGES = [
     ("studio:home", "preservation.studio"),
     ("studio:intensive", "Custom Framing Intensive"),
+    ("studio:intensive_apply", "Apply to the Intensive"),
     ("studio:weekend", "Custom Framing Weekend"),
     ("studio:sentimental", "Sentimental Value"),
+    ("studio:sentimental_apply", "Share your story"),
     ("studio:about", "The studio"),
+    ("studio:about_faq", "Frequently asked"),
     ("studio:contact", "Get in touch"),
+    ("studio:contact_sponsor", "Sponsor a Seat"),
 ]
 
 
@@ -63,6 +77,50 @@ class PageRenderTests(TestCase):
         """With DJANGO_ADMIN_URL unset, /admin/ must not resolve."""
         resp = client().get("/admin/login/")
         self.assertEqual(resp.status_code, 404)
+
+
+class NestedStructureTests(TestCase):
+    """Forms and FAQ live on nested child pages, not inline on parents."""
+
+    def test_intensive_form_is_nested(self):
+        parent = client().get(reverse("studio:intensive"))
+        self.assertNotContains(parent, 'name="first_name"')
+        self.assertContains(parent, reverse("studio:intensive_apply"))
+        child = client().get(reverse("studio:intensive_apply"))
+        self.assertContains(child, 'name="first_name"')
+        self.assertContains(child, 'name="liability_consent"')
+
+    def test_sentimental_form_is_nested(self):
+        parent = client().get(reverse("studio:sentimental"))
+        self.assertNotContains(parent, 'name="object_description"')
+        self.assertContains(parent, reverse("studio:sentimental_apply"))
+        child = client().get(reverse("studio:sentimental_apply"))
+        self.assertContains(child, 'name="object_description"')
+        self.assertContains(child, 'enctype="multipart/form-data"')
+
+    def test_faq_is_nested(self):
+        parent = client().get(reverse("studio:about"))
+        self.assertNotContains(parent, "<details")
+        self.assertContains(parent, reverse("studio:about_faq"))
+        child = client().get(reverse("studio:about_faq"))
+        self.assertContains(child, "<details")
+        self.assertContains(child, "Do I need experience?")
+
+    def test_sponsor_inquiry_is_nested(self):
+        parent = client().get(reverse("studio:contact"))
+        self.assertContains(parent, reverse("studio:contact_sponsor"))
+        child = client().get(reverse("studio:contact_sponsor"))
+        self.assertContains(child, 'name="message"')
+        self.assertContains(child, "What sponsors receive")
+
+    def test_weekend_interest_form_inline(self):
+        """The brief nests no form under Weekend — interest list stays inline."""
+        resp = client().get(reverse("studio:weekend"))
+        self.assertContains(resp, 'name="city"')
+
+    def test_waitlist_inline_on_home(self):
+        resp = client().get(reverse("studio:home"))
+        self.assertContains(resp, 'name="email"')
 
 
 class WaitlistTests(TestCase):
@@ -133,7 +191,7 @@ class SentimentalValueTests(TestCase):
             "letter.jpg", buf.getvalue(), content_type="image/jpeg"
         )
         resp = client().post(
-            reverse("studio:sentimental"),
+            reverse("studio:sentimental_apply"),
             {
                 "name": "Rosa Diaz",
                 "email": "rosa@example.com",
@@ -175,7 +233,7 @@ class IntensiveApplicationTests(TestCase):
     }
 
     def test_full_application_saves(self):
-        resp = client().post(reverse("studio:intensive"), self.VALID)
+        resp = client().post(reverse("studio:intensive_apply"), self.VALID)
         self.assertRedirects(resp, reverse("studio:thanks", kwargs={"kind": "intensive"}))
         app = IntensiveApplication.objects.get()
         self.assertEqual(app.first_name, "Jon")
@@ -186,7 +244,7 @@ class IntensiveApplicationTests(TestCase):
         self.assertTrue(app.liability_consent)
 
     def test_required_fields_enforced(self):
-        resp = client().post(reverse("studio:intensive"), {})
+        resp = client().post(reverse("studio:intensive_apply"), {})
         self.assertEqual(resp.status_code, 200)
         self.assertContains(resp, "This field is required")
         self.assertEqual(IntensiveApplication.objects.count(), 0)
@@ -195,7 +253,7 @@ class IntensiveApplicationTests(TestCase):
         data = dict(self.VALID)
         data["payment_plan_needed"] = "on"
         data["payment_plan_choice"] = ""
-        resp = client().post(reverse("studio:intensive"), data)
+        resp = client().post(reverse("studio:intensive_apply"), data)
         self.assertEqual(resp.status_code, 200)
         self.assertContains(resp, "Please choose a payment plan")
         self.assertEqual(IntensiveApplication.objects.count(), 0)
@@ -204,7 +262,7 @@ class IntensiveApplicationTests(TestCase):
         data = dict(self.VALID)
         data["sponsored_seat_consideration"] = "on"
         data["sponsored_seat_statement"] = ""
-        resp = client().post(reverse("studio:intensive"), data)
+        resp = client().post(reverse("studio:intensive_apply"), data)
         self.assertEqual(resp.status_code, 200)
         self.assertContains(resp, "Please share briefly")
         self.assertEqual(IntensiveApplication.objects.count(), 0)
@@ -213,27 +271,26 @@ class IntensiveApplicationTests(TestCase):
         data = dict(self.VALID)
         data["payment_plan_needed"] = ""
         data["payment_plan_choice"] = ""
-        resp = client().post(reverse("studio:intensive"), data)
+        resp = client().post(reverse("studio:intensive_apply"), data)
         self.assertRedirects(resp, reverse("studio:thanks", kwargs={"kind": "intensive"}))
         app = IntensiveApplication.objects.get()
         self.assertFalse(app.payment_plan_needed)
 
 
 class ContactTests(TestCase):
-    def test_sponsorship_inquiry_saves(self):
+    def test_general_inquiry_saves(self):
         resp = client().post(
             reverse("studio:contact"),
             {
-                "name": "A Gallery",
-                "email": "gallery@example.com",
-                "kind": "sponsorship",
-                "message": "We'd like to fund a seat.",
+                "name": "A Friend",
+                "email": "friend@example.com",
+                "kind": "general",
+                "message": "When does the next cohort start?",
             },
         )
         self.assertRedirects(resp, reverse("studio:thanks", kwargs={"kind": "contact"}))
         msg = ContactMessage.objects.get()
-        self.assertEqual(msg.kind, "sponsorship")
-        self.assertEqual(msg.message, "We'd like to fund a seat.")
+        self.assertEqual(msg.kind, "general")
 
     def test_email_required(self):
         resp = client().post(
@@ -242,3 +299,17 @@ class ContactTests(TestCase):
         )
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(ContactMessage.objects.count(), 0)
+
+    def test_sponsor_inquiry_saves_as_sponsorship(self):
+        resp = client().post(
+            reverse("studio:contact_sponsor"),
+            {
+                "name": "A Gallery",
+                "email": "gallery@example.com",
+                "message": "We'd like to fund a seat for the next cohort.",
+            },
+        )
+        self.assertRedirects(resp, reverse("studio:thanks", kwargs={"kind": "sponsor"}))
+        msg = ContactMessage.objects.get()
+        self.assertEqual(msg.kind, "sponsorship")
+        self.assertIn("fund a seat", msg.message)

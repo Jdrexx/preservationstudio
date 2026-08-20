@@ -28,29 +28,14 @@
 
 <section class="section section-alt section-rule" id="apply">
   <div class="container">
-    <span class="section-num">№ 02 — Application</span>
-    <h2>Apply</h2>
-
-    {% if form.errors %}
-      <div class="form-errors">
-        <strong>Almost there.</strong> A few fields need attention below.
+    <div class="apply-band">
+      <div>
+        <span class="section-num">№ 02 — Application</span>
+        <h2>Have a piece with a story?</h2>
+        <p class="muted" style="max-width:52ch;">Tell us about the object, why it matters, and where it came from — and upload a photo of it.</p>
       </div>
-    {% endif %}
-
-    <form method="post" action="{% url 'studio:sentimental' %}" enctype="multipart/form-data" class="form-card">
-      {% csrf_token %}
-      {{ form.honeypot }}
-      {% include "studio/partials/field.html" with field=form.name %}
-      {% include "studio/partials/field.html" with field=form.email %}
-      {% include "studio/partials/field.html" with field=form.instagram %}
-      {% include "studio/partials/field.html" with field=form.object_description %}
-      {% include "studio/partials/field.html" with field=form.why_it_matters %}
-      {% include "studio/partials/field.html" with field=form.origin %}
-      {% include "studio/partials/field.html" with field=form.photo %}
-      <div class="btn-row">
-        <button type="submit" class="btn btn-yellow">Share your story</button>
-      </div>
-    </form>
+      <a class="btn btn-yellow" href="{% url 'studio:sentimental_apply' %}">Apply →</a>
+    </div>
   </div>
 </section>
 

@@ -7,14 +7,16 @@ Built with **Python / Django 6**. Deployed on **Railway**. Repo: `Jdrexx/preserv
 
 ## Pages (launch version)
 
-| Route | Page | Form |
+Nested page layout — parent pages hold the info, child pages hold the forms.
+
+| Route | Page | Nested |
 |---|---|---|
-| `/` | Home — hero, offerings, sponsor a seat | Waitlist (email) |
-| `/intensive/` | Custom Framing Intensive — sessions, pricing | Full application |
-| `/weekend/` | Custom Framing Weekend — cities, interest list | Name / email / city |
-| `/sentimental-value/` | Sentimental Value series | Object story + photo upload |
-| `/about/` | Bio, philosophy, FAQ | — |
-| `/contact/` | Email, Instagram, inquiries | Sponsor / workshop / general message |
+| `/` | Home — hero, offerings, sponsor a seat | Waitlist form (inline) |
+| `/intensive/` | Custom Framing Intensive — sessions, pricing | `/intensive/apply/` — full application |
+| `/weekend/` | Custom Framing Weekend — cities, interest list | Interest form (inline) |
+| `/sentimental-value/` | Sentimental Value series | `/sentimental-value/apply/` — object story + photo |
+| `/about/` | Bio, philosophy | `/about/faq/` — FAQ |
+| `/contact/` | Email, Instagram, message form | `/contact/sponsor/` — sponsored seat inquiry |
 
 Every submission is stored in the database and reviewed in the Django admin
 (admin is mounted at a secret path set by `DJANGO_ADMIN_URL` — unset = admin disabled).

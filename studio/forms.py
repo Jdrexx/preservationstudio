@@ -200,3 +200,21 @@ class ContactForm(HoneypotMixin, forms.ModelForm):
             "kind": forms.Select(),
             "message": forms.Textarea(attrs={"rows": 5}),
         }
+
+
+class SponsorInquiryForm(HoneypotMixin, forms.ModelForm):
+    """Sponsored seat inquiry — saved as a sponsorship contact message."""
+
+    name = forms.CharField(
+        widget=forms.TextInput(attrs={"autocomplete": "name"})
+    )
+    email = forms.EmailField(
+        widget=forms.EmailInput(attrs={"autocomplete": "email"})
+    )
+
+    class Meta:
+        model = ContactMessage
+        fields = ["name", "email", "message"]
+        widgets = {
+            "message": forms.Textarea(attrs={"rows": 5}),
+        }

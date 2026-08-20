@@ -245,6 +245,36 @@ a:hover { color: #000; }
 .card p { flex: 1; }
 .card .btn-row { margin-top: 1.4rem; }
 
+/* ---------- Breadcrumb (nested pages) ---------- */
+
+.breadcrumb { margin-bottom: 2.4rem; }
+.breadcrumb a {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ink-soft);
+  text-decoration: none;
+}
+.breadcrumb a:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+
+/* ---------- Apply CTA band ---------- */
+
+.apply-band {
+  margin-top: 0.4rem;
+  background: var(--butter-soft);
+  border: 1px solid var(--butter);
+  border-radius: 4px;
+  padding: 2rem 2.2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.6rem;
+  flex-wrap: wrap;
+}
+.apply-band h2 { margin-bottom: 0.5rem; }
+
 /* ---------- Sponsor seat band ---------- */
 
 .sponsor-band {

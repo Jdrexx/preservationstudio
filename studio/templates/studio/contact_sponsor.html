@@ -1,0 +1,53 @@
+{% extends "studio/base.html" %}
+{% block title %}Sponsor a Seat — preservation.studio{% endblock %}
+{% block meta_description %}Sponsor a seat in the Preservation Studio Custom Framing Intensive — full tuition covered for a QTPOC artist demonstrating financial need and a serious commitment to the work.{% endblock %}
+{% block content %}
+
+<section class="section">
+  <div class="container">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="{% url 'studio:contact' %}">← Contact</a>
+    </nav>
+
+    <span class="section-num">Sponsored Seat Inquiry</span>
+    <h1>Sponsor a Seat</h1>
+    <p class="lede" style="max-width:46rem;">One sponsored seat is available per cohort, reserved for a QTPOC artist demonstrating financial need and a serious commitment to the work. Full tuition covered.</p>
+  </div>
+</section>
+
+<section class="section section-tight">
+  <div class="container intro-copy">
+    <span class="section-num">№ 01 — What sponsors receive</span>
+    <p>Sponsoring organizations and donors receive named recognition on the program page and all relevant cohort materials, social media acknowledgment, and named recognition in the annual group show program.</p>
+    <p>Sponsors are invited to the end of year group show.</p>
+    <p>For grant-funded sponsorships a formal letter of acknowledgment and outcome documentation is provided for reporting purposes.</p>
+    <p class="muted">Sponsored seats are made possible through private donors, organizations, and grants. Availability varies by cohort.</p>
+  </div>
+</section>
+
+<section class="section section-tight section-rule" id="inquiry">
+  <div class="container">
+    <span class="section-num">№ 02 — Inquiry</span>
+    <h2>Tell us about your interest</h2>
+
+    {% if form.errors %}
+      <div class="form-errors">
+        <strong>Almost there.</strong> A few fields need attention below.
+      </div>
+    {% endif %}
+
+    <form method="post" action="{% url 'studio:contact_sponsor' %}" class="form-card">
+      {% csrf_token %}
+      {{ form.honeypot }}
+      {% include "studio/partials/field.html" with field=form.name %}
+      {% include "studio/partials/field.html" with field=form.email %}
+      {% include "studio/partials/field.html" with field=form.message %}
+      <div class="btn-row">
+        <button type="submit" class="btn btn-yellow">Send inquiry</button>
+      </div>
+      <p class="muted" style="margin-top:1rem; font-size:0.9rem;">Prefer email? Reach us at <a href="mailto:hello@preservation.studio">hello@preservation.studio</a>.</p>
+    </form>
+  </div>
+</section>
+
+{% endblock %}
