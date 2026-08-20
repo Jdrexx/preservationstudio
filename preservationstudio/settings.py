@@ -140,6 +140,10 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # ---- Security headers -------------------------------------------------------
 
+# Railway terminates TLS at the edge and forwards plain HTTP to the container.
+# Trust the X-Forwarded-Proto header so is_secure() (and SECURE_SSL_REDIRECT)
+# behave correctly instead of looping.
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 SECURE_SSL_REDIRECT = os.environ.get("DJANGO_SECURE_SSL_REDIRECT", "0") == "1"
 SESSION_COOKIE_SECURE = os.environ.get("DJANGO_SECURE_COOKIES", "0") == "1"
 CSRF_COOKIE_SECURE = os.environ.get("DJANGO_SECURE_COOKIES", "0") == "1"
