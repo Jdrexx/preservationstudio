@@ -1,0 +1,99 @@
+{% load static %}
+{# Vibe Tuner — only rendered when the page is loaded with ?vibe=1 #}
+<button id="vibe-fab" type="button">Tune Vibe</button>
+
+<aside id="vibe-panel" aria-label="Vibe tuner" hidden>
+  <header class="vibe-head">
+    <span class="vibe-title">vibe tuner</span>
+    <button id="vibe-close" type="button" aria-label="Close">×</button>
+  </header>
+  <div class="vibe-body">
+    <section class="vibe-sec">
+      <h4>Palette</h4>
+      <div class="vibe-swatches" id="vibe-tokens"></div>
+    </section>
+    <section class="vibe-sec">
+      <h4>Type families</h4>
+      <label class="vibe-field"><span>Display</span>
+        <select id="vibe-sel-display">
+          <option value="fraunces">Fraunces</option>
+          <option value="georgia">Georgia</option>
+        </select>
+      </label>
+      <label class="vibe-field"><span>Body</span>
+        <select id="vibe-sel-body">
+          <option value="newsreader">Newsreader</option>
+          <option value="fraunces">Fraunces</option>
+          <option value="georgia">Georgia</option>
+        </select>
+      </label>
+      <label class="vibe-field"><span>Mono</span>
+        <select id="vibe-sel-mono">
+          <option value="plex">IBM Plex Mono</option>
+          <option value="courier">Courier New</option>
+        </select>
+      </label>
+      <label class="vibe-field"><span>Notes</span>
+        <select id="vibe-sel-hand">
+          <option value="kalam">Kalam</option>
+          <option value="caveat">Caveat</option>
+        </select>
+      </label>
+    </section>
+    <section class="vibe-sec">
+      <h4>Fraunces dials</h4>
+      <label class="vibe-slider"><span>WONK <output id="out-fx-wonk">60</output></span>
+        <input type="range" id="vibe-fx-wonk" min="0" max="100" value="60">
+      </label>
+      <label class="vibe-slider"><span>SOFT <output id="out-fx-soft">60</output></span>
+        <input type="range" id="vibe-fx-soft" min="0" max="100" value="60">
+      </label>
+      <label class="vibe-slider"><span>Optical size <output id="out-fx-opsz">110</output></span>
+        <input type="range" id="vibe-fx-opsz" min="9" max="144" value="110">
+      </label>
+      <label class="vibe-slider"><span>Display weight <output id="out-fx-wght">560</output></span>
+        <input type="range" id="vibe-fx-wght" min="100" max="900" value="560">
+      </label>
+      <label class="vibe-slider"><span>Note size <output id="out-hand-size">1.15</output></span>
+        <input type="range" id="vibe-hand-size" min="0.8" max="1.6" step="0.05" value="1.15">
+      </label>
+      <label class="vibe-slider"><span>Note tilt <output id="out-hand-rotate">-1.6</output></span>
+        <input type="range" id="vibe-hand-rotate" min="-5" max="5" step="0.1" value="-1.6">
+      </label>
+    </section>
+    <section class="vibe-sec vibe-actions">
+      <button id="vibe-export" class="btn btn-yellow" type="button">Export CSS</button>
+      <button id="vibe-reset" class="btn" type="button">Reset</button>
+    </section>
+    <p class="vibe-hint">This room only appears with ?vibe=1 — visitors never see it. Tuning persists in this browser. Export the :root block and paste it into site.css to lock a vibe in permanently.</p>
+  </div>
+  <footer class="vibe-foot">preservation.studio — tuning room</footer>
+</aside>
+
+<div id="vibe-modal" hidden>
+  <div class="vibe-modal-card">
+    <div class="vibe-modal-head">
+      <h4>export vibe</h4>
+      <button id="vibe-copy" type="button">Copy</button>
+    </div>
+    <textarea id="vibe-css" rows="18" readonly spellcheck="false"></textarea>
+    <div class="vibe-modal-foot">
+      <button id="vibe-close-modal" class="btn" type="button">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* Apply saved vibe before first paint to avoid flash. */
+(function () {
+  try {
+    var s = JSON.parse(localStorage.getItem("ps-vibe-v1") || "null");
+    if (!s) return;
+    var st = document.documentElement.style;
+    if (s.tokens) for (var k in s.tokens) st.setProperty("--" + k, s.tokens[k]);
+    if (s.stacks) for (var k2 in s.stacks) st.setProperty(k2, s.stacks[k2]);
+    if (s.sliders) for (var k3 in s.sliders) st.setProperty("--" + k3, s.sliders[k3]);
+  } catch (e) {}
+})();
+</script>
+<script src="{% static 'studio/js/vibe-tuner.js' %}?v=1"></script>

@@ -1,0 +1,247 @@
+/* ============================================================
+   preservation.studio — Vibe Tuner (?vibe=1 only)
+   Live palette + type tuning. Never rendered without ?vibe=1.
+   ============================================================ */
+
+#vibe-fab {
+  position: fixed;
+  right: 1.2rem;
+  bottom: 1.2rem;
+  z-index: 200;
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--ink);
+  background: var(--butter);
+  border: 1px solid var(--ink);
+  border-radius: 3px;
+  padding: 0.7rem 1.1rem;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 rgba(36, 20, 12, 0.18);
+  transition: transform 0.12s ease, background 0.12s ease;
+}
+#vibe-fab:hover { transform: translate(-1px, -1px); background: var(--butter-soft); }
+
+#vibe-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 210;
+  width: min(360px, 94vw);
+  background: var(--paper);
+  color: var(--ink);
+  border-left: 1px solid var(--rule-strong);
+  box-shadow: -6px 0 24px rgba(36, 20, 12, 0.18);
+  display: flex;
+  flex-direction: column;
+  font-family: var(--serif);
+}
+
+.vibe-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.2rem;
+  border-bottom: 1px solid var(--rule);
+  background: var(--card);
+}
+.vibe-title {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--ink-soft);
+}
+#vibe-close {
+  font-family: var(--mono);
+  font-size: 1rem;
+  background: none;
+  border: 1px solid var(--rule-strong);
+  border-radius: 3px;
+  color: var(--ink);
+  width: 1.7rem;
+  height: 1.7rem;
+  line-height: 1;
+  cursor: pointer;
+}
+#vibe-close:hover { background: var(--butter); }
+
+.vibe-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.1rem 1.2rem 1.6rem;
+}
+
+.vibe-sec { margin-bottom: 1.5rem; }
+.vibe-sec h4 {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--ink-faint);
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 0.4rem;
+  margin-bottom: 0.8rem;
+}
+
+.vibe-swatches {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.45rem 0.7rem;
+}
+.vibe-swatch {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.04em;
+  color: var(--ink-soft);
+}
+.vibe-swatch input[type="color"] {
+  width: 1.9rem;
+  height: 1.5rem;
+  padding: 0;
+  border: 1px solid var(--rule-strong);
+  border-radius: 3px;
+  background: none;
+  cursor: pointer;
+}
+.vibe-swatch code { flex: 1; }
+
+.vibe-field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  margin-bottom: 0.5rem;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  color: var(--ink-soft);
+}
+.vibe-field select {
+  font-family: var(--serif);
+  font-size: 0.9rem;
+  color: var(--ink);
+  background: var(--card);
+  border: 1px solid var(--rule-strong);
+  border-radius: 3px;
+  padding: 0.3rem 0.45rem;
+}
+
+.vibe-slider { display: block; margin-bottom: 0.7rem; }
+.vibe-slider > span {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  color: var(--ink-soft);
+  margin-bottom: 0.25rem;
+}
+.vibe-slider output {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  color: var(--ink);
+  background: var(--butter-soft);
+  border-radius: 2px;
+  padding: 0.05rem 0.4rem;
+}
+.vibe-slider input[type="range"] {
+  width: 100%;
+  accent-color: var(--butter);
+}
+
+.vibe-actions { display: flex; gap: 0.6rem; margin-top: 0.4rem; }
+.vibe-actions .btn { padding: 0.6rem 1rem; font-size: 0.72rem; }
+
+.vibe-hint {
+  font-size: 0.8rem;
+  color: var(--ink-faint);
+  font-style: italic;
+  margin-top: 1rem;
+  line-height: 1.45;
+}
+
+.vibe-foot {
+  padding: 0.8rem 1.2rem;
+  background: var(--plum);
+  color: var(--on-plum);
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+}
+
+/* Export modal */
+#vibe-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 220;
+  background: rgba(36, 20, 12, 0.55);
+  display: grid;
+  place-items: center;
+  padding: 1.2rem;
+}
+.vibe-modal-card {
+  background: var(--card);
+  border: 1px solid var(--rule-strong);
+  border-radius: 4px;
+  box-shadow: 4px 4px 0 rgba(36, 20, 12, 0.25);
+  width: min(640px, 96vw);
+  max-height: 86vh;
+  display: flex;
+  flex-direction: column;
+}
+.vibe-modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.9rem 1.2rem;
+  border-bottom: 1px solid var(--rule);
+}
+.vibe-modal-head h4 {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+}
+#vibe-copy {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  background: var(--butter);
+  color: var(--ink);
+  border: 1px solid var(--ink);
+  border-radius: 3px;
+  padding: 0.4rem 0.8rem;
+  cursor: pointer;
+}
+#vibe-copy.copied { background: var(--blue); }
+#vibe-css {
+  flex: 1;
+  margin: 1rem 1.2rem;
+  padding: 0.9rem;
+  background: var(--paper);
+  border: 1px solid var(--rule-strong);
+  border-radius: 3px;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  line-height: 1.5;
+  color: var(--ink);
+  resize: none;
+}
+.vibe-modal-foot {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 1.2rem 1rem;
+}

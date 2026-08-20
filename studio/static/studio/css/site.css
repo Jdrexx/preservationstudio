@@ -5,21 +5,39 @@
    ============================================================ */
 
 :root {
-  --paper: #F3EEE3;
-  --paper-deep: #EAE2D0;
-  --card: #FAF6EC;
-  --ink: #2A251D;
-  --ink-soft: #5C5544;
+  /* Palette — preservation.studio (PANTONE-anchored warm neutrals) */
+  --paper: #F5EDD6;        /* PANTONE Papyrus */
+  --paper-deep: #D5D5BC;   /* Pearl */
+  --card: #FFFAE6;         /* Butter */
+  --ink: #24140C;          /* Licorice */
+  --ink-soft: #5F5A41;     /* PANTONE Olive Night */
   --ink-faint: #8A8270;
-  --rule: #D8CDB4;
-  --rule-strong: #B8AC90;
-  --butter: #E3B93C;
-  --butter-soft: #F2E3B3;
-  --blue: #9DBFE3;
-  --blue-soft: #DCE9F5;
+  --rule: #D5D5BC;         /* Pearl */
+  --rule-strong: #B3A189;  /* Cinnamon */
+  --butter: #FFDE8A;       /* Honey */
+  --butter-soft: #FAE6B0;  /* soft Honey */
+  --blue: #9EBEC6;         /* Light Blue */
+  --blue-soft: #CFDEE2;
+  --plum: #3D2D2E;         /* PANTONE Chocolate Plum */
+  --on-plum: #EADFC4;      /* cream text on plum */
   --error: #A6402E;
-  --serif: Georgia, "Iowan Old Style", "Palatino Linotype", "Book Antiqua", "Times New Roman", serif;
-  --mono: "Courier New", ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* Typography — Magazine (Fraunces) / Institution (IBM Plex Mono) / Notes (Kalam) */
+  --serif: "Newsreader", Georgia, "Times New Roman", serif;
+  --mono: "IBM Plex Mono", "Courier New", ui-monospace, monospace;
+  --display: "Fraunces", Georgia, serif;
+  --hand: "Kalam", "Caveat", cursive;
+
+  /* Fraunces variable axes (tunable via ?vibe=1) */
+  --fx-opsz: 110;    /* 9–144 optical size for headlines */
+  --fx-wght: 560;    /* 100–900 display weight */
+  --fx-soft: 60;     /* 0–100 SOFT */
+  --fx-wonk: 0.6;    /* 0–1 WONK */
+
+  /* Handwritten annotation (note-taking layer) */
+  --hand-size: 1.15rem;
+  --hand-rotate: -1.6deg;
+
   --measure: 62ch;
 }
 
@@ -46,9 +64,11 @@ body {
 /* ---------- Typography ---------- */
 
 h1, h2, h3 {
-  font-weight: 500;
+  font-family: var(--display);
+  font-weight: var(--fx-wght);
   line-height: 1.12;
   letter-spacing: -0.01em;
+  font-variation-settings: "opsz" var(--fx-opsz), "SOFT" var(--fx-soft), "WONK" var(--fx-wonk);
 }
 
 h1 { font-size: clamp(2.4rem, 6vw, 4.2rem); }
@@ -105,11 +125,13 @@ a:hover { color: #000; }
 }
 
 .wordmark {
+  font-family: var(--display);
   font-size: 1.28rem;
   font-weight: 600;
   letter-spacing: -0.02em;
   text-decoration: none;
   font-variant-numeric: tabular-nums;
+  font-variation-settings: "opsz" 30, "SOFT" var(--fx-soft), "WONK" var(--fx-wonk);
 }
 .wordmark .wordmark-dot { color: var(--butter); }
 
@@ -534,10 +556,11 @@ a:hover { color: #000; }
 /* ---------- Footer ---------- */
 
 .site-footer {
-  border-top: 1px solid var(--rule);
+  border-top: 1px solid var(--plum);
   margin-top: 4rem;
   padding-block: 2.6rem;
-  background: var(--paper-deep);
+  background: var(--plum);
+  color: var(--on-plum);
 }
 .footer-inner {
   display: flex;
@@ -552,14 +575,14 @@ a:hover { color: #000; }
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.16em;
-  border: 1.5px solid var(--ink-soft);
-  color: var(--ink-soft);
+  border: 1.5px solid var(--butter);
+  color: var(--butter);
   border-radius: 4px;
   padding: 0.3rem 0.8rem;
   transform: rotate(-1.2deg);
   margin-bottom: 0.9rem;
 }
-.footer-line { display: block; color: var(--ink-soft); font-size: 0.95rem; }
+.footer-line { display: block; color: var(--on-plum); font-size: 0.95rem; }
 .footer-links {
   display: flex;
   flex-direction: column;
@@ -568,8 +591,8 @@ a:hover { color: #000; }
   font-size: 0.82rem;
   text-align: right;
 }
-.footer-links a { color: var(--ink-soft); text-decoration: none; }
-.footer-links a:hover { color: var(--ink); text-decoration: underline; }
+.footer-links a { color: var(--on-plum); text-decoration: none; }
+.footer-links a:hover { color: var(--butter); text-decoration: underline; }
 
 /* ---------- Thanks page ---------- */
 
@@ -609,3 +632,21 @@ a:hover { color: #000; }
   .form-card { padding: 1.6rem 1.3rem; }
   .footer-links { text-align: left; }
 }
+
+/* ---------- Handwritten annotation (note-taking layer) ---------- */
+
+.annotation {
+  font-family: var(--hand);
+  font-size: var(--hand-size);
+  font-weight: 400;
+  line-height: 1.3;
+  color: var(--ink);
+  background: var(--butter);
+  display: inline-block;
+  padding: 0.05em 0.55em 0.15em;
+  border-radius: 3px;
+  transform: rotate(var(--hand-rotate));
+  box-shadow: 2px 2px 0 rgba(36, 20, 12, 0.1);
+}
+.hero .annotation { margin-top: 1.7rem; margin-left: 2rem; }
+.annotation-mark { font-weight: 700; }

@@ -7,7 +7,9 @@
   <meta name="description" content="{% block meta_description %}Preservation Studio is a custom framing program based in Los Angeles for artists and makers.{% endblock %}">
   <link rel="icon" type="image/svg+xml" href="{% static 'studio/favicon.svg' %}">
   <link rel="alternate icon" href="{% static 'studio/favicon.svg' %}">
-  <link rel="stylesheet" href="{% static 'studio/css/site.css' %}?v=1">
+  <link rel="stylesheet" href="{% static 'studio/css/fonts.css' %}?v=1">
+  <link rel="stylesheet" href="{% static 'studio/css/site.css' %}?v=2">
+  {% if request.GET.vibe %}<link rel="stylesheet" href="{% static 'studio/css/vibe-tuner.css' %}?v=1">{% endif %}
   {% block extra_head %}{% endblock %}
 </head>
 <body>
@@ -41,5 +43,6 @@
       </div>
     </div>
   </footer>
+  {% if request.GET.vibe %}{% include "studio/partials/vibe_tuner.html" %}{% endif %}
 </body>
 </html>
