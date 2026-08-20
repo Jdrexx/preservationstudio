@@ -231,7 +231,7 @@
   padding: 0.4rem 0.8rem;
   cursor: pointer;
 }
-#vibe-copy.copied { background: var(--blue); }
+#vibe-copy.copied, #vibe-link.copied { background: var(--blue); }
 #vibe-css {
   flex: 1;
   margin: 1rem 1.2rem;

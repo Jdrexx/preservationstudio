@@ -63,9 +63,10 @@
     </section>
     <section class="vibe-sec vibe-actions">
       <button id="vibe-export" class="btn btn-yellow" type="button">Export CSS</button>
+      <button id="vibe-link" class="btn" type="button">Copy Link</button>
       <button id="vibe-reset" class="btn" type="button">Reset</button>
     </section>
-    <p class="vibe-hint">This room only appears with ?vibe=1 — visitors never see it. Tuning persists in this browser. Export the :root block and paste it into site.css to lock a vibe in permanently.</p>
+    <p class="vibe-hint">This room only appears with ?vibe=1 — visitors never see it. Tuning persists in this browser. Copy Link shares the current look as a URL; anyone opening it sees your palette and type instantly. Export CSS locks a vibe into site.css permanently.</p>
   </div>
   <footer class="vibe-foot">preservation.studio — tuning room</footer>
 </aside>
@@ -84,14 +85,25 @@
 </div>
 
 <script>
-/* Apply saved vibe before first paint to avoid flash. */
+/* Apply saved (or shared-link) vibe before first paint to avoid flash. */
 (function () {
   try {
-    var s = JSON.parse(localStorage.getItem("ps-vibe-v1") || "null");
+    var s = null;
+    var t = new URLSearchParams(location.search).get("t");
+    if (t) {
+      var b64 = t.replace(/-/g, "+").replace(/_/g, "/");
+      while (b64.length % 4) b64 += "=";
+      s = JSON.parse(atob(b64));
+      if (s) localStorage.setItem("ps-vibe-v1", JSON.stringify(s));
+    }
+    if (!s) s = JSON.parse(localStorage.getItem("ps-vibe-v1") || "null");
     if (!s) return;
+    var LEGACY = { display: "--display", body: "--serif", mono: "--mono", hand: "--hand" };
     var st = document.documentElement.style;
     if (s.tokens) for (var k in s.tokens) st.setProperty("--" + k, s.tokens[k]);
-    if (s.stacks) for (var k2 in s.stacks) st.setProperty(k2, s.stacks[k2]);
+    if (s.stacks) for (var k2 in s.stacks) {
+      st.setProperty(k2.charAt(0) === "-" ? k2 : LEGACY[k2] || k2, s.stacks[k2]);
+    }
     if (s.sliders) for (var k3 in s.sliders) st.setProperty("--" + k3, s.sliders[k3]);
   } catch (e) {}
 })();

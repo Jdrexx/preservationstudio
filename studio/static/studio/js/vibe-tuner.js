@@ -88,9 +88,9 @@
     return STACKS[kind][key] || STACKS[kind][Object.keys(STACKS[kind])[0]];
   }
 
-  function detectStack(kind, varName) {
-    var val = cs(varName).toLowerCase();
+  function detectStack(kind, val) {
     var map = STACKS[kind];
+    val = (val || "").toLowerCase();
     for (var key in map) {
       var probe = map[key].toLowerCase();
       var first = probe.split(",")[0].replace(/["']/g, "").trim();
@@ -132,12 +132,14 @@
   /* ---------- type family selects ---------- */
 
   ["display", "body", "mono", "hand"].forEach(function (kind) {
+    var varName = STACK_VARS[kind];
+    var saved = state.stacks[varName];
     var sel = document.getElementById("vibe-sel-" + kind);
-    sel.value = state.stacks[kind] || detectStack(kind, STACK_VARS[kind]);
+    sel.value = saved ? detectStack(kind, saved) : detectStack(kind, cs(varName));
     sel.addEventListener("change", function () {
       var stack = stackFor(kind, sel.value);
-      setVar(STACK_VARS[kind], stack);
-      state.stacks[kind] = sel.value;
+      setVar(varName, stack);
+      state.stacks[varName] = stack;
       save();
     });
   });
@@ -272,6 +274,58 @@
       navigator.clipboard.writeText(cssArea.value).then(done, done);
     } else {
       document.execCommand("copy");
+      done();
+    }
+  });
+
+  /* ---------- share link ---------- */
+
+  function currentState() {
+    var st = { tokens: {}, stacks: {}, sliders: {} };
+    TOKENS.forEach(function (pair) {
+      var input = swatches.querySelector('input[data-token="' + pair[0] + '"]');
+      st.tokens[pair[0]] = input.value;
+    });
+    ["display", "body", "mono", "hand"].forEach(function (kind) {
+      var sel = document.getElementById("vibe-sel-" + kind);
+      st.stacks[STACK_VARS[kind]] = stackFor(kind, sel.value);
+    });
+    SLIDERS.forEach(function (spec) {
+      var name = spec[0];
+      var unit = spec[5];
+      var v = parseFloat(document.getElementById("vibe-" + name).value);
+      if (unit === "num100") st.sliders["--" + name] = (v / 100).toFixed(2);
+      else if (unit === "rem") st.sliders["--" + name] = v.toFixed(2) + "rem";
+      else if (unit === "deg") st.sliders["--" + name] = v.toFixed(1) + "deg";
+      else st.sliders["--" + name] = String(Math.round(v));
+    });
+    return st;
+  }
+
+  function encodeState(st) {
+    return btoa(JSON.stringify(st)).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  }
+
+  var linkBtn = document.getElementById("vibe-link");
+  linkBtn.addEventListener("click", function () {
+    var url = location.pathname + "?vibe=1&t=" + encodeState(currentState());
+    var done = function () {
+      linkBtn.textContent = "Link copied";
+      linkBtn.classList.add("copied");
+      setTimeout(function () {
+        linkBtn.textContent = "Copy Link";
+        linkBtn.classList.remove("copied");
+      }, 1500);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(done, done);
+    } else {
+      var ta = document.createElement("textarea");
+      ta.value = url;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
       done();
     }
   });
