@@ -81,6 +81,55 @@ python manage.py runserver
   the form currently records fee status only.
 - About page portrait is a styled placeholder frame — drop in a real photo when ready.
 
+## Design system: typography & palette
+
+All styling is driven by CSS variables in the `:root` block of
+`studio/static/studio/css/site.css` — one place to restyle the whole site.
+
+**Fonts** (self-hosted in `studio/static/studio/fonts/`, no Google CDN dependency):
+
+| Role | Font | Notes |
+|---|---|---|
+| Display (headlines) | **Fraunces** | Variable: optical size, weight, SOFT, WONK |
+| Body | **Newsreader** | Long-form reading |
+| Labels / institution | **IBM Plex Mono** | Nav, buttons, section numbers |
+| Handwritten notes | **Kalam** (alt: Caveat) | Hero annotation accents |
+
+**Palette** (client's PANTONE-anchored hexes):
+
+| Token | Hex | Use |
+|---|---|---|
+| `--paper` | `#F5EDD6` Papyrus | Page background |
+| `--paper-deep` | `#D5D5BC` Pearl | Alternate section bands |
+| `--card` | `#FFFAE6` Butter | Cards, form panels |
+| `--ink` | `#24140C` Licorice | Text |
+| `--ink-soft` | `#5F5A41` Olive Night | Labels, captions |
+| `--rule-strong` | `#B3A189` Cinnamon | Borders, rules |
+| `--butter` | `#FFDE8A` Honey | Accent, buttons, highlights |
+| `--blue` | `#9EBEC6` Light Blue | Weekend card, sponsor band |
+| `--plum` | `#3D2D2E` Chocolate Plum | Footer |
+
+## Vibe tuner (?vibe=1)
+
+A hidden design room for tuning the look live. Visitors never see it.
+
+- **Open it:** append `?vibe=1` to any page URL — e.g. `/?vibe=1`. A
+  "Tune Vibe" button appears bottom-right.
+- **What you can tune:** every palette color (color pickers), the four type
+  families, the Fraunces dials (WONK, SOFT, optical size, weight), and the
+  handwritten note size + tilt.
+- **Persistence:** tuning is saved in your browser (localStorage) and applies
+  across all pages.
+- **Share a look:** hit **Copy Link** — it copies a URL with the full look
+  encoded in a `?t=...` param. Anyone opening that link sees the same colors
+  and type instantly, no setup needed.
+- **Lock it in permanently:** hit **Export CSS** — copy the `:root` block it
+  generates and paste it over the one in `site.css` (bump the `?v=` on
+  `site.css` in `base.html` so browsers pick it up).
+
+Tuner files: `vibe-tuner.css` / `vibe-tuner.js` / `partials/vibe_tuner.html` —
+all gated behind `?vibe=1` in `base.html`.
+
 ## Deployment
 
 Push to `main` → Railway auto-deploys (GitHub source connected).
