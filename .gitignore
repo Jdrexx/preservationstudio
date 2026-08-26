@@ -7,3 +7,6 @@ __pycache__/
 *.log
 .env
 .DS_Store
+.procoder/state/
+.procoder/index/
+.lycheecache
