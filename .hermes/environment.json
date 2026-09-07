@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "recipe": {
+    "name": "preservationstudio Django",
+    "kind": "python",
+    "bootstrap": [
+      "python3 -m venv .venv && .venv/bin/pip install -q -r requirements.txt && DJANGO_DEBUG=1 .venv/bin/python manage.py migrate --noinput"
+    ],
+    "test": [
+      "DJANGO_DEBUG=1 .venv/bin/python manage.py test studio"
+    ],
+    "start": [
+      "DJANGO_DEBUG=1 .venv/bin/python manage.py runserver 127.0.0.1:8000"
+    ],
+    "readiness": {
+      "url": "http://127.0.0.1:8000/",
+      "timeout": 30
+    },
+    "notes": "Production site (client: Preservation Studio / Asher Cano) on Railway + Postgres. Local runs SQLite with DJANGO_DEBUG=1; tests pin HTTP_HOST=localhost (in ALLOWED_HOSTS default). Suite: 38 tests incl. a real ~4MB photo-upload regression (DATA_UPLOAD_MAX_MEMORY_SIZE=12MB).",
+    "evidence": [
+      "38/38 tests OK",
+      "deployed 2e2eb71: HSTS max-age=15552000 live, all 10 pages 200, admin gated"
+    ]
+  }
+}
