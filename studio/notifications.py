@@ -60,15 +60,9 @@ def send_submission_email(kind, instance):
         return False
 
     title = SUBMISSION_TITLES.get(kind, "New submission")
-    admin_hint = (
-        f"Review in the admin: {settings.ADMIN_URL or '(admin disabled)'}"
-    )
+    admin_hint = f"Review in the admin: {settings.ADMIN_URL or '(admin disabled)'}"
     subject = f"[preservation.studio] {title}"
-    body = (
-        f"{title}\n\n"
-        f"{submission_summary(instance)}\n\n"
-        f"{admin_hint}"
-    )
+    body = f"{title}\n\n{submission_summary(instance)}\n\n{admin_hint}"
     try:
         send_mail(
             subject,

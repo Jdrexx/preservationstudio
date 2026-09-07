@@ -123,9 +123,7 @@ class IntensiveApplication(BaseSubmission):
         ("video", "Video"),
         ("phone", "Phone"),
     ]
-    interview_format = models.CharField(
-        max_length=10, choices=INTERVIEW_FORMAT_CHOICES
-    )
+    interview_format = models.CharField(max_length=10, choices=INTERVIEW_FORMAT_CHOICES)
 
     # ---- Application fee ------------------------------------------------
     FEE_STATUS_CHOICES = [
@@ -133,9 +131,7 @@ class IntensiveApplication(BaseSubmission):
         ("no", "No, not yet"),
         ("waiver", "I have requested a fee waiver"),
     ]
-    application_fee_status = models.CharField(
-        max_length=10, choices=FEE_STATUS_CHOICES
-    )
+    application_fee_status = models.CharField(max_length=10, choices=FEE_STATUS_CHOICES)
 
     # ---- Liability ------------------------------------------------------
     liability_consent = models.BooleanField(

@@ -26,9 +26,7 @@ from .forms import (
 )
 
 THANKS_MESSAGES = {
-    "waitlist": (
-        "You're on the list. We'll let you know when the next cohort opens."
-    ),
+    "waitlist": ("You're on the list. We'll let you know when the next cohort opens."),
     "weekend": (
         "Thanks — we'll reach out when a weekend intensive is coming to your city."
     ),

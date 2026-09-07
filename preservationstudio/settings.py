@@ -15,7 +15,9 @@ SECRET_KEY = os.environ.get(
     "django-insecure-dev-only-key-do-not-use-in-production",
 )
 
-DEBUG = os.environ.get("DJANGO_DEBUG", "1") == "1"
+# Fail closed: DEBUG is OFF unless explicitly enabled. A missing env var must
+# never silently ship a debug-enabled app (leaks stack traces + settings).
+DEBUG = os.environ.get("DJANGO_DEBUG", "0") == "1"
 
 ALLOWED_HOSTS = [
     h.strip()

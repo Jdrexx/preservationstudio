@@ -21,7 +21,9 @@ class HoneypotMixin(forms.Form):
 
     honeypot = forms.CharField(
         required=False,
-        widget=forms.TextInput(attrs={"class": "honeypot", "tabindex": "-1", "autocomplete": "off"}),
+        widget=forms.TextInput(
+            attrs={"class": "honeypot", "tabindex": "-1", "autocomplete": "off"}
+        ),
     )
 
     def clean_honeypot(self):
@@ -44,12 +46,8 @@ class WaitlistForm(HoneypotMixin, forms.ModelForm):
 
 
 class WeekendInterestForm(HoneypotMixin, forms.ModelForm):
-    name = forms.CharField(
-        widget=forms.TextInput(attrs={"autocomplete": "name"})
-    )
-    email = forms.EmailField(
-        widget=forms.EmailInput(attrs={"autocomplete": "email"})
-    )
+    name = forms.CharField(widget=forms.TextInput(attrs={"autocomplete": "name"}))
+    email = forms.EmailField(widget=forms.EmailInput(attrs={"autocomplete": "email"}))
 
     class Meta:
         model = WeekendInterest
@@ -176,10 +174,10 @@ class IntensiveApplicationForm(HoneypotMixin, forms.ModelForm):
 
     def clean(self):
         cleaned = super().clean()
-        if cleaned.get("payment_plan_needed") and not cleaned.get("payment_plan_choice"):
-            self.add_error(
-                "payment_plan_choice", "Please choose a payment plan."
-            )
+        if cleaned.get("payment_plan_needed") and not cleaned.get(
+            "payment_plan_choice"
+        ):
+            self.add_error("payment_plan_choice", "Please choose a payment plan.")
         if cleaned.get("sponsored_seat_consideration") and not cleaned.get(
             "sponsored_seat_statement"
         ):
@@ -205,12 +203,8 @@ class ContactForm(HoneypotMixin, forms.ModelForm):
 class SponsorInquiryForm(HoneypotMixin, forms.ModelForm):
     """Sponsored seat inquiry — saved as a sponsorship contact message."""
 
-    name = forms.CharField(
-        widget=forms.TextInput(attrs={"autocomplete": "name"})
-    )
-    email = forms.EmailField(
-        widget=forms.EmailInput(attrs={"autocomplete": "email"})
-    )
+    name = forms.CharField(widget=forms.TextInput(attrs={"autocomplete": "name"}))
+    email = forms.EmailField(widget=forms.EmailInput(attrs={"autocomplete": "email"}))
 
     class Meta:
         model = ContactMessage

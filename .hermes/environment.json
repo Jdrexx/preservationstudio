@@ -6,9 +6,7 @@
     "bootstrap": [
       "python3 -m venv .venv && .venv/bin/pip install -q -r requirements.txt && DJANGO_DEBUG=1 .venv/bin/python manage.py migrate --noinput"
     ],
-    "test": [
-      "DJANGO_DEBUG=1 .venv/bin/python manage.py test studio"
-    ],
+    "test": ["DJANGO_DEBUG=1 .venv/bin/python manage.py test studio"],
     "start": [
       "DJANGO_DEBUG=1 .venv/bin/python manage.py runserver 127.0.0.1:8000"
     ],

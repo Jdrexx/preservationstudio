@@ -4,7 +4,9 @@
    ============================================================ */
 
 /* The hidden attribute must always win over display rules below */
-#vibe-fab[hidden], #vibe-panel[hidden], #vibe-modal[hidden] {
+#vibe-fab[hidden],
+#vibe-panel[hidden],
+#vibe-modal[hidden] {
   display: none !important;
 }
 
@@ -25,9 +27,14 @@
   padding: 0.7rem 1.1rem;
   cursor: pointer;
   box-shadow: 3px 3px 0 rgba(36, 20, 12, 0.18);
-  transition: transform 0.12s ease, background 0.12s ease;
+  transition:
+    transform 0.12s ease,
+    background 0.12s ease;
 }
-#vibe-fab:hover { transform: translate(-1px, -1px); background: var(--butter-soft); }
+#vibe-fab:hover {
+  transform: translate(-1px, -1px);
+  background: var(--butter-soft);
+}
 
 #vibe-panel {
   position: fixed;
@@ -73,7 +80,9 @@
   line-height: 1;
   cursor: pointer;
 }
-#vibe-close:hover { background: var(--butter); }
+#vibe-close:hover {
+  background: var(--butter);
+}
 
 .vibe-body {
   flex: 1;
@@ -81,7 +90,9 @@
   padding: 1.1rem 1.2rem 1.6rem;
 }
 
-.vibe-sec { margin-bottom: 1.5rem; }
+.vibe-sec {
+  margin-bottom: 1.5rem;
+}
 .vibe-sec h4 {
   font-family: var(--mono);
   font-size: 0.68rem;
@@ -117,7 +128,9 @@
   background: none;
   cursor: pointer;
 }
-.vibe-swatch code { flex: 1; }
+.vibe-swatch code {
+  flex: 1;
+}
 
 .vibe-field {
   display: flex;
@@ -140,7 +153,10 @@
   padding: 0.3rem 0.45rem;
 }
 
-.vibe-slider { display: block; margin-bottom: 0.7rem; }
+.vibe-slider {
+  display: block;
+  margin-bottom: 0.7rem;
+}
 .vibe-slider > span {
   display: flex;
   justify-content: space-between;
@@ -163,8 +179,15 @@
   accent-color: var(--butter);
 }
 
-.vibe-actions { display: flex; gap: 0.6rem; margin-top: 0.4rem; }
-.vibe-actions .btn { padding: 0.6rem 1rem; font-size: 0.72rem; }
+.vibe-actions {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 0.4rem;
+}
+.vibe-actions .btn {
+  padding: 0.6rem 1rem;
+  font-size: 0.72rem;
+}
 
 .vibe-hint {
   font-size: 0.8rem;
@@ -231,7 +254,10 @@
   padding: 0.4rem 0.8rem;
   cursor: pointer;
 }
-#vibe-copy.copied, #vibe-link.copied { background: var(--blue); }
+#vibe-copy.copied,
+#vibe-link.copied {
+  background: var(--blue);
+}
 #vibe-css {
   flex: 1;
   margin: 1rem 1.2rem;

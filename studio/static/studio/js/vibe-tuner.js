@@ -46,7 +46,12 @@
     },
   };
 
-  var STACK_VARS = { display: "--display", body: "--serif", mono: "--mono", hand: "--hand" };
+  var STACK_VARS = {
+    display: "--display",
+    body: "--serif",
+    mono: "--mono",
+    hand: "--hand",
+  };
 
   var SLIDERS = [
     ["fx-wonk", "WONK (wonkiness)", 0, 100, 1, "num100"],
@@ -135,7 +140,9 @@
     var varName = STACK_VARS[kind];
     var saved = state.stacks[varName];
     var sel = document.getElementById("vibe-sel-" + kind);
-    sel.value = saved ? detectStack(kind, saved) : detectStack(kind, cs(varName));
+    sel.value = saved
+      ? detectStack(kind, saved)
+      : detectStack(kind, cs(varName));
     sel.addEventListener("change", function () {
       var stack = stackFor(kind, sel.value);
       setVar(varName, stack);
@@ -159,7 +166,12 @@
     if (current === undefined) {
       var raw = cs("--" + name);
       var num = parseFloat(raw);
-      current = unit === "num100" ? num * 100 : unit === "rem" || unit === "deg" ? num : num;
+      current =
+        unit === "num100"
+          ? num * 100
+          : unit === "rem" || unit === "deg"
+            ? num
+            : num;
       if (isNaN(current)) current = unit === "num100" ? 60 : 50;
     }
     input.value = current;
@@ -233,11 +245,16 @@
       lines.push("  " + v + ": " + stacks[v] + ";");
     });
     var sliders = currentSliders();
-    ["--fx-opsz", "--fx-wght", "--fx-soft", "--fx-wonk", "--hand-size", "--hand-rotate"].forEach(
-      function (v) {
-        lines.push("  " + v + ": " + sliders[v] + ";");
-      }
-    );
+    [
+      "--fx-opsz",
+      "--fx-wght",
+      "--fx-soft",
+      "--fx-wonk",
+      "--hand-size",
+      "--hand-rotate",
+    ].forEach(function (v) {
+      lines.push("  " + v + ": " + sliders[v] + ";");
+    });
     lines.push("}");
     return lines.join("\n");
   }
@@ -303,7 +320,10 @@
   }
 
   function encodeState(st) {
-    return btoa(JSON.stringify(st)).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+    return btoa(JSON.stringify(st))
+      .replace(/\+/g, "-")
+      .replace(/\//g, "_")
+      .replace(/=+$/, "");
   }
 
   var linkBtn = document.getElementById("vibe-link");
