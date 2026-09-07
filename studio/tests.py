@@ -68,7 +68,9 @@ class PageRenderTests(TestCase):
                 resp = client().get(reverse(name))
                 html = resp.content.decode()
                 self.assertIn("<title>", html)
-                self.assertIn("preservation.studio", html.split("<title>")[1].split("</title>")[0])
+                self.assertIn(
+                    "preservation.studio", html.split("<title>")[1].split("</title>")[0]
+                )
 
     def test_404_uses_custom_template(self):
         resp = client().get("/no-such-page/")
@@ -163,7 +165,9 @@ class WaitlistTests(TestCase):
             reverse("studio:home"),
             {"email": "artist@example.com"},
         )
-        self.assertRedirects(resp, reverse("studio:thanks", kwargs={"kind": "waitlist"}))
+        self.assertRedirects(
+            resp, reverse("studio:thanks", kwargs={"kind": "waitlist"})
+        )
         self.assertEqual(WaitlistEntry.objects.count(), 1)
         self.assertEqual(WaitlistEntry.objects.first().email, "artist@example.com")
 
@@ -236,9 +240,45 @@ class SentimentalValueTests(TestCase):
                 "photo": img,
             },
         )
-        self.assertRedirects(resp, reverse("studio:thanks", kwargs={"kind": "sentimental"}))
+        self.assertRedirects(
+            resp, reverse("studio:thanks", kwargs={"kind": "sentimental"})
+        )
         app = SentimentalValueApplication.objects.get()
         self.assertEqual(app.name, "Rosa Diaz")
+        self.assertTrue(app.photo.name.startswith("sentimental/"))
+
+    def test_phone_sized_photo_submits(self):
+        """A real phone photo (~3-6 MB) must not hit Django's request-body cap.
+
+        Regression: DATA_UPLOAD_MAX_MEMORY_SIZE defaults to 2.5 MB, which caps
+        the WHOLE multipart body — submissions with an ordinary photo over
+        ~2.4 MB failed with a bare 400 and the story was lost. The setting is
+        raised to 12 MB; this test proves an ~4 MB upload goes through.
+        """
+        from os import urandom
+
+        noise = Image.frombytes("RGB", (2200, 2200), urandom(2200 * 2200 * 3))
+        buf = BytesIO()
+        noise.save(buf, format="JPEG", quality=90)
+        assert buf.tell() > 3 * 1024 * 1024  # sanity: this really is a big photo
+        img = SimpleUploadedFile(
+            "phone-photo.jpg", buf.getvalue(), content_type="image/jpeg"
+        )
+        resp = client().post(
+            reverse("studio:sentimental_apply"),
+            {
+                "name": "Jordan Lee",
+                "email": "jordan@example.com",
+                "object_description": "A camera from my grandfather",
+                "why_it_matters": "It started my love of photography.",
+                "origin": "Handed down.",
+                "photo": img,
+            },
+        )
+        self.assertRedirects(
+            resp, reverse("studio:thanks", kwargs={"kind": "sentimental"})
+        )
+        app = SentimentalValueApplication.objects.get(name="Jordan Lee")
         self.assertTrue(app.photo.name.startswith("sentimental/"))
 
 
@@ -268,7 +308,9 @@ class IntensiveApplicationTests(TestCase):
 
     def test_full_application_saves(self):
         resp = client().post(reverse("studio:intensive_apply"), self.VALID)
-        self.assertRedirects(resp, reverse("studio:thanks", kwargs={"kind": "intensive"}))
+        self.assertRedirects(
+            resp, reverse("studio:thanks", kwargs={"kind": "intensive"})
+        )
         app = IntensiveApplication.objects.get()
         self.assertEqual(app.first_name, "Jon")
         self.assertTrue(app.payment_plan_needed)
@@ -306,7 +348,9 @@ class IntensiveApplicationTests(TestCase):
         data["payment_plan_needed"] = ""
         data["payment_plan_choice"] = ""
         resp = client().post(reverse("studio:intensive_apply"), data)
-        self.assertRedirects(resp, reverse("studio:thanks", kwargs={"kind": "intensive"}))
+        self.assertRedirects(
+            resp, reverse("studio:thanks", kwargs={"kind": "intensive"})
+        )
         app = IntensiveApplication.objects.get()
         self.assertFalse(app.payment_plan_needed)
 
@@ -326,7 +370,9 @@ class NotificationTests(TestCase):
                 reverse("studio:home"),
                 {"email": "notify@example.com"},
             )
-        self.assertRedirects(resp, reverse("studio:thanks", kwargs={"kind": "waitlist"}))
+        self.assertRedirects(
+            resp, reverse("studio:thanks", kwargs={"kind": "waitlist"})
+        )
         self.assertEqual(len(mail.outbox), 1)
         msg = mail.outbox[0]
         self.assertEqual(msg.to, ["alerts@preservation.studio"])
@@ -336,7 +382,9 @@ class NotificationTests(TestCase):
 
     def test_intensive_application_emails_full_summary(self):
         with self.settings(**self.EMAIL_SETTINGS):
-            resp = client().post(reverse("studio:intensive_apply"), IntensiveApplicationTests.VALID)
+            resp = client().post(
+                reverse("studio:intensive_apply"), IntensiveApplicationTests.VALID
+            )
         self.assertEqual(resp.status_code, 302)
         self.assertEqual(len(mail.outbox), 1)
         msg = mail.outbox[0]
@@ -349,8 +397,11 @@ class NotificationTests(TestCase):
         with self.settings(**self.EMAIL_SETTINGS):
             resp = client().post(
                 reverse("studio:contact_sponsor"),
-                {"name": "A Gallery", "email": "g@example.com",
-                 "message": "We'd like to fund a seat."},
+                {
+                    "name": "A Gallery",
+                    "email": "g@example.com",
+                    "message": "We'd like to fund a seat.",
+                },
             )
         self.assertEqual(resp.status_code, 302)
         self.assertEqual(len(mail.outbox), 1)
@@ -360,8 +411,12 @@ class NotificationTests(TestCase):
         with self.settings(**self.EMAIL_SETTINGS):
             resp = client().post(
                 reverse("studio:contact"),
-                {"name": "A Friend", "email": "f@example.com",
-                 "kind": "general", "message": "When is the next cohort?"},
+                {
+                    "name": "A Friend",
+                    "email": "f@example.com",
+                    "kind": "general",
+                    "message": "When is the next cohort?",
+                },
             )
         self.assertEqual(resp.status_code, 302)
         self.assertEqual(len(mail.outbox), 1)
@@ -373,9 +428,13 @@ class NotificationTests(TestCase):
             reverse("studio:home"),
             {"email": "quiet@example.com"},
         )
-        self.assertRedirects(resp, reverse("studio:thanks", kwargs={"kind": "waitlist"}))
+        self.assertRedirects(
+            resp, reverse("studio:thanks", kwargs={"kind": "waitlist"})
+        )
         self.assertEqual(len(mail.outbox), 0)
-        self.assertEqual(WaitlistEntry.objects.filter(email="quiet@example.com").count(), 1)
+        self.assertEqual(
+            WaitlistEntry.objects.filter(email="quiet@example.com").count(), 1
+        )
 
     def test_email_failure_does_not_break_submission(self):
         with self.settings(**self.EMAIL_SETTINGS):
@@ -387,8 +446,12 @@ class NotificationTests(TestCase):
                     reverse("studio:home"),
                     {"email": "brave@example.com"},
                 )
-        self.assertRedirects(resp, reverse("studio:thanks", kwargs={"kind": "waitlist"}))
-        self.assertEqual(WaitlistEntry.objects.filter(email="brave@example.com").count(), 1)
+        self.assertRedirects(
+            resp, reverse("studio:thanks", kwargs={"kind": "waitlist"})
+        )
+        self.assertEqual(
+            WaitlistEntry.objects.filter(email="brave@example.com").count(), 1
+        )
 
 
 class ContactTests(TestCase):

@@ -68,7 +68,9 @@ WSGI_APPLICATION = "preservationstudio.wsgi.application"
 
 # ---- Database: Postgres on Railway (DATABASE_URL or PG*), SQLite locally ----
 
-DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": BASE_DIR / "db.sqlite3"}}
+DATABASES = {
+    "default": {"ENGINE": "django.db.backends.sqlite3", "NAME": BASE_DIR / "db.sqlite3"}
+}
 
 _db_url = os.environ.get("DATABASE_URL", "").strip()
 if _db_url:
@@ -107,7 +109,9 @@ else:
         }
 
 AUTH_PASSWORD_VALIDATORS = [
-    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
+    {
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
+    },
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
@@ -144,9 +148,32 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # Trust the X-Forwarded-Proto header so is_secure() (and SECURE_SSL_REDIRECT)
 # behave correctly instead of looping.
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+# SECURE_SSL_REDIRECT stays env-gated (default off): Railway's edge already
+# redirects http->https, and internal deploy health checks hit the container
+# over plain HTTP with no forwarded-proto header — forcing a redirect here
+# could fail those checks.
 SECURE_SSL_REDIRECT = os.environ.get("DJANGO_SECURE_SSL_REDIRECT", "0") == "1"
-SESSION_COOKIE_SECURE = os.environ.get("DJANGO_SECURE_COOKIES", "0") == "1"
-CSRF_COOKIE_SECURE = os.environ.get("DJANGO_SECURE_COOKIES", "0") == "1"
+# Secure-only cookies and HSTS default ON in production (DEBUG off) so a
+# missing env var never silently downgrades transport security; an explicit
+# DJANGO_SECURE_COOKIES / DJANGO_HSTS_SECONDS env value always wins.
+_secure_default = "1" if not DEBUG else "0"
+SESSION_COOKIE_SECURE = os.environ.get("DJANGO_SECURE_COOKIES", _secure_default) == "1"
+CSRF_COOKIE_SECURE = os.environ.get("DJANGO_SECURE_COOKIES", _secure_default) == "1"
+try:
+    _hsts = int(os.environ.get("DJANGO_HSTS_SECONDS", "15552000" if not DEBUG else "0"))
+except (TypeError, ValueError):
+    _hsts = 0 if DEBUG else 15552000
+SECURE_HSTS_SECONDS = _hsts
+SECURE_HSTS_INCLUDE_SUBDOMAINS = not DEBUG
+SECURE_HSTS_PRELOAD = not DEBUG
+
+# ---- Uploads (Sentimental Value photos) ------------------------------------
+#
+# The default DATA_UPLOAD_MAX_MEMORY_SIZE (2.5 MB) caps the WHOLE multipart
+# body, so a phone photo over ~2.4 MB made the story-submission form fail
+# with a bare 400 — no message, submission lost. Raise it so real photos fit;
+# 12 MB is generous for a JPEG/HEIC of a cherished object.
+DATA_UPLOAD_MAX_MEMORY_SIZE = 12 * 1024 * 1024
 
 # ---- Admin: hidden behind an env-var path (unset = admin disabled) ---------
 
