@@ -1,25 +1,28 @@
 /* ============================================================
-   preservation.studio — Archive / Research Library
-   Warm neutral paper, ink serif type, institutional mono labels,
-   butter yellow + light blue accents. No frameworks.
+   preservation.studio — Bold Red / editorial luxury
+   Design language integrated from the "Bold Red" luxury
+   course-creator template: cream paper, bold red accents,
+   deep maroon blocks, uppercase display serif, pill CTAs.
+   Token NAMES kept stable (vibe tuner / ?vibe=1 depends on
+   them); values re-anchored to the new palette.
    ============================================================ */
 
 :root {
-  /* Palette — preservation.studio (PANTONE-anchored warm neutrals) */
-  --paper: #f5edd6; /* PANTONE Papyrus */
-  --paper-deep: #d5d5bc; /* Pearl */
-  --card: #fffae6; /* Butter */
-  --ink: #24140c; /* Licorice */
-  --ink-soft: #5f5a41; /* PANTONE Olive Night */
-  --ink-faint: #8a8270;
-  --rule: #d5d5bc; /* Pearl */
-  --rule-strong: #b3a189; /* Cinnamon */
-  --butter: #ffde8a; /* Honey */
-  --butter-soft: #fae6b0; /* soft Honey */
-  --blue: #9ebec6; /* Light Blue */
-  --blue-soft: #cfdee2;
-  --plum: #3d2d2e; /* PANTONE Chocolate Plum */
-  --on-plum: #eadfc4; /* cream text on plum */
+  /* Palette — Bold Red editorial (template-anchored warm creams + reds) */
+  --paper: #f2ecdf; /* Cream paper (template's off-white field) */
+  --paper-deep: #e7dfd0; /* deeper cream band */
+  --card: #fbf6ec; /* warm cream card */
+  --ink: #201915; /* near-charcoal text */
+  --ink-soft: #5c5248; /* warm gray-brown label */
+  --ink-faint: #978b7c;
+  --rule: #ddd3c1;
+  --rule-strong: #c0b29b; /* warm beige border */
+  --butter: #a63a2e; /* BOLD RED — primary accent */
+  --butter-soft: #f2dbd4; /* soft red tint band */
+  --blue: #3f5a44; /* Forest — secondary accent */
+  --blue-soft: #dde4db;
+  --plum: #8a332f; /* deep Maroon — block sections, footer */
+  --on-plum: #f5eee1; /* cream text on maroon */
   --error: #a6402e;
 
   /* Typography — Magazine (Fraunces) / Institution (IBM Plex Mono) / Notes (Kalam) */
@@ -891,4 +894,324 @@ a:hover {
 }
 .annotation-mark {
   font-weight: 700;
+}
+
+/* ============================================================
+   BOLD RED editorial layer — template-style components
+   (uppercase display, pill buttons, split hero, specimen
+   card, value band, maroon "MEET" band, polaroid collage)
+   ============================================================ */
+
+/* Uppercase display headlines ("BUILD THE LIFE" style) */
+.display-upper {
+  text-transform: uppercase;
+  letter-spacing: 0.015em;
+}
+
+/* ---------- Pill buttons ---------- */
+
+.btn {
+  border-radius: 999px;
+  padding: 0.9rem 1.9rem;
+}
+.btn-yellow {
+  background: var(--butter);
+  border-color: var(--butter);
+  color: #fdf8ef;
+}
+.btn-yellow:hover {
+  background: var(--plum);
+  border-color: var(--plum);
+  color: var(--on-plum);
+}
+.btn-blue {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: #fdf8ef;
+}
+.btn-blue:hover {
+  background: #33493a;
+  border-color: #33493a;
+  color: var(--paper);
+}
+/* Cream pill for use on maroon blocks */
+.btn-cream {
+  background: var(--on-plum);
+  border-color: var(--on-plum);
+  color: var(--plum);
+}
+.btn-cream:hover {
+  background: #fffdf6;
+  border-color: #fffdf6;
+  color: var(--plum);
+}
+
+/* ---------- Header: bold red top rule, red current-page ---------- */
+
+.site-header {
+  border-top: 4px solid var(--plum);
+}
+.site-nav a[aria-current="page"] {
+  color: var(--butter);
+  font-weight: 700;
+}
+
+/* ---------- Hero: split editorial layout ---------- */
+
+.hero {
+  padding-block: 4.5rem 3.5rem;
+}
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: 3.5rem;
+  align-items: center;
+}
+.hero-copy h1 {
+  margin-bottom: 1.3rem;
+  font-weight: 620;
+}
+.hero-copy .lede {
+  max-width: 46ch;
+}
+
+/* Specimen card — the "framed piece" standing in for photography */
+.hero-figure {
+  position: relative;
+  display: grid;
+  place-items: center;
+  padding: 1.2rem;
+}
+.specimen {
+  position: relative;
+  z-index: 2;
+  background: var(--card);
+  border: 1px solid var(--rule-strong);
+  padding: 0.8rem 0.8rem 1rem;
+  box-shadow: 8px 10px 0 rgba(36, 25, 21, 0.12);
+  transform: rotate(1.2deg);
+  max-width: 26rem;
+  width: 100%;
+}
+.specimen-frame {
+  border: 10px solid var(--plum);
+  background: var(--paper);
+}
+.specimen-art {
+  aspect-ratio: 4 / 5;
+  background:
+    linear-gradient(160deg, #c96a52 0%, var(--plum) 55%, #5a2020 100%),
+    repeating-linear-gradient(
+      0deg,
+      transparent 0 20px,
+      rgba(255, 255, 255, 0.06) 20px 21px
+    );
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+.specimen-art::after {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  border: 1px solid rgba(245, 238, 225, 0.35);
+}
+.specimen-stamp {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(245, 238, 225, 0.9);
+  transform: rotate(-90deg);
+}
+.specimen-caption {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  text-align: center;
+  padding: 0.7rem 0.4rem 0.2rem;
+}
+.specimen-note {
+  position: absolute;
+  right: -1.4rem;
+  bottom: -1.1rem;
+  font-family: var(--hand);
+  font-size: 1.05rem;
+  background: var(--butter);
+  color: #fdf8ef;
+  padding: 0.1em 0.7em 0.2em;
+  border-radius: 3px;
+  transform: rotate(-3deg);
+  box-shadow: 2px 2px 0 rgba(36, 25, 21, 0.15);
+}
+.polaroid-ghost {
+  position: absolute;
+  font-family: var(--hand);
+  font-size: 1.4rem;
+  background: var(--card);
+  border: 1px solid var(--rule-strong);
+  padding: 0.15em 0.7em;
+  box-shadow: 3px 3px 0 rgba(36, 25, 21, 0.1);
+  z-index: 1;
+}
+.polaroid-ghost-a {
+  top: 0.2rem;
+  left: -0.2rem;
+  transform: rotate(-6deg);
+  color: var(--butter);
+}
+.polaroid-ghost-b {
+  bottom: 0.4rem;
+  right: -0.4rem;
+  transform: rotate(5deg);
+  color: var(--ink);
+}
+
+/* ---------- Value band (two-column editorial) ---------- */
+
+.value-band {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2.6rem;
+  margin-top: 2.4rem;
+  max-width: 58rem;
+}
+.value-item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1.2rem;
+  align-items: start;
+}
+.value-illu {
+  width: 3.4rem;
+  height: 3.4rem;
+  color: var(--ink-soft);
+}
+.value-illu .illu-accent {
+  color: var(--butter);
+}
+.value-item h3 {
+  font-size: 1.35rem;
+  margin-bottom: 0.35rem;
+}
+.value-item p {
+  color: var(--ink-soft);
+}
+
+/* ---------- Maroon band (template's "MEET" section) ---------- */
+
+.section-maroon {
+  background: var(--plum);
+  color: var(--on-plum);
+  border-top: 1px solid rgba(245, 238, 225, 0.2);
+  border-bottom: 1px solid rgba(245, 238, 225, 0.2);
+}
+.section-maroon .lede {
+  color: var(--on-plum);
+}
+.section-maroon .mono-label,
+.section-maroon .muted {
+  color: rgba(245, 238, 225, 0.75);
+}
+.section-maroon .section-num {
+  color: rgba(245, 238, 225, 0.8);
+  border-color: rgba(245, 238, 225, 0.45);
+}
+.section-maroon a:not(.btn) {
+  color: var(--on-plum);
+}
+.meet-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 3.5rem;
+  align-items: center;
+  margin-top: 2rem;
+}
+.meet-copy .lede {
+  font-size: 1.18rem;
+}
+.meet-signature {
+  font-family: var(--hand);
+  font-size: 1.6rem;
+  color: var(--on-plum);
+  display: inline-block;
+  margin-top: 1rem;
+  transform: rotate(-1.5deg);
+}
+
+/* ---------- Polaroid collage ---------- */
+
+.polaroids {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.1rem;
+  align-items: center;
+}
+.polaroid {
+  background: var(--card);
+  border: 1px solid var(--rule-strong);
+  padding: 0.55rem 0.55rem 0.8rem;
+  box-shadow: 4px 5px 0 rgba(20, 12, 8, 0.25);
+}
+.polaroid:nth-child(1) {
+  transform: rotate(-4deg) translateY(0.4rem);
+}
+.polaroid:nth-child(2) {
+  transform: rotate(1.5deg) translateY(-0.5rem);
+}
+.polaroid:nth-child(3) {
+  transform: rotate(4deg) translateY(0.3rem);
+}
+.polaroid .polaroid-art {
+  aspect-ratio: 1;
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  display: grid;
+  place-items: center;
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.polaroid:nth-child(1) .polaroid-art {
+  background: linear-gradient(135deg, #d9a48e, #b5675a);
+}
+.polaroid:nth-child(2) .polaroid-art {
+  background: linear-gradient(135deg, #cdd9c9, #93a893);
+}
+.polaroid:nth-child(3) .polaroid-art {
+  background: linear-gradient(135deg, #e3c9a8, #c9a37c);
+}
+.polaroid figcaption {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  text-align: center;
+  padding-top: 0.55rem;
+}
+
+/* ---------- Bold Red responsive ---------- */
+
+@media (max-width: 860px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 2.6rem;
+  }
+  .meet-grid {
+    grid-template-columns: 1fr;
+  }
+  .polaroids {
+    gap: 0.7rem;
+  }
+  .specimen-note {
+    right: 0.2rem;
+  }
+  .polaroid-ghost-b {
+    right: 0.2rem;
+  }
 }

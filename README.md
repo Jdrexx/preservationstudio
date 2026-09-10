@@ -95,19 +95,52 @@ All styling is driven by CSS variables in the `:root` block of
 | Labels / institution | **IBM Plex Mono**       | Nav, buttons, section numbers              |
 | Handwritten notes    | **Kalam** (alt: Caveat) | Hero annotation accents                    |
 
-**Palette** (client's PANTONE-anchored hexes):
+**Vibe tuner library** — the `?vibe=1` tuner offers every family below as a
+Display / Body / Mono / Notes pick (all self-hosted, latin-only woff2):
 
-| Token           | Hex                      | Use                         |
-| --------------- | ------------------------ | --------------------------- |
-| `--paper`       | `#F5EDD6` Papyrus        | Page background             |
-| `--paper-deep`  | `#D5D5BC` Pearl          | Alternate section bands     |
-| `--card`        | `#FFFAE6` Butter         | Cards, form panels          |
-| `--ink`         | `#24140C` Licorice       | Text                        |
-| `--ink-soft`    | `#5F5A41` Olive Night    | Labels, captions            |
-| `--rule-strong` | `#B3A189` Cinnamon       | Borders, rules              |
-| `--butter`      | `#FFDE8A` Honey          | Accent, buttons, highlights |
-| `--blue`        | `#9EBEC6` Light Blue     | Weekend card, sponsor band  |
-| `--plum`        | `#3D2D2E` Chocolate Plum | Footer                      |
+| Stack   | Families                                                                                                            |
+| ------- | ------------------------------------------------------------------------------------------------------------------- |
+| Display | Fraunces, Playfair Display, Cormorant Garamond, Gloock, Italiana, Bricolage Grotesque, Georgia                      |
+| Body    | Newsreader, Libre Caslon Text, Source Serif 4, Cormorant Garamond, Inter, Space Grotesk, Archivo, Fraunces, Georgia |
+| Mono    | IBM Plex Mono, JetBrains Mono, Space Mono, Courier New                                                              |
+| Notes   | Kalam, Caveat, Dancing Script, Pacifico, Satisfy, Yellowtail, Grand Hotel                                           |
+
+**Free stand-ins for the client's Creative Market picks** (import now, swap
+for the purchased woff2s later without touching the tuner):
+
+| Creative Market font           | Free matches already in the tuner                                         |
+| ------------------------------ | ------------------------------------------------------------------------- |
+| Makking (variable grotesk)     | Bricolage Grotesque, Space Grotesk, Archivo                               |
+| Promenade (calligraphic serif) | Gloock, Playfair Display, Cormorant Garamond, Italiana, Libre Caslon Text |
+| Paloma (hand-painted brush)    | Yellowtail, Pacifico, Grand Hotel, Dancing Script                         |
+
+> **Adding a purchased font (e.g. Creative Market webfont):** drop the woff2
+> into `studio/static/studio/fonts/`, add one `@font-face` per family in
+> `fonts.css`, add an `<option>` in `partials/vibe_tuner.html` for its stack,
+> and mirror it in the matching `STACKS` map in `js/vibe-tuner.js`. Bump the
+> `?v=` on `vibe-tuner.js` so browsers reload it.
+
+**Palette** (Bold Red editorial — integrated from the "Bold Red" luxury
+course-creator template design; token names unchanged so the vibe tuner
+keeps working):
+
+| Token           | Hex                    | Use                         |
+| --------------- | ---------------------- | --------------------------- |
+| `--paper`       | `#F2ECDF` Cream        | Page background             |
+| `--paper-deep`  | `#E7DFD0`              | Alternate section bands     |
+| `--card`        | `#FBF6EC`              | Cards, form panels          |
+| `--ink`         | `#201915`              | Text                        |
+| `--ink-soft`    | `#5C5248`              | Labels, captions            |
+| `--rule-strong` | `#C0B29B` Beige        | Borders, rules              |
+| `--butter`      | `#A63A2E` **Bold Red** | Accent, pill CTAs           |
+| `--blue`        | `#3F5A44` Forest       | Weekend card, sponsor band  |
+| `--plum`        | `#8A332F` Maroon       | Footer, "Meet" band, frames |
+
+Design notes: uppercase editorial headlines (`.display-upper`), pill-shaped
+buttons, split hero with a CSS "specimen card" standing in for photography,
+two-column value band with flat SVG motifs, maroon "Meet the studio" band
+with a polaroid collage. All template component styles live in the
+"BOLD RED editorial layer" section at the end of `site.css`.
 
 ## Vibe tuner (?vibe=1)
 

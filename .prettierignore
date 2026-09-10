@@ -1,0 +1,4 @@
+# Django templates: prettier has no Django-tag grammar and corrupts {% %} blocks
+# (see django-development skill: template parser KeyError cascade). Formatter left out of scope.
+templates/**
+studio/templates/**

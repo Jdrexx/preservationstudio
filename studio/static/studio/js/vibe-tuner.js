@@ -29,20 +29,38 @@
   var STACKS = {
     display: {
       fraunces: '"Fraunces", Georgia, serif',
+      playfair: '"Playfair Display", Georgia, serif',
+      cormorant: '"Cormorant Garamond", Georgia, serif',
+      gloock: '"Gloock", Georgia, serif',
+      italiana: '"Italiana", Georgia, serif',
+      bricolage: '"Bricolage Grotesque", "Space Grotesk", sans-serif',
       georgia: "Georgia, serif",
     },
     body: {
       newsreader: '"Newsreader", Georgia, "Times New Roman", serif',
+      librecaslon: '"Libre Caslon Text", "Times New Roman", serif',
+      sourceserif: '"Source Serif 4", Georgia, serif',
+      cormorant: '"Cormorant Garamond", Georgia, serif',
+      inter: '"Inter", "Helvetica Neue", Arial, sans-serif',
+      spacegrotesk: '"Space Grotesk", "Helvetica Neue", sans-serif',
+      archivo: '"Archivo", "Helvetica Neue", Arial, sans-serif',
       fraunces: '"Fraunces", Georgia, serif',
       georgia: "Georgia, serif",
     },
     mono: {
       plex: '"IBM Plex Mono", "Courier New", monospace',
+      jetbrains: '"JetBrains Mono", "Courier New", monospace',
+      spacemono: '"Space Mono", "Courier New", monospace',
       courier: '"Courier New", monospace',
     },
     hand: {
       kalam: '"Kalam", "Caveat", cursive',
       caveat: '"Caveat", cursive',
+      dancingscript: '"Dancing Script", "Caveat", cursive',
+      pacifico: '"Pacifico", cursive',
+      satisfy: '"Satisfy", cursive',
+      yellowtail: '"Yellowtail", cursive',
+      grandhotel: '"Grand Hotel", cursive',
     },
   };
 
