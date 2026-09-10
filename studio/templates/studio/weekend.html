@@ -1,17 +1,17 @@
 {% extends "studio/base.html" %}
 {% block title %}Custom Framing Weekend — preservation.studio{% endblock %}
-{% block meta_description %}The full Custom Framing Intensive curriculum compressed into two days. Traveling cohorts in select cities. Friday evening through Sunday afternoon.{% endblock %}
+{% block meta_description %}The full Custom Framing Intensive curriculum compressed into two days. Traveling cohorts in select cities. Friday evening through Sunday afternoon. $3,500, all materials included.{% endblock %}
 {% block content %}
 
-<section class="hero">
+{# 01 — Poster title. The Weekend mockup is almost entirely whitespace:
+   the name, then a wide gap, then the two columns. #}
+<section class="section">
   <div class="container">
-    <div class="hero-eyebrow">
-      <span class="rule-tick"></span>
-      <span class="mono-label">Traveling cohorts</span>
+    <div class="poster">
+      <h1>Custom Framing Weekend</h1>
     </div>
-    <h1>Custom Framing Weekend</h1>
-    <p class="lede">The full Custom Framing Intensive curriculum compressed into two days. Traveling cohorts in select cities.</p>
-    <div class="hero-meta">
+    <p class="lede" style="max-width:52ch;margin-inline:auto;text-align:center;">The full Custom Framing Intensive curriculum compressed into two days. Traveling cohorts in select cities.</p>
+    <div class="hero-meta" style="justify-content:center;">
       <span><b>Fri evening – Sun afternoon</b></span>
       <span><b>6 people max</b></span>
       <span><b>All materials included</b></span>
@@ -19,7 +19,45 @@
   </div>
 </section>
 
+<div class="photo-band photo" role="img" aria-label="The weekend intensive — a bench mid-build, materials laid out"></div>
+
+{# 02 — What you'll learn: schedule left, pricing right (the mockup's split). #}
 <section class="section">
+  <div class="container">
+    <h2 class="script-head" style="font-size:clamp(1.6rem,3vw,2.3rem);">What you'll learn.</h2>
+
+    <div class="two-col-foot">
+      <div>
+        <h3>Weekend</h3>
+        <dl class="day-list">
+          <dt>Day 1 —</dt>
+          <dd>Measuring, Tools, &amp; First Cuts</dd>
+          <dd>Mat Cutting, Mounting &amp; Hinging</dd>
+          <dt>Day 2 —</dt>
+          <dd>Glazing &amp; Full Assembly</dd>
+          <dd>Float Frames &amp; Shadow Boxes</dd>
+          <dd>Conservation, Pricing &amp; Showcase</dd>
+        </dl>
+      </div>
+
+      <div>
+        <h3>Pricing</h3>
+        <p class="pricing-note">
+          <strong>Cohort Tuition: $3,500.</strong> Enrollment limited to 6.
+          All materials included.
+        </p>
+        <p class="pricing-note">Payment plans are available. A $500 deposit holds your spot. The remaining balance is due before the first session. A $50 admin fee applies to payment plans.</p>
+        <p class="pricing-note muted">Join the interest list and we'll reach out when a weekend intensive is coming to your city.</p>
+        <div class="btn-row">
+          <a class="btn btn-cta" href="#interest">waitlist</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{# 03 — Where we're headed + interest list (form must stay inline). #}
+<section class="section section-alt section-rule">
   <div class="container">
     <div class="intro-copy">
       <span class="section-num">№ 01 — Upcoming Locations</span>
@@ -30,7 +68,7 @@
   </div>
 </section>
 
-<section class="section section-alt section-rule" id="interest">
+<section class="section" id="interest">
   <div class="container">
     <span class="section-num">№ 02 — Interest List</span>
     <h2>Join the interest list</h2>
@@ -43,7 +81,7 @@
       {% include "studio/partials/field.html" with field=form.email %}
       {% include "studio/partials/field.html" with field=form.city %}
       <div class="btn-row">
-        <button type="submit" class="btn btn-blue">Submit</button>
+        <button type="submit" class="btn btn-cta">submit</button>
       </div>
     </form>
   </div>

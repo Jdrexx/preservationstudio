@@ -9,27 +9,33 @@
 
 :root {
   /* Palette — Bold Red editorial (template-anchored warm creams + reds) */
-  --paper: #f2ecdf; /* Cream paper (template's off-white field) */
-  --paper-deep: #e7dfd0; /* deeper cream band */
-  --card: #fbf6ec; /* warm cream card */
-  --ink: #201915; /* near-charcoal text */
-  --ink-soft: #5c5248; /* warm gray-brown label */
-  --ink-faint: #978b7c;
-  --rule: #ddd3c1;
-  --rule-strong: #c0b29b; /* warm beige border */
-  --butter: #a63a2e; /* BOLD RED — primary accent */
-  --on-butter: #fdf8ef; /* text/fg on the accent (dark for light accents) */
-  --butter-soft: #f2dbd4; /* soft red tint band */
-  --blue: #3f5a44; /* Forest — secondary accent */
-  --blue-soft: #dde4db;
-  --plum: #8a332f; /* deep Maroon — block sections, footer */
-  --on-plum: #f5eee1; /* cream text on maroon */
+  --paper: #f5f1ea; /* Cream — measured off Asher's newest mockups (brief: Papyrus #F5EDD6) */
+  --paper-deep: #eae3d4; /* deeper cream band */
+  --card: #ffffff; /* mockup cards are white stock */
+  --ink: #24140c; /* Licorice — brief */
+  --ink-soft: #5f5a41; /* Olive Night — brief */
+  --ink-faint: #8c8273;
+  --rule: #d5d5bc; /* Pearl — brief */
+  --rule-strong: #b3a189; /* Cinnamon — brief */
+  --butter: #ffde8a; /* Honey — brief accent */
+  --on-butter: #24140c; /* dark text sits on the light accents */
+  --butter-soft: #fbeecb; /* soft Honey band */
+  --blue: #9ebec6; /* Light Blue — brief; the CTA colour in the mockups */
+  --blue-soft: #dce7ea;
+  --plum: #3d2d2e; /* Chocolate Plum — brief; block sections, footer */
+  --on-plum: #f5f1ea; /* cream text on plum */
   --error: #a6402e;
 
-  /* Typography — Magazine (Fraunces) / Institution (IBM Plex Mono) / Notes (Kalam) */
-  --serif: "Newsreader", Georgia, "Times New Roman", serif;
+  /* Typography — Asher's trio: Paloma (titles) / Promenade (subheads) /
+     Makking (paragraph). Free stand-ins are self-hosted; the paid originals
+     drop in by swapping the woff2 + the family name in one place. */
+  --script:
+    "Permanent Marker", "Kaushan Script", cursive; /* Paloma — hand-painted titles */
+  --display:
+    "Libre Bodoni", "Playfair Display", Georgia, serif; /* Promenade — calligraphic serif */
+  --serif:
+    "Switzer", "Inter", "Helvetica Neue", Arial, sans-serif; /* Makking — grotesk paragraphs */
   --mono: "IBM Plex Mono", "Courier New", ui-monospace, monospace;
-  --display: "Fraunces", Georgia, serif;
   --hand: "Kalam", "Caveat", cursive;
 
   /* Fraunces variable axes (tunable via ?vibe=1) */
@@ -71,7 +77,7 @@ body {
 
 ::selection {
   background: var(--butter);
-  color: var(--on-plum);
+  color: var(--on-butter);
 }
 
 /* ---------- Typography ---------- */
@@ -886,7 +892,7 @@ a:hover {
   font-size: var(--hand-size);
   font-weight: 400;
   line-height: 1.3;
-  color: var(--on-plum);
+  color: var(--on-butter);
   background: var(--butter);
   display: inline-block;
   padding: 0.05em 0.55em 0.15em;
@@ -933,12 +939,12 @@ a:hover {
 .btn-blue {
   background: var(--blue);
   border-color: var(--blue);
-  color: #fdf8ef;
+  color: var(--on-butter);
 }
 .btn-blue:hover {
-  background: #33493a;
-  border-color: #33493a;
-  color: var(--paper);
+  background: var(--plum);
+  border-color: var(--plum);
+  color: var(--on-plum);
 }
 /* Cream pill for use on maroon blocks */
 .btn-cream {
@@ -1253,5 +1259,367 @@ a:hover {
   }
   .for-you {
     grid-template-columns: 1fr;
+  }
+}
+
+/* ============================================================
+   ARCHIVE LAYER — Asher's newest mockups + the Site Info brief
+   ============================================================
+
+   Direction (merged from three sources):
+     · the newest mockups (Home, Intensive, Weekend)
+     · the Site Info brief: "minimal / archive research library vibes",
+       "Magazine meets Institution meets Note taking", warm neutral
+       with a pop of Butter Yellow / Light Blue
+     · Asher's font picks: Paloma titles, Promenade subheads,
+       Makking paragraphs (free stand-ins, self-hosted)
+
+   Devices: hand-painted script headings, white catalogue cards on
+   cream, index cards, pinned notices, a stamped seal.
+
+   NOTE ON IMAGERY — the mockups lead with documentary photography,
+   but no full-resolution originals exist yet. Every image slot below
+   is a deliberate CSS stand-in (archival field + grain), never a
+   third-party photo: the inspiration images in the brief are
+   Pinterest finds and are not ours to publish. Drop real photos into
+   `.photo` as a background-image when Asher sends them.
+   ============================================================ */
+
+/* ---------- Hand-painted headings (Paloma stand-in) ---------- */
+
+.script-head {
+  font-family: var(--script);
+  font-weight: 400;
+  line-height: 1.06;
+  letter-spacing: -0.005em;
+  color: var(--ink);
+}
+
+/* ---------- Hero: full-bleed archival field ---------- */
+
+.hero-archive {
+  position: relative;
+  padding-block: 6.5rem 5rem;
+  border-bottom: 0;
+  background-color: var(--plum);
+  background-image:
+    radial-gradient(
+      120% 90% at 22% 12%,
+      rgba(255, 222, 138, 0.16),
+      transparent 62%
+    ),
+    radial-gradient(
+      90% 80% at 84% 88%,
+      rgba(158, 190, 198, 0.18),
+      transparent 60%
+    ),
+    repeating-linear-gradient(
+      0deg,
+      transparent 0 3px,
+      rgba(255, 255, 255, 0.022) 3px 4px
+    );
+  color: var(--on-plum);
+  text-align: center;
+}
+
+/* .photo turns any block into a real image slot */
+.photo {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.hero-archive .hero-inner {
+  position: relative;
+  z-index: 2;
+}
+
+.hero-archive .hero-presents {
+  font-family: var(--display);
+  font-weight: 400;
+  font-style: italic;
+  font-size: clamp(1rem, 1.6vw, 1.35rem);
+  letter-spacing: 0.02em;
+  color: rgba(245, 241, 234, 0.82);
+  margin-bottom: 0.2rem;
+}
+
+.hero-archive .hero-wordmark {
+  font-family: var(--script);
+  font-weight: 400;
+  font-size: clamp(2.1rem, 6.4vw, 5rem);
+  line-height: 1;
+  letter-spacing: 0.005em;
+  text-transform: uppercase;
+  color: var(--card);
+  margin: 0 0 1.1rem;
+}
+
+.hero-archive .hero-tagline {
+  font-family: var(--display);
+  font-size: clamp(1.05rem, 1.9vw, 1.45rem);
+  color: rgba(245, 241, 234, 0.94);
+  max-width: 30ch;
+  margin-inline: auto;
+}
+
+.hero-archive .btn-row {
+  justify-content: center;
+  margin-top: 2.2rem;
+}
+
+/* ---------- Photo band: the workshop/archive image slot ---------- */
+
+.photo-band {
+  aspect-ratio: 16 / 7;
+  min-height: 15rem;
+  background-color: var(--plum);
+  background-image:
+    linear-gradient(180deg, rgba(61, 45, 46, 0.18), rgba(61, 45, 46, 0.42)),
+    radial-gradient(
+      90% 120% at 30% 20%,
+      rgba(222, 214, 195, 0.34),
+      transparent 58%
+    ),
+    radial-gradient(
+      80% 110% at 78% 74%,
+      rgba(158, 190, 198, 0.26),
+      transparent 62%
+    ),
+    repeating-linear-gradient(
+      92deg,
+      transparent 0 26px,
+      rgba(255, 255, 255, 0.03) 26px 28px
+    );
+  border-bottom: 1px solid var(--rule-strong);
+}
+
+/* ---------- Catalogue cards (the PRACTICE row) ---------- */
+
+.catalogue {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.6rem;
+  margin-top: 2.2rem;
+}
+
+.catalogue-card {
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: 1.9rem 1.7rem 2rem;
+  box-shadow: 2px 3px 0 rgba(36, 20, 12, 0.06);
+  display: flex;
+  flex-direction: column;
+}
+
+.catalogue-card h3 {
+  font-family: var(--display);
+  font-size: 1.3rem;
+  line-height: 1.2;
+  margin-bottom: 0.5rem;
+}
+
+.catalogue-card p {
+  color: var(--ink-soft);
+  font-size: 1rem;
+  margin-bottom: 1.2rem;
+}
+
+.catalogue-card .btn-row {
+  margin-top: auto;
+}
+
+/* ---------- Stamped seal (the union-label device, redrawn) ---------- */
+
+/* A vintage union-label badge, drawn from scratch: the studio's own name
+   in the device, not a real union's mark. */
+.seal {
+  --seal-size: 9.5rem;
+  width: var(--seal-size);
+  height: var(--seal-size);
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border: 3px double var(--plum);
+  border-radius: 50%;
+  color: var(--plum);
+  text-align: center;
+  transform: rotate(-8deg);
+  font-family: var(--mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  line-height: 1.5;
+  opacity: 0.85;
+}
+
+.seal-inner {
+  padding: 0.6rem;
+}
+
+.seal-rule {
+  display: block;
+  border-top: 1px solid currentColor;
+  margin: 0.3rem 0;
+  opacity: 0.6;
+}
+
+.seal-year {
+  font-size: 0.62rem;
+  font-weight: 700;
+}
+
+/* ---------- Waitlist band with index-card furniture ---------- */
+
+.waitlist-archive {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: 3rem;
+  align-items: center;
+}
+
+/* index-card stack: the archive drawer, drawn in CSS */
+.card-stack {
+  position: relative;
+  min-height: 15rem;
+  aspect-ratio: 4 / 5;
+  background: var(--paper-deep);
+  border: 1px solid var(--rule-strong);
+  border-radius: 3px;
+  padding: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  box-shadow: 6px 7px 0 rgba(36, 20, 12, 0.09);
+}
+
+.index-card {
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  padding: 0.5rem 0.7rem;
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.index-card:first-child {
+  border-top: 3px solid var(--butter);
+}
+
+/* ---------- Script section heading + rule ---------- */
+
+.section-script {
+  display: flex;
+  align-items: baseline;
+  gap: 1.2rem;
+  margin-bottom: 0.4rem;
+}
+
+.section-script h2 {
+  font-family: var(--script);
+  font-weight: 400;
+  text-transform: lowercase;
+  font-size: clamp(1.9rem, 3.6vw, 2.9rem);
+  line-height: 1;
+}
+
+/* ---------- Light-blue pill CTA with script label (the mockup button) ---------- */
+
+.btn-cta {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 0.85rem 2.1rem;
+  font-family: var(--script);
+  font-size: 1.05rem;
+  text-transform: lowercase;
+  letter-spacing: 0.01em;
+}
+
+.btn-cta:hover {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--blue-soft);
+}
+
+/* ---------- Poster type: enormous whitespace (the Weekend mockup) ---------- */
+
+.poster {
+  min-height: 46vh;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding-block: 3rem;
+}
+
+.poster h1 {
+  font-family: var(--script);
+  font-weight: 400;
+  font-size: clamp(2rem, 6vw, 4.2rem);
+  line-height: 1.05;
+  margin: 0;
+}
+
+.two-col-foot {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 3.5rem;
+  align-items: start;
+}
+
+.two-col-foot h3 {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 1.05rem;
+  margin-bottom: 0.8rem;
+}
+
+.day-list {
+  font-family: var(--serif);
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--ink);
+}
+
+.day-list dt {
+  font-weight: 500;
+  margin-top: 0.9rem;
+}
+
+.day-list dd {
+  margin: 0 0 0.2rem;
+  color: var(--ink-soft);
+}
+
+.pricing-note {
+  font-family: var(--serif);
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--ink-soft);
+}
+
+.pricing-note strong {
+  color: var(--ink);
+}
+
+/* ---------- Archive responsive ---------- */
+
+@media (max-width: 860px) {
+  .waitlist-archive,
+  .two-col-foot {
+    grid-template-columns: 1fr;
+    gap: 2.2rem;
+  }
+  .card-stack {
+    aspect-ratio: auto;
+    min-height: 0;
+  }
+  .hero-archive {
+    padding-block: 4.5rem 3.5rem;
   }
 }

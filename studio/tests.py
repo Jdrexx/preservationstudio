@@ -693,7 +693,7 @@ class DesignLibraryTests(TestCase):
             .split("var PRESETS =", 1)[1]
             .split('id: "')[1:]
         )
-        self.assertEqual(len(chunks), 4)
+        self.assertEqual(len(chunks), 5)
         for chunk in chunks:
             preset = chunk.split('"', 1)[0]
             tokens = chunk.split("tokens: {", 1)[1].split("},", 1)[0]

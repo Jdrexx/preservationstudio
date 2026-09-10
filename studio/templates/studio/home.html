@@ -2,143 +2,87 @@
 {% block title %}preservation.studio{% endblock %}
 {% block content %}
 
-{# 01 — Hero: split editorial layout (template's "BUILD THE LIFE" flow) #}
-<section class="hero" aria-labelledby="hero-title">
-  <div class="container hero-grid">
-    <div class="hero-copy">
-      <div class="hero-eyebrow">
-        <span class="rule-tick"></span>
-        <span class="mono-label">Home · Los Angeles</span>
-      </div>
-      <h1 class="display-upper" id="hero-title">Frame the things you keep coming back to.</h1>
-      <p class="lede">Preservation Studio is a custom framing program based in Los Angeles for artists and makers.</p>
-      <p class="annotation">frame what you carry</p>
-      <div class="btn-row">
-        <a class="btn btn-yellow" href="{% url 'studio:intensive' %}">Apply for the Intensive</a>
-        <a class="btn" href="{% url 'studio:about' %}">Meet the studio</a>
-      </div>
-    </div>
-    <div class="hero-figure" aria-hidden="true">
-      <figure class="specimen">
-        <div class="specimen-frame">
-          <div class="specimen-art">
-            <span class="specimen-stamp">archival · mat 4ply</span>
-          </div>
-          <figcaption class="specimen-caption">hand cut · hinged · ready to hang</figcaption>
-        </div>
-        <span class="specimen-note">the one you keep</span>
-      </figure>
-      <span class="polaroid-ghost polaroid-ghost-a">keep</span>
-      <span class="polaroid-ghost polaroid-ghost-b">carry</span>
+{# 01 — Hero. Rebuilt from Asher's newest Home mockup: the studio's name
+   presented like a title card, one line about the work, one CTA. #}
+<section class="hero hero-archive" aria-labelledby="hero-title">
+  <div class="container hero-inner">
+    <p class="hero-presents">ryereuel's</p>
+    <h1 class="hero-wordmark" id="hero-title">Preservation Studio</h1>
+    <p class="hero-tagline">The trade of framing. The stories we keep.</p>
+    <div class="btn-row">
+      <a class="btn btn-cta" href="{% url 'studio:intensive' %}">apply for the intensive</a>
     </div>
   </div>
 </section>
 
-{# 02 — Value band: two-column editorial with flat illustration motifs #}
-<section class="section section-alt section-rule">
-  <div class="container">
-    <span class="section-num">№ 01 — Kept</span>
-    <div class="value-band">
-      <div class="value-item">
-        <svg class="value-illu" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <rect x="8" y="14" width="48" height="36" />
-          <rect x="14" y="20" width="36" height="24" class="illu-accent" stroke-width="1.5" />
-          <path d="M14 44 L26 30 L36 40 L44 32 L50 38" stroke-width="2" />
-          <path d="M24 8 L24 14 M40 8 L40 14" stroke-width="2" />
-          <path d="M24 50 L24 56 M40 50 L40 56" stroke-width="2" />
-        </svg>
-        <div>
-          <h3>The photo that made it through three moves.</h3>
-          <p>Come out knowing how to frame the things you've actually been carrying — the pieces that carry their own story.</p>
-        </div>
-      </div>
-      <div class="value-item">
-        <svg class="value-illu" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <rect x="10" y="14" width="44" height="36" />
-          <path d="M10 20 L32 36 L54 20" stroke-width="2.5" />
-          <path d="M18 44 L26 36 M46 44 L38 36" stroke-width="2" class="illu-accent" />
-        </svg>
-        <div>
-          <h3>The letter you've read a hundred times.</h3>
-          <p>The stuff you've kept for reasons you can't fully explain. That's the work this studio is built around.</p>
-        </div>
-      </div>
-    </div>
+{# 02 — Photo band. A real workshop/archive photograph drops in here as a
+   background-image on .photo; until Asher sends originals this is the
+   archival field stand-in. #}
+<div class="photo-band photo" role="img" aria-label="The studio floor — framing bench, tools and archival materials"></div>
+
+{# 03 — What it is, in the brief's own words. #}
+<section class="section">
+  <div class="container intro-copy">
+    <span class="section-num">№ 01 — The studio</span>
+    <p class="lede">Preservation Studio is a custom framing program based in Los Angeles for artists and makers. Come out knowing how to frame the things you've actually been carrying. The photo that made it through three moves. The letter you've read a hundred times. The stuff you've kept for reasons you can't fully explain.</p>
+    <p class="annotation">frame what you carry</p>
   </div>
 </section>
 
-{# 03 — Offerings #}
-<section class="section section-rule">
+{# 04 — The practice: three catalogue cards (mockup's PRACTICE row). #}
+<section class="section section-rule section-alt">
   <div class="container">
-    <span class="section-num">№ 02 — Offerings</span>
-    <h2>Offerings</h2>
-    <div class="cards">
-      <article class="card">
+    <div class="section-script">
+      <h2>practice</h2>
+      <span class="section-num">№ 02</span>
+    </div>
+
+    <div class="catalogue">
+      <article class="catalogue-card">
         <h3>Custom Framing Intensive</h3>
-        <p class="card-stats">6 weeks · Cohort of 6 · $2,500</p>
+        <p class="card-stats">6 weeks · Cohort of 6 · $3,500</p>
         <p>The full trade, start to finish.</p>
         <div class="btn-row">
-          <a class="btn btn-yellow" href="{% url 'studio:intensive' %}">Learn more / Apply</a>
+          <a class="btn" href="{% url 'studio:intensive' %}">Learn more / Apply</a>
         </div>
       </article>
-      <article class="card card-blue">
+
+      <article class="catalogue-card">
         <h3>Custom Framing Weekend</h3>
         <p class="card-stats">2 days · Traveling cohorts</p>
         <p>The full curriculum, compressed.</p>
         <div class="btn-row">
-          <a class="btn btn-blue" href="{% url 'studio:weekend' %}">Learn more</a>
+          <a class="btn" href="{% url 'studio:weekend' %}">Learn more</a>
+        </div>
+      </article>
+
+      <article class="catalogue-card">
+        <h3>Sponsor a Seat</h3>
+        <p>One sponsored seat is available per cohort, reserved for a QTPOC artist demonstrating financial need and a serious commitment to the work. Full tuition covered.</p>
+        <div class="btn-row">
+          <a class="btn" href="{% url 'studio:contact_sponsor' %}">Learn more</a>
         </div>
       </article>
     </div>
-
-    <div class="sponsor-band">
-      <div>
-        <h3>Sponsor a Seat</h3>
-        <p>One sponsored seat is available per cohort, reserved for a QTPOC artist demonstrating financial need and a serious commitment to the work. Full tuition covered.</p>
-      </div>
-      <a class="btn" href="{% url 'studio:contact_sponsor' %}">Learn more</a>
-    </div>
   </div>
 </section>
 
-{# 04 — Maroon band: template's "MEET" section with polaroid collage #}
-<section class="section section-maroon">
-  <div class="container">
-    <span class="section-num">№ 03 — Meet</span>
-    <div class="meet-grid">
-      <div class="meet-copy">
-        <h2 class="display-upper">Meet the studio</h2>
-        <p class="lede">A custom framing program in Los Angeles for artists and makers who keep things for a reason. Six weeks, a cohort of six, and the full trade — start to finish. You leave knowing how to frame what you carry.</p>
-        <div class="btn-row">
-          <a class="btn btn-cream" href="{% url 'studio:about' %}">About the studio</a>
-        </div>
-        <span class="meet-signature">start with the one you keep</span>
-      </div>
-      <div class="polaroids" aria-hidden="true">
-        <figure class="polaroid">
-          <div class="polaroid-art">mat cut by hand</div>
-          <figcaption>01 · measured twice</figcaption>
-        </figure>
-        <figure class="polaroid">
-          <div class="polaroid-art">hinged, archival</div>
-          <figcaption>02 · reversible</figcaption>
-        </figure>
-        <figure class="polaroid">
-          <div class="polaroid-art">ready to hang</div>
-          <figcaption>03 · framed, finally</figcaption>
-        </figure>
-      </div>
-    </div>
-  </div>
-</section>
-
-{# 05 — Waitlist #}
+{# 05 — Waitlist: the archive drawer beside the ask. #}
 <section class="section" id="waitlist">
-  <div class="container">
-    <div class="waitlist-strip">
-      <span class="section-num">№ 04 — Waitlist</span>
-      <h2>Join the waitlist</h2>
-      <p class="muted">We'll let you know when the next cohort opens.</p>
+  <div class="container waitlist-archive">
+    <div class="card-stack" aria-hidden="true">
+      <div class="index-card">Preservation&nbsp;Studio</div>
+      <div class="index-card">Cohort&nbsp;— six seats</div>
+      <div class="index-card">Custom framing&nbsp;— Los&nbsp;Angeles</div>
+      <div class="index-card">Next intake&nbsp;— dates TBD</div>
+      <div class="index-card">Keep&nbsp;this&nbsp;card</div>
+    </div>
+
+    <div>
+      <div class="section-script">
+        <h2>waitlist</h2>
+      </div>
+      <p class="lede">Join the waitlist and we'll let you know when the next cohort opens.</p>
       <form method="post" action="{% url 'studio:home' %}" class="inline-form">
         {% csrf_token %}
         {{ form.honeypot }}
@@ -146,8 +90,17 @@
         {% if form.email.errors %}
           <p class="error">{{ form.email.errors.0 }}</p>
         {% endif %}
-        <button type="submit" class="btn btn-yellow">Submit</button>
+        <button type="submit" class="btn btn-cta">submit</button>
       </form>
+      <div class="seal" aria-hidden="true">
+        <span class="seal-inner">
+          Preservation Studio
+          <span class="seal-rule"></span>
+          Custom Framing
+          <span class="seal-rule"></span>
+          <span class="seal-year">Los Angeles</span>
+        </span>
+      </div>
     </div>
   </div>
 </section>

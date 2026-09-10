@@ -100,8 +100,11 @@ class IntensiveApplication(BaseSubmission):
         default=False, verbose_name="Will you need a payment plan?"
     )
     PAYMENT_PLAN_CHOICES = [
-        ("option_a", "Option A — $550 / $1,000 / $1,050 (total $2,550)"),
-        ("option_b", "Option B — $500 / $700 / $700 / $650 (total $2,550)"),
+        # Amounts intentionally omitted: the brief's instalment figures were
+        # computed off the previous $2,500 tuition. Until Asher confirms the
+        # new schedule these describe structure only — never invent money.
+        ("option_a", "Option A — deposit, then two further payments"),
+        ("option_b", "Option B — deposit, then three further payments"),
     ]
     payment_plan_choice = models.CharField(
         max_length=20, choices=PAYMENT_PLAN_CHOICES, blank=True

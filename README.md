@@ -150,27 +150,41 @@ Switzer is Fontshare (ITF Free Font License).
 > `client-picks` look in the `PRESETS` array. `DesignLibraryTests` fails on
 > whichever of those five steps you skipped.
 
-**Palette** (Bold Red editorial — integrated from the "Bold Red" luxury
-course-creator template design; token names unchanged so the vibe tuner
-keeps working):
+**Palette** (Archive / research-library — from the client's own
+`Hexcodes.txt` and the colours sampled off his newest mockups; token names
+unchanged so the vibe tuner keeps working):
 
-| Token           | Hex                    | Use                         |
-| --------------- | ---------------------- | --------------------------- |
-| `--paper`       | `#F2ECDF` Cream        | Page background             |
-| `--paper-deep`  | `#E7DFD0`              | Alternate section bands     |
-| `--card`        | `#FBF6EC`              | Cards, form panels          |
-| `--ink`         | `#201915`              | Text                        |
-| `--ink-soft`    | `#5C5248`              | Labels, captions            |
-| `--rule-strong` | `#C0B29B` Beige        | Borders, rules              |
-| `--butter`      | `#A63A2E` **Bold Red** | Accent, pill CTAs           |
-| `--on-butter`   | `#FDF8EF` Cream        | Text on the accent          |
-| `--blue`        | `#3F5A44` Forest       | Weekend card, sponsor band  |
-| `--plum`        | `#8A332F` Maroon       | Footer, "Meet" band, frames |
+| Token           | Hex                    | Use                            |
+| --------------- | ---------------------- | ------------------------------ |
+| `--paper`       | `#F5F1EA` Cream        | Page background                |
+| `--paper-deep`  | `#EAE3D4`              | Alternate section bands        |
+| `--card`        | `#FFFFFF` White        | Catalogue cards, form panels   |
+| `--ink`         | `#24140C` Licorice     | Text                           |
+| `--ink-soft`    | `#5F5A41` Olive Night  | Labels, captions, card body    |
+| `--rule`        | `#D5D5BC` Pearl        | Hairlines                      |
+| `--rule-strong` | `#B3A189` Cinnamon     | Borders, rules                 |
+| `--butter`      | `#FFDE8A` Honey        | Accent, marker highlights      |
+| `--on-butter`   | `#24140C` Licorice     | Text on the accent             |
+| `--blue`        | `#9EBEC6` Light Blue   | CTAs (the mockups' pill button) |
+| `--plum`        | `#3D2D2E` Choc. Plum   | Hero band, footer, frames      |
 
 `--on-butter` exists so a look can flip the accent to something light
 (butter yellow, say) and set dark text on it without editing component CSS.
 Every button/annotation that sits on the accent reads it instead of a
-hard-coded cream.
+hard-coded cream — the Bold Red palette hard-coded cream, which turned into
+cream-on-Honey (1.16:1) the moment the accent went light again.
+
+**Type** is Asher's trio, each a self-hosted free stand-in for a paid
+Creative Market font. Swapping in the purchased webfonts is a one-line change
+per role in `:root`:
+
+| Role      | Token      | Stand-in          | Client's pick |
+| --------- | ---------- | ----------------- | ------------- |
+| Titles    | `--script` | Permanent Marker  | Paloma        |
+| Subheads  | `--display`| Libre Bodoni      | Promenade     |
+| Paragraph | `--serif`  | Switzer           | Makking       |
+| Labels    | `--mono`   | IBM Plex Mono     | —             |
+| Notes     | `--hand`   | Kalam             | —             |
 
 Design notes: uppercase editorial headlines (`.display-upper`), pill-shaped
 buttons, split hero with a CSS "specimen card" standing in for photography,

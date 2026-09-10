@@ -96,6 +96,43 @@
 
   var PRESETS = [
     {
+      id: "mockups",
+      label: "Asher's mockups — site default",
+      note: "Ships as the site default. Built from Asher's newest mockups + the Site Info brief: cream field, white catalogue cards, Light Blue CTAs, Honey accent, Chocolate Plum bands. Type is his trio — Paloma hand-painted titles, Promenade calligraphic subheads, Makking grotesk paragraphs (free stand-ins).",
+      tokens: {
+        paper: "#f5f1ea",
+        "paper-deep": "#eae3d4",
+        card: "#ffffff",
+        ink: "#24140c",
+        "ink-soft": "#5f5a41",
+        "ink-faint": "#8c8273",
+        rule: "#d5d5bc",
+        "rule-strong": "#b3a189",
+        butter: "#ffde8a",
+        "butter-soft": "#fbeecb",
+        "on-butter": "#24140c",
+        blue: "#9ebec6",
+        "blue-soft": "#dce7ea",
+        plum: "#3d2d2e",
+        "on-plum": "#f5f1ea",
+        error: "#a6402e",
+      },
+      stacks: {
+        "--display": '"Libre Bodoni", "Playfair Display", Georgia, serif',
+        "--serif": '"Switzer", "Inter", "Helvetica Neue", Arial, sans-serif',
+        "--mono": PLEX,
+        "--hand": '"Kalam", "Caveat", cursive',
+      },
+      sliders: {
+        "--fx-opsz": "110",
+        "--fx-wght": "500",
+        "--fx-soft": "20",
+        "--fx-wonk": "0.1",
+        "--hand-size": "1.15rem",
+        "--hand-rotate": "-1.6deg",
+      },
+    },
+    {
       id: "bold-red",
       label: "Bold Red — template",
       note: 'Ships as the site default. From the "Bold Red" Squarespace template Asher linked (RowMarketCo, Etsy): cream paper, brick-red accent, maroon bands.',
