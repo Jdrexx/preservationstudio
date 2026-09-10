@@ -6,5 +6,6 @@ class StudioConfig(AppConfig):
     name = "studio"
 
     def ready(self):
-        # Importing signals registers the post_save notification handlers.
-        from . import signals  # noqa: F401
+        # Importing signals registers the post_save notification handlers;
+        # checks registers the boot-time validation of the email config.
+        from . import checks, signals  # noqa: F401

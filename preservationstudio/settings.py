@@ -202,5 +202,9 @@ EMAIL_HOST_USER = os.environ.get("DJANGO_EMAIL_USER", "")
 EMAIL_HOST_PASSWORD = os.environ.get("DJANGO_EMAIL_PASSWORD", "")
 EMAIL_USE_TLS = os.environ.get("DJANGO_EMAIL_USE_TLS", "1") == "1"
 DEFAULT_FROM_EMAIL = os.environ.get(
-    "DJANGO_FROM_EMAIL", "preservation.studio <no-reply@preservation.studio>"
+    # A period in an UNQUOTED display name is rejected by Django's SMTP
+    # backend at send time ("period in 'phrase'"), so keep this form free of
+    # periods — see studio/checks.py (studio.E002) which enforces it at boot.
+    "DJANGO_FROM_EMAIL",
+    "Preservation Studio <no-reply@preservation.studio>",
 )

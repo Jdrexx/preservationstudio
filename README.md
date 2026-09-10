@@ -45,10 +45,33 @@ To receive email alerts, set on Railway:
 | `DJANGO_EMAIL_USER`     | your SMTP username                                         |                                                                            |
 | `DJANGO_EMAIL_PASSWORD` | your SMTP password                                         |                                                                            |
 | `DJANGO_EMAIL_USE_TLS`  | `1`                                                        | TLS on (default)                                                           |
-| `DJANGO_FROM_EMAIL`     | `preservation.studio <no-reply@...>`                       | From address (optional)                                                    |
+| `DJANGO_FROM_EMAIL`     | `Preservation Studio <no-reply@...>`                       | From address (optional)                                                    |
 
 Email sending is best-effort: if the mail server is unreachable the submission
 still saves and the visitor still sees the thank-you page (failure is logged).
+
+⚠️ **Do not put a period in an unquoted display name.** Django's SMTP backend
+parses `From` on every send and rejects `preservation.studio <no-reply@…>`
+(`period in 'phrase'`). Because sending is best-effort the failure is silent —
+the client simply stops receiving alerts with nothing on screen to show for it.
+Quote it (`"preservation.studio" <no-reply@…>`) or drop the period. The
+`studio.E002` system check blocks the deploy if it is wrong.
+
+This domain's mail is hosted on iCloud (MX `mx01/mx02.mail.icloud.com`), so the
+branded sender needs no DNS changes:
+
+```
+DJANGO_NOTIFY_EMAIL=alerts@preservation.studio
+DJANGO_EMAIL_HOST=smtp.mail.me.com
+DJANGO_EMAIL_PORT=587
+DJANGO_EMAIL_USER=hello@preservation.studio
+DJANGO_EMAIL_PASSWORD=<app-specific password from appleid.apple.com>
+DJANGO_EMAIL_USE_TLS=1
+DJANGO_FROM_EMAIL=Preservation Studio <no-reply@preservation.studio>
+```
+
+Verify a live configuration by sending a real submission and confirming the
+email arrives — a passing test suite proves the code path, not the credentials.
 
 ## Local development
 
