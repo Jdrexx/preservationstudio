@@ -686,7 +686,7 @@ class DesignLibraryTests(TestCase):
             for name in re.findall(r'\["([a-z\-]+)", "', self.js_block("var SLIDERS ="))
         ]
         self.assertEqual(len(token_names), 16)
-        self.assertEqual(len(slider_names), 6)
+        self.assertEqual(len(slider_names), 7)
 
         chunks = (
             self.read("js", "vibe-tuner.js")
@@ -716,6 +716,34 @@ class DesignLibraryTests(TestCase):
         rule = site.split(".btn-yellow {")[-1].split("}", 1)[0]
         self.assertIn("color: var(--on-butter)", rule)
         self.assertIn('"on-butter"', self.read("js", "vibe-tuner.js"))
+
+    def test_every_letter_spacing_rule_supports_live_tracking(self):
+        """The tuner's Letter spacing dial is --ls-tune, added to every
+        non-zero letter-spacing via calc(). A raw (unwrapped) value would
+        silently ignore the dial, so any that appear must be flagged here."""
+        site = self.read("css", "site.css")
+        self.assertIn("--ls-tune: 0em;", site)
+        raws = re.findall(r"letter-spacing:\s*([^;]+);", site)
+        self.assertGreater(len(raws), 30)
+        for value in raws:
+            with self.subTest(value=value.strip()):
+                if value.strip() != "0":
+                    self.assertIn("var(--ls-tune", value)
+        # the dial itself: present in the panel, the SLIDERS table, the
+        # export block's slider list, and complete in every preset
+        html = self.read("..", "..", "templates", "studio", "partials", "vibe_tuner.html")
+        self.assertIn('id="vibe-ls-tune"', html)
+        self.assertIn('id="out-ls-tune"', html)
+        js = self.read("js", "vibe-tuner.js")
+        sliders = self.js_block("var SLIDERS =")
+        self.assertIn('"ls-tune"', sliders)
+        self.assertIn('"em"', sliders)
+        self.assertIn('"--ls-tune"', self.js_block("function buildExport"))
+        for chunk in js.split('id: "')[1:]:
+            preset = chunk.split('"', 1)[0]
+            with self.subTest(preset=preset):
+                sliders = chunk.split("sliders: {", 1)[1].split("},", 1)[0]
+                self.assertIn('"--ls-tune"', sliders)
 
 
 class TemplateHygieneTests(TestCase):

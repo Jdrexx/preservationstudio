@@ -83,6 +83,7 @@
     ["fx-wght", "Display weight", 100, 900, 1, "num"],
     ["hand-size", "Note size", 0.8, 1.6, 0.05, "rem"],
     ["hand-rotate", "Note tilt", -5, 5, 0.1, "deg"],
+    ["ls-tune", "Letter spacing (em)", -0.05, 0.2, 0.01, "em"],
   ];
 
   /* ---------- Looks ----------
@@ -130,6 +131,7 @@
         "--fx-wonk": "0.1",
         "--hand-size": "1.15rem",
         "--hand-rotate": "-1.6deg",
+        "--ls-tune": "0em",
       },
     },
     {
@@ -167,6 +169,7 @@
         "--fx-wonk": "0.60",
         "--hand-size": "1.15rem",
         "--hand-rotate": "-1.6deg",
+        "--ls-tune": "0em",
       },
     },
     {
@@ -204,6 +207,7 @@
         "--fx-wonk": "0.35",
         "--hand-size": "1.2rem",
         "--hand-rotate": "-1.2deg",
+        "--ls-tune": "0em",
       },
     },
     {
@@ -241,6 +245,7 @@
         "--fx-wonk": "0.25",
         "--hand-size": "1.1rem",
         "--hand-rotate": "-1deg",
+        "--ls-tune": "0em",
       },
     },
     {
@@ -278,6 +283,7 @@
         "--fx-wonk": "0.1",
         "--hand-size": "1.25rem",
         "--hand-rotate": "-2deg",
+        "--ls-tune": "0em",
       },
     },
   ];
@@ -393,14 +399,12 @@
     var current = state.sliders[name];
     if (current === undefined) {
       var raw = cs("--" + name);
-      var num = parseFloat(raw);
-      current =
-        unit === "num100"
-          ? num * 100
-          : unit === "rem" || unit === "deg"
-            ? num
-            : num;
-      if (isNaN(current)) current = unit === "num100" ? 60 : 50;
+      current = unit === "num100" ? parseFloat(raw) * 100 : parseFloat(raw);
+      if (isNaN(current)) current = unit === "num100" ? 60 : unit === "em" ? 0 : 50;
+    } else if (typeof current === "string") {
+      /* saved value is the applied var string ("0.08em", "0.42" for WONK) */
+      current = unit === "num100" ? parseFloat(current) * 100 : parseFloat(current);
+      if (isNaN(current)) current = unit === "num100" ? 60 : unit === "em" ? 0 : 50;
     }
     input.value = current;
     out.textContent = unit === "num100" ? Math.round(current) : current;
@@ -411,9 +415,10 @@
       if (unit === "num100") varValue = String(v / 100); /* WONK 0-1 */
       else if (unit === "rem") varValue = v.toFixed(2) + "rem";
       else if (unit === "deg") varValue = v.toFixed(1) + "deg";
+      else if (unit === "em") varValue = v.toFixed(2) + "em";
       else varValue = String(Math.round(v));
       setVar("--" + name, varValue);
-      state.sliders[name] = v;
+      state.sliders[name] = varValue;
       out.textContent = unit === "num100" ? Math.round(v) : v;
       save();
     });
@@ -436,7 +441,7 @@
     SLIDERS.forEach(function (spec) {
       var name = spec[0];
       var unit = spec[5];
-      var raw = st.sliders && st.sliders["--" + name];
+      var raw = st.sliders && (st.sliders[name] !== undefined ? st.sliders[name] : st.sliders["--" + name]);
       if (raw === undefined) return;
       var value = unit === "num100" ? parseFloat(raw) * 100 : parseFloat(raw);
       document.getElementById("vibe-" + name).value = value;
@@ -449,7 +454,9 @@
     var key;
     if (st.tokens) for (key in st.tokens) setVar("--" + key, st.tokens[key]);
     if (st.stacks) for (key in st.stacks) setVar(key, st.stacks[key]);
-    if (st.sliders) for (key in st.sliders) setVar("--" + key, st.sliders[key]);
+    if (st.sliders)
+      for (key in st.sliders)
+        setVar(key.indexOf("--") === 0 ? key : "--" + key, st.sliders[key]);
   }
 
   var presetWrap = document.getElementById("vibe-presets");
@@ -509,6 +516,7 @@
       if (unit === "num100") out["--" + name] = (v / 100).toFixed(2);
       else if (unit === "rem") out["--" + name] = v.toFixed(2) + "rem";
       else if (unit === "deg") out["--" + name] = v.toFixed(1) + "deg";
+      else if (unit === "em") out["--" + name] = v.toFixed(2) + "em";
       else out["--" + name] = String(Math.round(v));
     });
     return out;
@@ -536,6 +544,7 @@
       "--fx-wonk",
       "--hand-size",
       "--hand-rotate",
+      "--ls-tune",
     ].forEach(function (v) {
       lines.push("  " + v + ": " + sliders[v] + ";");
     });
@@ -598,6 +607,7 @@
       if (unit === "num100") st.sliders["--" + name] = (v / 100).toFixed(2);
       else if (unit === "rem") st.sliders["--" + name] = v.toFixed(2) + "rem";
       else if (unit === "deg") st.sliders["--" + name] = v.toFixed(1) + "deg";
+      else if (unit === "em") st.sliders["--" + name] = v.toFixed(2) + "em";
       else st.sliders["--" + name] = String(Math.round(v));
     });
     return st;

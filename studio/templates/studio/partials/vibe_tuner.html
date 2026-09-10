@@ -87,6 +87,9 @@
       <label class="vibe-slider"><span>Note tilt <output id="out-hand-rotate">-1.6</output></span>
         <input type="range" id="vibe-hand-rotate" min="-5" max="5" step="0.1" value="-1.6">
       </label>
+      <label class="vibe-slider"><span>Letter spacing (em) <output id="out-ls-tune">0</output></span>
+        <input type="range" id="vibe-ls-tune" min="-0.05" max="0.2" step="0.01" value="0">
+      </label>
     </section>
     <section class="vibe-sec vibe-actions">
       <button id="vibe-export" class="btn btn-yellow" type="button">Export CSS</button>
@@ -131,8 +134,10 @@
     if (s.stacks) for (var k2 in s.stacks) {
       st.setProperty(k2.charAt(0) === "-" ? k2 : LEGACY[k2] || k2, s.stacks[k2]);
     }
-    if (s.sliders) for (var k3 in s.sliders) st.setProperty("--" + k3, s.sliders[k3]);
+    if (s.sliders) for (var k3 in s.sliders) {
+      st.setProperty(k3.indexOf("--") === 0 ? k3 : "--" + k3, s.sliders[k3]);
+    }
   } catch (e) {}
 })();
 </script>
-<script src="{% static 'studio/js/vibe-tuner.js' %}?v=5"></script>
+<script src="{% static 'studio/js/vibe-tuner.js' %}?v=7"></script>
