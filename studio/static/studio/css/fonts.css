@@ -285,3 +285,14 @@
   font-style: normal;
   font-display: swap;
 }
+/* Playfair Display italic (latin) — a TRUE italic serif for the alternating
+   headline phrases. Declared as a real italic face because every other family
+   here is roman-only: without one the browser synthesises an oblique, which is
+   what makes display lines read as cheap. Use via --display-italic. */
+@font-face {
+  font-family: "Playfair Display";
+  src: url("../fonts/playfair-italic-w400.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}

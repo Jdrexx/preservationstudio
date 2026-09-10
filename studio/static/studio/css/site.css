@@ -1623,3 +1623,461 @@ a:hover {
     padding-block: 4.5rem 3.5rem;
   }
 }
+
+/* ============================================================
+   TRACK + SCENE LAYOUT
+   Composition adapted from rabenrifaie.com: a fixed corner UI
+   over full-height scenes navigated horizontally, extremely
+   restrained type, and one idea per scene.
+
+   Rendered in PRESERVATION STUDIO's own colours and copy, not
+   the reference's black/white — and with the client's own type
+   trio instead of PP Eiko / PP Neue Montreal.
+
+   Deliberate differences from the reference:
+     · no scroll-jacking. The track is a native horizontal
+       scroller (trackpad, touch, arrow keys, and the on-screen
+       next/prev control all work), so nothing traps the page.
+     · under 900px the scenes stack vertically — a sideways
+       scroller on a phone is hostile.
+   ============================================================ */
+
+:root {
+  --ui-h: 4.75rem;
+  --display-italic: "Playfair Display", Georgia, serif;
+}
+
+/* ---------- Fixed corner UI ---------- */
+
+.site-header {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 60;
+  border-top: 0;
+  border-bottom: 1px solid var(--rule);
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  backdrop-filter: blur(8px);
+}
+
+.site-header .header-inner {
+  width: min(1600px, 95vw);
+  margin-inline: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  padding-block: 0.95rem;
+}
+
+.site-header .wordmark {
+  font-size: 0.9rem;
+  letter-spacing: 0.01em;
+}
+
+.site-header .header-right {
+  display: flex;
+  align-items: center;
+  gap: clamp(1rem, 2.4vw, 2.2rem);
+}
+
+.site-header .site-nav {
+  display: flex;
+  gap: clamp(0.9rem, 1.8vw, 1.7rem);
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  flex-wrap: wrap;
+}
+
+.site-header .site-nav a {
+  color: var(--ink-soft);
+  text-decoration: none;
+}
+
+.site-header .site-nav a:hover,
+.site-header .site-nav a[aria-current="page"] {
+  color: var(--ink);
+}
+
+/* ---------- Pills (the reference's button vocabulary) ---------- */
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  padding: 0.5rem 1.1rem;
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--ink);
+  background: transparent;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.pill:hover {
+  background: var(--butter);
+  border-color: var(--butter);
+  color: var(--on-butter);
+}
+
+.pill-solid {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
+}
+
+.pill-solid:hover {
+  background: var(--butter);
+  border-color: var(--butter);
+  color: var(--on-butter);
+}
+
+.pill-quiet {
+  border-color: var(--rule-strong);
+  color: var(--ink-soft);
+}
+
+/* ---------- Small editorial type ---------- */
+
+.micro {
+  font-family: var(--mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+/* The signature move: one sentence alternating a true italic serif with the
+   grotesk. Same size, same baseline — the switch is the whole effect. */
+.mix {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: clamp(1.4rem, 2.55vw, 2.3rem);
+  line-height: 1.35;
+  letter-spacing: -0.008em;
+  color: var(--ink);
+  max-width: 30ch;
+}
+
+.mix em {
+  font-family: var(--display-italic);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.mix-sm {
+  font-size: clamp(1.05rem, 1.5vw, 1.3rem);
+  line-height: 1.5;
+  max-width: 42ch;
+}
+
+/* ---------- The track ---------- */
+
+main {
+  padding-top: calc(var(--ui-h) + 0.5rem);
+}
+
+body.is-track main {
+  padding-top: 0;
+}
+
+.track {
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  height: 100svh;
+  scrollbar-width: none;
+}
+
+.track::-webkit-scrollbar {
+  display: none;
+}
+
+.scene {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+  width: min(94vw, 1060px);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.15rem;
+  padding: 6.5rem clamp(1.3rem, 4vw, 4.5rem) 5rem;
+  border-right: 1px solid var(--rule);
+  position: relative;
+}
+
+.scene:last-child {
+  border-right: 0;
+}
+
+.scene > .micro:first-child {
+  position: absolute;
+  top: 5.6rem;
+  left: clamp(1.3rem, 4vw, 4.5rem);
+}
+
+/* ---------- Scene furniture ---------- */
+
+.scene-index {
+  position: fixed;
+  right: clamp(1.3rem, 4vw, 4.5rem);
+  bottom: 1.5rem;
+  z-index: 60;
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.14em;
+  color: var(--ink-soft);
+}
+
+.scene-nav {
+  position: fixed;
+  left: clamp(1.3rem, 4vw, 4.5rem);
+  bottom: 1.5rem;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.scene-nav button {
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  background: none;
+  border: 1px solid var(--rule-strong);
+  border-radius: 999px;
+  width: 2.1rem;
+  height: 2.1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.scene-nav button:hover:not(:disabled) {
+  background: var(--butter);
+  border-color: var(--butter);
+  color: var(--on-butter);
+}
+
+.scene-nav button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+/* the reference's "explore" affordance */
+.explore {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-top: 1.4rem;
+  text-decoration: none;
+  color: var(--ink-soft);
+}
+
+.explore .rule-tick {
+  flex: 0 0 2.6rem;
+  height: 1px;
+  background: var(--rule-strong);
+}
+
+.explore:hover {
+  color: var(--ink);
+}
+
+/* ---------- Ways in: the offerings as a quiet row ---------- */
+
+.rows {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem clamp(1.4rem, 3vw, 3rem);
+  font-family: var(--serif);
+  font-size: 1rem;
+  color: var(--ink);
+}
+
+.rows a {
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--rule-strong);
+  padding-bottom: 0.15rem;
+}
+
+.rows a:hover {
+  border-color: var(--ink);
+}
+
+.rows .rows-note {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  display: block;
+  margin-top: 0.35rem;
+}
+
+/* stacked offering detail inside a scene */
+.stack-list {
+  display: grid;
+  gap: 1.5rem;
+  max-width: 40rem;
+}
+
+.stack-item h3 {
+  font-family: var(--display);
+  font-size: 1.15rem;
+  margin-bottom: 0.25rem;
+}
+
+.stack-item .stats {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-bottom: 0.35rem;
+}
+
+.stack-item p {
+  color: var(--ink-soft);
+  font-size: 0.98rem;
+}
+
+/* ---------- Quote wall (the reference's scattered testimonials) ---------- */
+
+.quote-wall {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 1.8rem 2rem;
+  max-width: 60rem;
+}
+
+.quote {
+  font-family: var(--serif);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--ink);
+}
+
+.quote:nth-child(odd) {
+  transform: translateY(0.7rem);
+}
+
+.quote:nth-child(3n) {
+  transform: translateY(-0.5rem);
+}
+
+.quote cite {
+  display: block;
+  margin-top: 0.4rem;
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-style: normal;
+  color: var(--ink-soft);
+  opacity: 0.8;
+}
+
+/* ---------- Photo band inside a scene ---------- */
+
+.scene .photo-band {
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  max-width: 34rem;
+  min-height: 0;
+  border: 1px solid var(--rule-strong);
+}
+
+/* ---------- Waitlist inside a scene ---------- */
+
+.scene .inline-form {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  max-width: 30rem;
+  margin-top: 1.3rem;
+}
+
+.scene .inline-form input[type="email"] {
+  flex: 1 1 14rem;
+}
+
+/* ---------- Track responsive: scenes stack on small screens ---------- */
+
+@media (max-width: 900px) {
+  .track {
+    flex-direction: column;
+    height: auto;
+    overflow-x: hidden;
+    scroll-snap-type: none;
+  }
+  .scene {
+    width: 100%;
+    height: auto;
+    padding: 5.5rem 1.3rem 3rem;
+    border-right: 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .scene > .micro:first-child {
+    position: static;
+  }
+  .scene-index,
+  .scene-nav {
+    display: none;
+  }
+  .site-header .site-nav {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track {
+    scroll-behavior: auto;
+  }
+}
+
+/* ---------- Track layer: element resets ---------- */
+
+/* .explore is a <button> so it can drive the track, not a dead anchor */
+button.explore {
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+}
+
+h1.mix,
+h2.mix {
+  margin: 0;
+}
+
+.scene form {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  align-items: center;
+  max-width: 30rem;
+}
+
+.scene form input[type="email"] {
+  flex: 1 1 14rem;
+}
+
+.scene .pill {
+  align-self: flex-start;
+}
