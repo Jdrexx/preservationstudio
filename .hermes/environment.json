@@ -6,18 +6,17 @@
     "bootstrap": [
       "python3 -m venv .venv && .venv/bin/pip install -q -r requirements.txt && DJANGO_DEBUG=1 .venv/bin/python manage.py migrate --noinput"
     ],
+    "build": [],
     "test": ["DJANGO_DEBUG=1 .venv/bin/python manage.py test studio"],
-    "start": [
-      "DJANGO_DEBUG=1 .venv/bin/python manage.py runserver 127.0.0.1:8000"
-    ],
-    "readiness": {
-      "url": "http://127.0.0.1:8000/",
-      "timeout": 30
-    },
-    "notes": "Production site (client: Preservation Studio / Asher Cano) on Railway + Postgres. Local runs SQLite with DJANGO_DEBUG=1; tests pin HTTP_HOST=localhost (in ALLOWED_HOSTS default). Suite: 38 tests incl. a real ~4MB photo-upload regression (DATA_UPLOAD_MAX_MEMORY_SIZE=12MB).",
+    "start": "DJANGO_DEBUG=1 .venv/bin/python manage.py runserver 127.0.0.1:8010 --noreload",
+    "port": 8010,
+    "readinessPath": "/",
+    "notes": "Production site (client: Preservation Studio / Asher Cano) on Railway + Postgres. Local runs SQLite with DJANGO_DEBUG=1; tests pin HTTP_HOST=localhost (in ALLOWED_HOSTS default). Suite covers 53 tests incl. a real ~4MB photo-upload regression (DATA_UPLOAD_MAX_MEMORY_SIZE=12MB). TWO SCHEMA/ENV TRAPS: (1) `start` must be a COMMAND STRING with `port` + `readinessPath` as siblings - a `start` list and a `readiness` object are silently ignored by `hermes verify`, which then reports \"readiness\": null and never boots the app. (2) Port 8000 is NOT this app on this machine - an unrelated uvicorn service holds it, so a readiness poll on 8000 returns 200 in ~7ms and passes without Django ever starting. This recipe uses 8010 (verified free); `hermes verify` readiness is only meaningful on a port nothing else holds.",
     "evidence": [
-      "38/38 tests OK",
-      "deployed 2e2eb71: HSTS max-age=15552000 live, all 10 pages 200, admin gated"
+      "53/53 tests OK; bootstrap + test phases exit 0",
+      "fresh boot on a port verified free: 200 after 1 poll, served page carried this app's own markup, socket owner matched the spawned pid, port released on teardown",
+      "submission->SMTP path proven over a real TCP socket: message crosses the wire; a dead mail server still saves the lead and reaches /thanks/",
+      "a bad DJANGO_FROM_EMAIL makes `manage.py migrate` exit 1 (studio.E002), so it cannot reach production silently"
     ]
   }
 }
