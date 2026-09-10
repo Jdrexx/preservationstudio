@@ -1,108 +1,126 @@
 {% extends "studio/base.html" %}
+{% load static %}
 {% block title %}preservation.studio{% endblock %}
+{% block body_class %}is-track{% endblock %}
 {% block content %}
 
-{# 01 — Hero. Rebuilt from Asher's newest Home mockup: the studio's name
-   presented like a title card, one line about the work, one CTA. #}
-<section class="hero hero-archive" aria-labelledby="hero-title">
-  <div class="container hero-inner">
-    <p class="hero-presents">ryereuel's</p>
-    <h1 class="hero-wordmark" id="hero-title">Preservation Studio</h1>
-    <p class="hero-tagline">The trade of framing. The stories we keep.</p>
-    <div class="btn-row">
-      <a class="btn btn-cta" href="{% url 'studio:intensive' %}">apply for the intensive</a>
+{# Composition adapted from the rabenrifaie.com layout: a fixed corner UI over
+   full-height scenes navigated sideways, one idea per scene, restrained type.
+   Copy and colour are Preservation Studio's own. Every scene keeps a real
+   heading or link so the page still works without the horizontal track
+   (which is why it degrades to a vertical stack under 900px). #}
+
+<div class="track" id="track" aria-label="Preservation Studio">
+
+  {# 01 — Hero #}
+  <section class="scene" aria-labelledby="s1">
+    <span class="micro">Preservation Studio · Los Angeles</span>
+    <h1 class="mix" id="s1">A custom framing program <em>in Los Angeles</em> for artists and makers.</h1>
+    <p class="micro">The trade of framing · the stories we keep</p>
+    <button class="explore" type="button" data-track-next>
+      <span class="rule-tick"></span>
+      <span class="micro">explore</span>
+    </button>
+    <div class="rows">
+      <a href="{% url 'studio:intensive' %}">Custom Framing Intensive</a>
+      <a href="{% url 'studio:weekend' %}">Custom Framing Weekend</a>
+      <a href="{% url 'studio:sentimental' %}">Sentimental Value</a>
     </div>
-  </div>
-</section>
+  </section>
 
-{# 02 — Photo band. A real workshop/archive photograph drops in here as a
-   background-image on .photo; until Asher sends originals this is the
-   archival field stand-in. #}
-<div class="photo-band photo" role="img" aria-label="The studio floor — framing bench, tools and archival materials"></div>
+  {# 02 — The studio #}
+  <section class="scene" aria-labelledby="s2">
+    <span class="micro">№ 01 — The studio</span>
+    <h2 class="mix mix-sm" id="s2">Preservation Studio is a custom framing program based in Los Angeles for artists and makers. <em>Come out knowing how to frame the things you've actually been carrying.</em></h2>
+    <div class="photo-band photo" role="img" aria-label="The studio floor — framing bench, tools and archival materials"></div>
+    <a class="pill" href="{% url 'studio:about' %}">About the studio</a>
+  </section>
 
-{# 03 — What it is, in the brief's own words. #}
-<section class="section">
-  <div class="container intro-copy">
-    <span class="section-num">№ 01 — The studio</span>
-    <p class="lede">Preservation Studio is a custom framing program based in Los Angeles for artists and makers. Come out knowing how to frame the things you've actually been carrying. The photo that made it through three moves. The letter you've read a hundred times. The stuff you've kept for reasons you can't fully explain.</p>
-    <p class="annotation">frame what you carry</p>
-  </div>
-</section>
+  {# 03 — Practice #}
+  <section class="scene" aria-labelledby="s3">
+    <span class="micro">№ 02 — Practice</span>
+    <h2 class="mix mix-sm" id="s3">Two ways to <em>learn the trade</em>, and one seat given away.</h2>
 
-{# 04 — The practice: three catalogue cards (mockup's PRACTICE row). #}
-<section class="section section-rule section-alt">
-  <div class="container">
-    <div class="section-script">
-      <h2>practice</h2>
-      <span class="section-num">№ 02</span>
-    </div>
-
-    <div class="catalogue">
-      <article class="catalogue-card">
+    <div class="stack-list">
+      <div class="stack-item">
         <h3>Custom Framing Intensive</h3>
-        <p class="card-stats">6 weeks · Cohort of 6 · $3,500</p>
+        <p class="stats">6 weeks · Cohort of 6 · $3,500</p>
         <p>The full trade, start to finish.</p>
-        <div class="btn-row">
-          <a class="btn" href="{% url 'studio:intensive' %}">Learn more / Apply</a>
-        </div>
-      </article>
-
-      <article class="catalogue-card">
+        <p><a class="pill pill-quiet" href="{% url 'studio:intensive' %}">Learn more / Apply</a></p>
+      </div>
+      <div class="stack-item">
         <h3>Custom Framing Weekend</h3>
-        <p class="card-stats">2 days · Traveling cohorts</p>
+        <p class="stats">2 days · Traveling cohorts</p>
         <p>The full curriculum, compressed.</p>
-        <div class="btn-row">
-          <a class="btn" href="{% url 'studio:weekend' %}">Learn more</a>
-        </div>
-      </article>
-
-      <article class="catalogue-card">
+        <p><a class="pill pill-quiet" href="{% url 'studio:weekend' %}">Learn more</a></p>
+      </div>
+      <div class="stack-item">
         <h3>Sponsor a Seat</h3>
         <p>One sponsored seat is available per cohort, reserved for a QTPOC artist demonstrating financial need and a serious commitment to the work. Full tuition covered.</p>
-        <div class="btn-row">
-          <a class="btn" href="{% url 'studio:contact_sponsor' %}">Learn more</a>
-        </div>
-      </article>
-    </div>
-  </div>
-</section>
-
-{# 05 — Waitlist: the archive drawer beside the ask. #}
-<section class="section" id="waitlist">
-  <div class="container waitlist-archive">
-    <div class="card-stack" aria-hidden="true">
-      <div class="index-card">Preservation&nbsp;Studio</div>
-      <div class="index-card">Cohort&nbsp;— six seats</div>
-      <div class="index-card">Custom framing&nbsp;— Los&nbsp;Angeles</div>
-      <div class="index-card">Next intake&nbsp;— dates TBD</div>
-      <div class="index-card">Keep&nbsp;this&nbsp;card</div>
-    </div>
-
-    <div>
-      <div class="section-script">
-        <h2>waitlist</h2>
-      </div>
-      <p class="lede">Join the waitlist and we'll let you know when the next cohort opens.</p>
-      <form method="post" action="{% url 'studio:home' %}" class="inline-form">
-        {% csrf_token %}
-        {{ form.honeypot }}
-        {{ form.email }}
-        {% if form.email.errors %}
-          <p class="error">{{ form.email.errors.0 }}</p>
-        {% endif %}
-        <button type="submit" class="btn btn-cta">submit</button>
-      </form>
-      <div class="seal" aria-hidden="true">
-        <span class="seal-inner">
-          Preservation Studio
-          <span class="seal-rule"></span>
-          Custom Framing
-          <span class="seal-rule"></span>
-          <span class="seal-year">Los Angeles</span>
-        </span>
+        <p><a class="pill pill-quiet" href="{% url 'studio:contact_sponsor' %}">Learn more</a></p>
       </div>
     </div>
-  </div>
-</section>
+  </section>
+
+  {# 04 — Kept: the reference's scattered quote wall, standing in for the
+     things people bring in. These are the brief's own lines, not invented
+     testimonials. #}
+  <section class="scene" aria-labelledby="s4">
+    <span class="micro">№ 03 — Kept</span>
+    <h2 class="mix mix-sm" id="s4">The work starts with <em>what you kept.</em></h2>
+    <div class="quote-wall">
+      <blockquote class="quote">
+        “The photo that made it through three moves.”
+        <cite>Kept</cite>
+      </blockquote>
+      <blockquote class="quote">
+        “The letter you've read a hundred times.”
+        <cite>Kept</cite>
+      </blockquote>
+      <blockquote class="quote">
+        “The stuff you've kept for reasons you can't fully explain.”
+        <cite>Kept</cite>
+      </blockquote>
+      <blockquote class="quote">
+        “Every object has a story worth preserving.”
+        <cite>Sentimental Value</cite>
+      </blockquote>
+      <blockquote class="quote">
+        “A photograph, a letter, an heirloom, something passed down.”
+        <cite>Sentimental Value</cite>
+      </blockquote>
+      <blockquote class="quote">
+        “Selected pieces are framed at no cost and their story documented on film.”
+        <cite>Sentimental Value</cite>
+      </blockquote>
+    </div>
+    <a class="pill" href="{% url 'studio:sentimental' %}">The Sentimental Value series</a>
+  </section>
+
+  {# 05 — Waitlist #}
+  <section class="scene" aria-labelledby="s5">
+    <span class="micro">№ 04 — Waitlist</span>
+    <h2 class="mix mix-sm" id="s5">Join the waitlist and we'll let you know <em>when the next cohort opens.</em></h2>
+    <form method="post" action="{% url 'studio:home' %}">
+      {% csrf_token %}
+      {{ form.honeypot }}
+      {{ form.email }}
+      {% if form.email.errors %}
+        <p class="error">{{ form.email.errors.0 }}</p>
+      {% endif %}
+      <button type="submit" class="pill pill-solid">Submit</button>
+    </form>
+    <p class="micro">Applications are open · the cohort is limited to 6 people</p>
+    <a class="pill" href="{% url 'studio:intensive_apply' %}">Apply now</a>
+  </section>
+
+</div>
+
+<nav class="scene-nav" aria-label="Scene navigation">
+  <button type="button" data-track-prev aria-label="Previous scene">←</button>
+  <button type="button" data-track-next aria-label="Next scene">→</button>
+</nav>
+<p class="scene-index"><span data-scene-now>01</span> / 05</p>
 
 {% endblock %}
+{% block scripts %}<script src="{% static 'studio/js/track.js' %}?v=1"></script>{% endblock %}

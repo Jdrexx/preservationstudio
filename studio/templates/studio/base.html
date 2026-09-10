@@ -7,23 +7,26 @@
   <meta name="description" content="{% block meta_description %}Preservation Studio is a custom framing program based in Los Angeles for artists and makers.{% endblock %}">
   <link rel="icon" type="image/svg+xml" href="{% static 'studio/favicon.svg' %}">
   <link rel="alternate icon" href="{% static 'studio/favicon.svg' %}">
-  <link rel="stylesheet" href="{% static 'studio/css/fonts.css' %}?v=2">
-  <link rel="stylesheet" href="{% static 'studio/css/site.css' %}?v=5">
-  {% if request.GET.vibe %}<link rel="stylesheet" href="{% static 'studio/css/vibe-tuner.css' %}?v=2">{% endif %}
+  <link rel="stylesheet" href="{% static 'studio/css/fonts.css' %}?v=3">
+  <link rel="stylesheet" href="{% static 'studio/css/site.css' %}?v=6">
+  {% if request.GET.vibe %}<link rel="stylesheet" href="{% static 'studio/css/vibe-tuner.css' %}?v=3">{% endif %}
   {% block extra_head %}{% endblock %}
 </head>
-<body>
+<body class="{% block body_class %}{% endblock %}">
   <header class="site-header">
-    <div class="container header-inner">
+    <div class="header-inner">
       <a class="wordmark" href="{% url 'studio:home' %}">preservation<span class="wordmark-dot">.</span>studio</a>
-      <nav class="site-nav" aria-label="Main">
-        <a href="{% url 'studio:home' %}"{% if request.resolver_match.url_name == 'home' %} aria-current="page"{% endif %}>Home</a>
-        <a href="{% url 'studio:intensive' %}"{% if request.resolver_match.url_name == 'intensive' %} aria-current="page"{% endif %}>Intensive</a>
-        <a href="{% url 'studio:weekend' %}"{% if request.resolver_match.url_name == 'weekend' %} aria-current="page"{% endif %}>Weekend</a>
-        <a href="{% url 'studio:sentimental' %}"{% if request.resolver_match.url_name == 'sentimental' %} aria-current="page"{% endif %}>Sentimental Value</a>
-        <a href="{% url 'studio:about' %}"{% if request.resolver_match.url_name == 'about' %} aria-current="page"{% endif %}>About</a>
-        <a href="{% url 'studio:contact' %}"{% if request.resolver_match.url_name == 'contact' %} aria-current="page"{% endif %}>Contact</a>
-      </nav>
+      <div class="header-right">
+        <nav class="site-nav" aria-label="Main">
+          <a href="{% url 'studio:home' %}"{% if request.resolver_match.url_name == 'home' %} aria-current="page"{% endif %}>Home</a>
+          <a href="{% url 'studio:intensive' %}"{% if request.resolver_match.url_name == 'intensive' %} aria-current="page"{% endif %}>Intensive</a>
+          <a href="{% url 'studio:weekend' %}"{% if request.resolver_match.url_name == 'weekend' %} aria-current="page"{% endif %}>Weekend</a>
+          <a href="{% url 'studio:sentimental' %}"{% if request.resolver_match.url_name == 'sentimental' %} aria-current="page"{% endif %}>Sentimental Value</a>
+          <a href="{% url 'studio:about' %}"{% if request.resolver_match.url_name == 'about' %} aria-current="page"{% endif %}>About</a>
+          <a href="{% url 'studio:contact' %}"{% if request.resolver_match.url_name == 'contact' %} aria-current="page"{% endif %}>Contact</a>
+        </nav>
+        <a class="pill pill-solid" href="{% url 'studio:intensive_apply' %}">Apply</a>
+      </div>
     </div>
   </header>
 
@@ -43,6 +46,7 @@
       </div>
     </div>
   </footer>
+  {% block scripts %}{% endblock %}
   {% if request.GET.vibe %}{% include "studio/partials/vibe_tuner.html" %}{% endif %}
 </body>
 </html>
