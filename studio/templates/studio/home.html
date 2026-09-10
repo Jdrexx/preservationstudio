@@ -4,11 +4,17 @@
 {% block body_class %}is-track{% endblock %}
 {% block content %}
 
-{# Composition adapted from the rabenrifaie.com layout: a fixed corner UI over
-   full-height scenes navigated sideways, one idea per scene, restrained type.
-   Copy and colour are Preservation Studio's own. Every scene keeps a real
-   heading or link so the page still works without the horizontal track
-   (which is why it degrades to a vertical stack under 900px). #}
+{% comment %}
+Composition adapted from the rabenrifaie.com layout: a fixed corner UI over
+full-height scenes navigated sideways, one idea per scene, restrained type.
+Copy and colour are Preservation Studio's own. Every scene keeps a real heading
+or link so the page still works without the horizontal track (which is why it
+degrades to a vertical stack under 900px).
+
+Multi-line notes must use the comment block, never the single-line hash form:
+that form only comments to the end of its own line, so a multi-line one leaks
+its tail into the page as visible copy. tests.py guards this for every route.
+{% endcomment %}
 
 <div class="track" id="track" aria-label="Preservation Studio">
 
@@ -62,9 +68,10 @@
     </div>
   </section>
 
-  {# 04 — Kept: the reference's scattered quote wall, standing in for the
-     things people bring in. These are the brief's own lines, not invented
-     testimonials. #}
+  {% comment %}
+  04 — Kept: the reference's scattered quote wall, standing in for the things
+  people bring in. These are the brief's own lines, not invented testimonials.
+  {% endcomment %}
   <section class="scene" aria-labelledby="s4">
     <span class="micro">№ 03 — Kept</span>
     <h2 class="mix mix-sm" id="s4">The work starts with <em>what you kept.</em></h2>

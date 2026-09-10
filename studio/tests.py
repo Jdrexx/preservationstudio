@@ -716,3 +716,56 @@ class DesignLibraryTests(TestCase):
         rule = site.split(".btn-yellow {")[-1].split("}", 1)[0]
         self.assertIn("color: var(--on-butter)", rule)
         self.assertIn('"on-butter"', self.read("js", "vibe-tuner.js"))
+
+
+class TemplateHygieneTests(TestCase):
+    """A Django `{# ... #}` comment is SINGLE-LINE ONLY.
+
+    Only the text up to the end of that line is consumed, so a multi-line one
+    leaks its 2nd..nth lines AND the trailing `#}` into the rendered page as
+    visible copy. This shipped once (a design note appeared verbatim in the
+    "Kept" section of the home page), so it is checked both in the source and
+    in the rendered output of every route.
+    """
+
+    templates = Path(__file__).resolve().parent / "templates"
+
+    def test_no_multiline_single_line_comments_in_templates(self):
+        offenders = []
+        for path in sorted(self.templates.rglob("*.html")):
+            lines = path.read_text(encoding="utf-8").splitlines()
+            for i, line in enumerate(lines, 1):
+                for m in re.finditer(r"\{#", line):
+                    if "#}" in line[m.end():]:
+                        continue
+                    offenders.append(f"{path.name}:{i}")
+        self.assertEqual(
+            offenders,
+            [],
+            "multi-line {# #} comments leak into the page — use a comment block",
+        )
+
+    def test_no_template_syntax_leaks_into_rendered_pages(self):
+        """Nothing that looks like template syntax may reach the browser."""
+        pages = [
+            ("studio:home", {}),
+            ("studio:intensive", {}),
+            ("studio:intensive_apply", {}),
+            ("studio:weekend", {}),
+            ("studio:sentimental", {}),
+            ("studio:sentimental_apply", {}),
+            ("studio:about", {}),
+            ("studio:about_faq", {}),
+            ("studio:contact", {}),
+            ("studio:contact_sponsor", {}),
+            ("studio:thanks", {"kind": "waitlist"}),
+        ]
+        for name, kwargs in pages:
+            resp = client().get(reverse(name, kwargs=kwargs or None))
+            body = resp.content.decode()
+            with self.subTest(page=name):
+                self.assertEqual(resp.status_code, 200)
+                for token in ("{#", "#}", "{%", "{{"):
+                    self.assertNotIn(
+                        token, body, f"{token} leaked into {name}"
+                    )
