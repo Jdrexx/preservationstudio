@@ -834,3 +834,98 @@ class TrackCompositionTests(TestCase):
                 self.assertIn(hook, html)
         self.assertIn("data-track-prev", html)
         self.assertIn("data-track-next", html)
+
+
+class WelcomeGateTests(TestCase):
+    """The entry screen, replicated from the reference's welcome overlay.
+
+    Read off its live DOM: a full-bleed surface, a small flat progress bar
+    dead centre, a percentage counting up bottom-right in an italic serif, and
+    at 100% the bar gives way to the studio name with a pill-outlined
+    "Welcome". The safety half matters as much as the look: a gate whose only
+    exit is scripted traps anyone whose script did not run, so the no-JS rule
+    and the CSS failsafe are asserted here alongside the visuals.
+    """
+
+    static = Path(__file__).resolve().parent / "static" / "studio"
+
+    def home(self):
+        return client().get(reverse("studio:home")).content.decode()
+
+    def css(self):
+        return (self.static / "css" / "site.css").read_text(encoding="utf-8")
+
+    def js(self):
+        return (self.static / "js" / "welcome.js").read_text(encoding="utf-8")
+
+    def test_gate_is_on_the_track_page(self):
+        html = self.home()
+        self.assertIn('id="welcome"', html)
+        self.assertIn('role="progressbar"', html)
+        self.assertIn('id="welcome-count">0<', html)
+        self.assertIn('id="welcome-enter"', html)
+        self.assertIn(">Welcome</button>", html)
+
+    def test_gate_carries_the_studio_name_not_the_reference_s(self):
+        html = self.home()
+        self.assertIn('id="welcome-name"', html)
+        self.assertNotIn("RabenRifaie", html)
+
+    def test_gate_ships_disabled_until_the_script_ready_s_it(self):
+        """The Welcome button must not be pressable during the count."""
+        self.assertIn('id="welcome-enter" disabled', self.home())
+        self.assertIn("enter.disabled = false", self.js())
+
+    def test_noscript_hides_the_gate(self):
+        html = self.home()
+        self.assertIn(
+            "<noscript><style>.welcome { display: none; }</style></noscript>", html
+        )
+
+    def test_css_carries_a_failsafe_for_a_script_that_never_runs(self):
+        css = self.css()
+        self.assertIn("welcome-failsafe", css)
+        # the JS cancels it, so a working page never self-dismisses
+        self.assertIn(".welcome.is-live", css)
+        self.assertIn('gate.classList.add("is-live")', self.js())
+
+    def test_gate_sits_above_the_fixed_ui(self):
+        css = self.css()
+        gate = css.split(".welcome {", 1)[1].split("}", 1)[0]
+        self.assertIn("position: fixed", gate)
+        self.assertIn("inset: 0", gate)
+        self.assertIn("z-index: 90", gate)
+        # the header and the scene bar are z-index 60
+        self.assertLess(60, 90)
+
+    def test_gate_locks_the_page_underneath(self):
+        css = self.css()
+        self.assertIn("body.is-welcome .track", css)
+        self.assertIn("pointer-events: none", css)
+        self.assertIn('body.classList.add("is-welcome")', self.js())
+
+    def test_track_ignores_the_keyboard_while_the_gate_is_up(self):
+        track = (self.static / "js" / "track.js").read_text(encoding="utf-8")
+        guard = 'if (document.body.classList.contains("is-welcome")) return;'
+        self.assertIn(guard, track)
+
+    def test_leaving_removes_the_node(self):
+        """A hidden z-index-90 overlay is still a screen-reader and click trap."""
+        self.assertIn("removeChild(gate)", self.js())
+        self.assertIn('gate.classList.add("is-leaving")', self.js())
+
+    def test_reduced_motion_skips_the_count_and_the_fade(self):
+        self.assertIn("prefers-reduced-motion", self.css())
+        self.assertIn("reduce.matches", self.js())
+
+    def test_gate_is_only_on_the_track_page(self):
+        for name in ("studio:intensive", "studio:about", "studio:contact"):
+            with self.subTest(page=name):
+                html = client().get(reverse(name)).content.decode()
+                self.assertNotIn('id="welcome"', html)
+                self.assertNotIn("welcome.js", html)
+
+    def test_script_is_loaded_after_the_track(self):
+        html = self.home()
+        self.assertIn("studio/js/welcome", html)
+        self.assertLess(html.index("studio/js/track"), html.index("studio/js/welcome"))

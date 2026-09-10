@@ -160,8 +160,10 @@
     });
   });
 
-  // Arrow keys / Home / End, but never while the user is typing in a form.
+  // Arrow keys / Home / End, but never while the user is typing in a form and
+  // never while the welcome gate is still up — the gate owns the keyboard.
   document.addEventListener("keydown", function (e) {
+    if (document.body.classList.contains("is-welcome")) return;
     if (e.metaKey || e.ctrlKey || e.altKey) return;
     var el = document.activeElement;
     if (el && /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName)) return;

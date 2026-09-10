@@ -2200,3 +2200,170 @@ h2.mix {
 .scene-inner .pill {
   margin-top: 0.2rem;
 }
+
+/* ============================================================
+   WELCOME GATE — the reference's entry screen
+   ============================================================
+
+   Composition read off rabenrifaie.com's live DOM: a full-bleed
+   near-black surface (rgb(8,8,8)) with a small horizontal progress
+   bar dead centre (132x40, flat, no radius) that fills while a
+   percentage counts up bottom-right in an ITALIC SERIF (24px,
+   PP Eiko Italic Light). At 100% the bar is replaced by the studio
+   name in that same italic serif, with a thin pill-outlined
+   "Welcome" beneath it — click and the site opens.
+
+   Ours is that composition in our own surface and type: plum
+   instead of black, the wordmark in Playfair italic (our
+   --display-italic, doing the job the reference's Eiko italic
+   does), the pill filling Honey on hover/focus.
+
+   Two safety rules live here rather than in JS, because they have
+   to work when the script does NOT run:
+     · the <noscript> rule in the template hides the gate;
+     · the failsafe animation below clears it after 15s, and
+       welcome.js cancels it by adding .is-live. A gate whose only
+       exit is scripted is a trap, so it must be able to let go of
+       the visitor by itself.
+   ============================================================ */
+
+.welcome {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: grid;
+  place-items: center;
+  background: var(--plum);
+  color: var(--paper);
+  text-align: center;
+  animation: welcome-failsafe 0.5s ease 15s forwards;
+}
+
+.welcome.is-live {
+  animation: none;
+}
+
+@keyframes welcome-failsafe {
+  to {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+}
+
+/* The gate is modal: nothing underneath takes a click while it is up. */
+body.is-welcome .track,
+body.is-welcome .scene-bar,
+body.is-welcome .site-header {
+  pointer-events: none;
+}
+
+.welcome-inner {
+  display: grid;
+  justify-items: center;
+  gap: 1.6rem;
+}
+
+/* Bar and name share one grid cell, so swapping them moves nothing. */
+.welcome-stage {
+  display: grid;
+  place-items: center;
+  min-height: 2.5rem;
+}
+
+.welcome-bar {
+  grid-area: 1 / 1;
+  width: 8.25rem;
+  height: 2.5rem;
+  background: color-mix(in srgb, var(--paper) 20%, transparent);
+  position: relative;
+  overflow: hidden;
+  transition: opacity 0.4s ease;
+}
+
+.welcome-bar span {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 0;
+  background: var(--paper);
+}
+
+.welcome-name {
+  grid-area: 1 / 1;
+  margin: 0;
+  font-family: var(--display-italic);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.5rem, 2.6vw, 2rem);
+  line-height: 1.1;
+  color: var(--paper);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.welcome-name .wordmark-dot {
+  color: var(--butter);
+}
+
+.welcome-enter {
+  border-color: color-mix(in srgb, var(--paper) 55%, transparent);
+  color: var(--paper);
+  background: transparent;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 0.5s ease,
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.welcome.is-ready .welcome-bar {
+  opacity: 0;
+}
+
+.welcome.is-ready .welcome-name,
+.welcome.is-ready .welcome-enter {
+  opacity: 1;
+}
+
+.welcome.is-ready .welcome-enter {
+  pointer-events: auto;
+}
+
+.welcome-enter:hover,
+.welcome-enter:focus-visible {
+  background: var(--butter);
+  border-color: var(--butter);
+  color: var(--on-butter);
+}
+
+.welcome-count {
+  position: fixed;
+  right: clamp(1.3rem, 4vw, 4.5rem);
+  bottom: clamp(1.3rem, 3vh, 2rem);
+  margin: 0;
+  font-family: var(--display-italic);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.1rem, 1.7vw, 1.5rem);
+  line-height: 1;
+  color: var(--paper);
+}
+
+.welcome.is-leaving {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .welcome,
+  .welcome.is-leaving,
+  .welcome-bar,
+  .welcome-name,
+  .welcome-enter {
+    animation: none;
+    transition: none;
+  }
+}

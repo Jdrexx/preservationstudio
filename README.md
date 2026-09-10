@@ -41,6 +41,44 @@ reference's live DOM rather than guessed from a screenshot:
 - **One structure at every width.** Scenes stay one viewport wide on a phone —
   only the type and the bar tighten up. There is no vertical stacking fallback.
 
+### The welcome gate
+
+The home page opens on the reference's entry screen, read off its live DOM: a
+full-bleed near-black surface (`rgb(8,8,8)`) with a small flat progress bar
+dead centre (132x40, no radius) that fills while a percentage counts up
+bottom-right in an _italic serif_ (24px, PP Eiko Italic Light). At 100% the bar
+is replaced by the studio name in that same italic serif, with a thin
+pill-outlined "Welcome" beneath it — click and the site opens.
+
+Ours is that composition in our surface and type: `--plum` instead of black,
+the wordmark in Playfair italic (our `--display-italic`, the job the
+reference's Eiko italic does), the counter in the same face, the pill filling
+Honey on hover/focus. Markup lives at the top of `home.html`, states in
+`css/site.css` ("WELCOME GATE"), behaviour in `js/welcome.js`.
+
+| State        | What is on screen                                                     |
+| ------------ | --------------------------------------------------------------------- |
+| counting     | bar filling, counter ticking, `Welcome` disabled and transparent      |
+| `is-ready`   | bar faded out, wordmark + `Welcome` shown, button enabled and focused |
+| `is-leaving` | fading out, then the node is **removed** — not hidden                 |
+
+Four deliberate departures from the reference, all safety rather than style:
+
+- **`<noscript>` hides the gate.** A visitor without JS must never meet a
+  screen whose only exit is scripted.
+- **A CSS failsafe clears the gate on its own** after 15s
+  (`@keyframes welcome-failsafe`), and `welcome.js` cancels it by adding
+  `.is-live`. So a blocked, errored or slow script cannot trap anyone either.
+- **Any click, plus Enter/Space/Escape, opens the site** — the reference
+  accepts only a click on the word itself. A wheel or touch gesture also
+  opens it once the count has finished.
+- **`prefers-reduced-motion` skips the count and the fade** — the gate is
+  ready immediately.
+
+It appears on every load of the track page (as the reference does) and on no
+other route. To show it once per browser session instead, wrap the
+`countUp()` call in a `sessionStorage` check.
+
 The program pages above stay as real destinations (the scenes link to them via
 their bottom-right pill), so the long-form content — the "Is this for you?"
 grid, the six-week session list, the pricing detail — lives there rather than
