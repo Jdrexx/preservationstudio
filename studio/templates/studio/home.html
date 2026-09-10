@@ -5,129 +5,161 @@
 {% block content %}
 
 {% comment %}
-Composition adapted from the rabenrifaie.com layout: a fixed corner UI over
-full-height scenes navigated sideways, one idea per scene, restrained type.
-Copy and colour are Preservation Studio's own. Every scene keeps a real heading
-or link so the page still works without the horizontal track (which is why it
-degrades to a vertical stack under 900px).
+Composition lifted from rabenrifaie.com: ONE page, a fixed UI at the edges,
+and full-viewport scenes sitting side by side in a horizontal track. The page
+never scrolls vertically — the scene bar at the bottom and the "explore"
+control slide the track exactly one viewport at a time.
+
+Copy and colour are Preservation Studio's own. Every scene is one idea and
+keeps a real heading and a real link, so nothing is trapped behind the track:
+with JS off this is still an ordinary sideways scroller, and each scene's pill
+still reaches its page.
 
 Multi-line notes must use the comment block, never the single-line hash form:
 that form only comments to the end of its own line, so a multi-line one leaks
 its tail into the page as visible copy. tests.py guards this for every route.
 {% endcomment %}
 
-<div class="track" id="track" aria-label="Preservation Studio">
+<div class="track" id="track">
 
-  {# 01 — Hero #}
-  <section class="scene" aria-labelledby="s1">
-    <span class="micro">Preservation Studio · Los Angeles</span>
-    <h1 class="mix" id="s1">A custom framing program <em>in Los Angeles</em> for artists and makers.</h1>
-    <p class="micro">The trade of framing · the stories we keep</p>
-    <button class="explore" type="button" data-track-next>
-      <span class="rule-tick"></span>
-      <span class="micro">explore</span>
-    </button>
-    <div class="rows">
-      <a href="{% url 'studio:intensive' %}">Custom Framing Intensive</a>
-      <a href="{% url 'studio:weekend' %}">Custom Framing Weekend</a>
-      <a href="{% url 'studio:sentimental' %}">Sentimental Value</a>
+  <section class="scene" id="home" aria-labelledby="s-home">
+    <div class="scene-media" aria-hidden="true"></div>
+    <div class="scene-inner">
+      <p class="micro">preservation.studio · Los Angeles</p>
+      <h1 class="mix" id="s-home">A custom framing program <em>in Los Angeles</em> for artists and makers.</h1>
+      <p class="micro">The trade of framing · the stories we keep</p>
+      <a class="pill pill-solid" href="{% url 'studio:intensive_apply' %}">Apply</a>
+      <ul class="scene-row">
+        <li><a href="{% url 'studio:intensive' %}">Custom Framing Intensive</a></li>
+        <li><a href="{% url 'studio:weekend' %}">Custom Framing Weekend</a></li>
+        <li><a href="{% url 'studio:sentimental' %}">Sentimental Value</a></li>
+      </ul>
     </div>
+    <figure class="quote-float quote-float-a">
+      <blockquote>“The photo that made it through three moves.”</blockquote>
+      <figcaption>Kept</figcaption>
+    </figure>
+    <figure class="quote-float quote-float-b">
+      <blockquote>“The letter you've read a hundred times.”</blockquote>
+      <figcaption>Kept</figcaption>
+    </figure>
+    <a class="scene-cta pill" href="{% url 'studio:sentimental' %}">The series →</a>
   </section>
 
-  {# 02 — The studio #}
-  <section class="scene" aria-labelledby="s2">
-    <span class="micro">№ 01 — The studio</span>
-    <h2 class="mix mix-sm" id="s2">Preservation Studio is a custom framing program based in Los Angeles for artists and makers. <em>Come out knowing how to frame the things you've actually been carrying.</em></h2>
-    <div class="photo-band photo" role="img" aria-label="The studio floor — framing bench, tools and archival materials"></div>
-    <a class="pill" href="{% url 'studio:about' %}">About the studio</a>
+  <section class="scene" id="intensive" aria-labelledby="s-intensive">
+    <div class="scene-media" aria-hidden="true"></div>
+    <div class="scene-inner">
+      <p class="micro">№ 02 · Intensive</p>
+      <h2 class="mix mix-sm" id="s-intensive">The full trade, start to finish. <em>Six weeks, a cohort of six.</em></h2>
+      <ul class="scene-facts">
+        <li><b>6 weeks</b> · 2–2.5 hr sessions</li>
+        <li><b>Cohort of 6</b> · all materials included</li>
+        <li><b>$3,500</b> · payment plans available</li>
+      </ul>
+      <a class="pill pill-solid" href="{% url 'studio:intensive_apply' %}">Apply</a>
+    </div>
+    <a class="scene-cta pill" href="{% url 'studio:intensive' %}">Full program →</a>
   </section>
 
-  {# 03 — Practice #}
-  <section class="scene" aria-labelledby="s3">
-    <span class="micro">№ 02 — Practice</span>
-    <h2 class="mix mix-sm" id="s3">Two ways to <em>learn the trade</em>, and one seat given away.</h2>
+  <section class="scene" id="weekend" aria-labelledby="s-weekend">
+    <div class="scene-media" aria-hidden="true"></div>
+    <div class="scene-inner">
+      <p class="micro">№ 03 · Weekend</p>
+      <h2 class="mix mix-sm" id="s-weekend">The full curriculum, compressed. <em>Two days, traveling cohorts.</em></h2>
+      <ul class="scene-facts">
+        <li><b>2 days</b> · Fri evening – Sun afternoon</li>
+        <li><b>6 people max</b> · all materials included</li>
+        <li><b>New York · New Jersey · Philadelphia · Seattle · Albuquerque · Santa Fe</b> · dates TBD</li>
+      </ul>
+      <a class="pill pill-solid" href="{% url 'studio:weekend' %}#interest">Join the interest list</a>
+    </div>
+    <a class="scene-cta pill" href="{% url 'studio:weekend' %}">Weekend details →</a>
+  </section>
 
-    <div class="stack-list">
-      <div class="stack-item">
-        <h3>Custom Framing Intensive</h3>
-        <p class="stats">6 weeks · Cohort of 6 · $3,500</p>
-        <p>The full trade, start to finish.</p>
-        <p><a class="pill pill-quiet" href="{% url 'studio:intensive' %}">Learn more / Apply</a></p>
-      </div>
-      <div class="stack-item">
-        <h3>Custom Framing Weekend</h3>
-        <p class="stats">2 days · Traveling cohorts</p>
-        <p>The full curriculum, compressed.</p>
-        <p><a class="pill pill-quiet" href="{% url 'studio:weekend' %}">Learn more</a></p>
-      </div>
-      <div class="stack-item">
-        <h3>Sponsor a Seat</h3>
-        <p>One sponsored seat is available per cohort, reserved for a QTPOC artist demonstrating financial need and a serious commitment to the work. Full tuition covered.</p>
-        <p><a class="pill pill-quiet" href="{% url 'studio:contact_sponsor' %}">Learn more</a></p>
+  <section class="scene" id="sentimental-value" aria-labelledby="s-sentimental">
+    <div class="scene-media" aria-hidden="true"></div>
+    <div class="scene-inner">
+      <p class="micro">№ 04 · Sentimental Value</p>
+      <h2 class="mix mix-sm" id="s-sentimental">Every object has a story worth preserving. <em>Tell us yours.</em></h2>
+      <p class="scene-note">If you have a piece with a story, tell us about the object, why it matters, and where it came from. Selected pieces are framed at no cost and the story is documented on film.</p>
+      <p class="scene-note">One sponsored seat is available per cohort, reserved for a QTPOC artist demonstrating financial need and a serious commitment to the work.</p>
+      <a class="pill pill-solid" href="{% url 'studio:sentimental_apply' %}">Apply</a>
+    </div>
+    <a class="scene-cta pill" href="{% url 'studio:contact_sponsor' %}">Sponsor a seat →</a>
+  </section>
+
+  <section class="scene" id="about" aria-labelledby="s-about">
+    <div class="scene-media" aria-hidden="true"></div>
+    <div class="scene-inner">
+      <p class="micro">№ 05 · The studio</p>
+      <h2 class="mix mix-sm" id="s-about">Preservation Studio is a custom framing program based in Los Angeles for artists and makers. Come out knowing how to frame the things you've actually been carrying.</h2>
+      <p class="scene-note">Asher Cano is a framer, artist, and producer based in Los Angeles — nearly a decade in the trade, and Gallery Producer at Level Ground.</p>
+      <div class="quote-wall">
+        <blockquote class="quote">
+          “The stuff you've kept for reasons you can't fully explain.”
+          <cite>Kept</cite>
+        </blockquote>
+        <blockquote class="quote">
+          “Every object has a story worth preserving.”
+          <cite>Sentimental Value</cite>
+        </blockquote>
+        <blockquote class="quote">
+          “A photograph, a letter, an heirloom, something passed down.”
+          <cite>Sentimental Value</cite>
+        </blockquote>
+        <blockquote class="quote">
+          “Selected pieces are framed at no cost and their story documented on film.”
+          <cite>Sentimental Value</cite>
+        </blockquote>
       </div>
     </div>
+    <a class="scene-cta pill" href="{% url 'studio:about_faq' %}">Read the FAQ →</a>
   </section>
 
-  {% comment %}
-  04 — Kept: the reference's scattered quote wall, standing in for the things
-  people bring in. These are the brief's own lines, not invented testimonials.
-  {% endcomment %}
-  <section class="scene" aria-labelledby="s4">
-    <span class="micro">№ 03 — Kept</span>
-    <h2 class="mix mix-sm" id="s4">The work starts with <em>what you kept.</em></h2>
-    <div class="quote-wall">
-      <blockquote class="quote">
-        “The photo that made it through three moves.”
-        <cite>Kept</cite>
-      </blockquote>
-      <blockquote class="quote">
-        “The letter you've read a hundred times.”
-        <cite>Kept</cite>
-      </blockquote>
-      <blockquote class="quote">
-        “The stuff you've kept for reasons you can't fully explain.”
-        <cite>Kept</cite>
-      </blockquote>
-      <blockquote class="quote">
-        “Every object has a story worth preserving.”
-        <cite>Sentimental Value</cite>
-      </blockquote>
-      <blockquote class="quote">
-        “A photograph, a letter, an heirloom, something passed down.”
-        <cite>Sentimental Value</cite>
-      </blockquote>
-      <blockquote class="quote">
-        “Selected pieces are framed at no cost and their story documented on film.”
-        <cite>Sentimental Value</cite>
-      </blockquote>
+  <section class="scene" id="contact" aria-labelledby="s-contact">
+    <div class="scene-media" aria-hidden="true"></div>
+    <div class="scene-inner">
+      <p class="micro">№ 06 · Waitlist</p>
+      <h2 class="mix mix-sm" id="s-contact">Join the waitlist and we'll let you know when the next cohort opens.</h2>
+      <form method="post" action="{% url 'studio:home' %}">
+        {% csrf_token %}
+        {{ form.honeypot }}
+        {{ form.email }}
+        {% if form.email.errors %}
+          <p class="error">{{ form.email.errors.0 }}</p>
+        {% endif %}
+        <button type="submit" class="pill pill-solid">Submit</button>
+      </form>
+      <p class="micro">Applications are open · the cohort is limited to 6 people</p>
+      <p class="scene-links">
+        <a href="mailto:hello@preservation.studio">hello@preservation.studio</a>
+        <a href="https://instagram.com/preservation.studio" rel="noopener" target="_blank">@preservation.studio</a>
+      </p>
     </div>
-    <a class="pill" href="{% url 'studio:sentimental' %}">The Sentimental Value series</a>
-  </section>
-
-  {# 05 — Waitlist #}
-  <section class="scene" aria-labelledby="s5">
-    <span class="micro">№ 04 — Waitlist</span>
-    <h2 class="mix mix-sm" id="s5">Join the waitlist and we'll let you know <em>when the next cohort opens.</em></h2>
-    <form method="post" action="{% url 'studio:home' %}">
-      {% csrf_token %}
-      {{ form.honeypot }}
-      {{ form.email }}
-      {% if form.email.errors %}
-        <p class="error">{{ form.email.errors.0 }}</p>
-      {% endif %}
-      <button type="submit" class="pill pill-solid">Submit</button>
-    </form>
-    <p class="micro">Applications are open · the cohort is limited to 6 people</p>
-    <a class="pill" href="{% url 'studio:intensive_apply' %}">Apply now</a>
+    <a class="scene-cta pill" href="{% url 'studio:intensive_apply' %}">Apply now →</a>
   </section>
 
 </div>
 
-<nav class="scene-nav" aria-label="Scene navigation">
-  <button type="button" data-track-prev aria-label="Previous scene">←</button>
-  <button type="button" data-track-next aria-label="Next scene">→</button>
+<nav class="scene-bar" aria-label="Scenes">
+  <div class="scene-menu">
+    <a href="#home" data-scene-link>Home</a>
+    <a href="#intensive" data-scene-link>Intensive</a>
+    <a href="#weekend" data-scene-link>Weekend</a>
+    <a href="#sentimental-value" data-scene-link>Sentimental Value</a>
+    <a href="#about" data-scene-link>About</a>
+    <a href="#contact" data-scene-link>Contact</a>
+  </div>
+  <div class="scene-controls">
+    <button type="button" class="scene-step" data-track-prev aria-label="Previous scene">←</button>
+    <span class="explore-cluster">
+      <button type="button" class="explore" data-explore aria-label="Next scene"><span aria-hidden="true">ps.</span></button>
+      <span class="micro" aria-hidden="true">explore</span>
+    </span>
+    <button type="button" class="scene-step" data-track-next aria-label="Next scene">→</button>
+    <span class="scene-index"><span data-scene-now>01</span> / <span data-scene-total>06</span></span>
+  </div>
 </nav>
-<p class="scene-index"><span data-scene-now>01</span> / 05</p>
 
 {% endblock %}
-{% block scripts %}<script src="{% static 'studio/js/track.js' %}?v=1"></script>{% endblock %}
+{% block scripts %}<script src="{% static 'studio/js/track.js' %}?v=3"></script>{% endblock %}

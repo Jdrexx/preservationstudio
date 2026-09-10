@@ -18,6 +18,36 @@ Nested page layout — parent pages hold the info, child pages hold the forms.
 | `/about/`             | Bio, philosophy                                | `/about/faq/` — FAQ                                |
 | `/contact/`           | Email, Instagram, message form                 | `/contact/sponsor/` — sponsored seat inquiry       |
 
+## Layout: the one-track composition
+
+The site is laid out in the **rabenrifaie.com composition**, read off the
+reference's live DOM rather than guessed from a screenshot:
+
+- **One page, six scenes.** Home is a single horizontal track of full-viewport
+  scenes (`100vw x 100svh`), one per nav item, in order:
+  Home → Intensive → Weekend → Sentimental Value → About → Contact.
+- **The page never scrolls vertically.** `body.is-track` is clipped to the
+  viewport and the track is the only scroller. The footer is hidden there.
+- **Fixed UI at the edges**, exactly as the reference has it: the top bar
+  (wordmark left, Apply pill right) and the scene bar at the bottom — the six
+  scene words, prev/next, the circular "explore" control and the `01 / 06`
+  counter. Each scene also carries its own bottom-right pill (the reference's
+  per-scene button).
+- **Navigation is real navigation.** The scene bar and "explore" scroll the
+  track (explore wraps at the end); arrow keys, Home/End, trackpad, touch and
+  the scrollbar all work; `/#intensive` deep-links straight to a scene, and
+  sliding the track updates the hash with `replaceState` so the back button
+  leaves the page instead of walking the track.
+- **One structure at every width.** Scenes stay one viewport wide on a phone —
+  only the type and the bar tighten up. There is no vertical stacking fallback.
+
+The program pages above stay as real destinations (the scenes link to them via
+their bottom-right pill), so the long-form content — the "Is this for you?"
+grid, the six-week session list, the pricing detail — lives there rather than
+being crammed into a scene. `TrackCompositionTests` guards the composition:
+scene count and ids, one scene per nav item, the clipped document, the
+viewport-wide scenes, and the absence of the old stacking rule.
+
 Every submission is stored in the database and reviewed in the Django admin
 (admin is mounted at a secret path set by `DJANGO_ADMIN_URL` — unset = admin disabled).
 
@@ -154,19 +184,19 @@ Switzer is Fontshare (ITF Free Font License).
 `Hexcodes.txt` and the colours sampled off his newest mockups; token names
 unchanged so the vibe tuner keeps working):
 
-| Token           | Hex                    | Use                            |
-| --------------- | ---------------------- | ------------------------------ |
-| `--paper`       | `#F5F1EA` Cream        | Page background                |
-| `--paper-deep`  | `#EAE3D4`              | Alternate section bands        |
-| `--card`        | `#FFFFFF` White        | Catalogue cards, form panels   |
-| `--ink`         | `#24140C` Licorice     | Text                           |
-| `--ink-soft`    | `#5F5A41` Olive Night  | Labels, captions, card body    |
-| `--rule`        | `#D5D5BC` Pearl        | Hairlines                      |
-| `--rule-strong` | `#B3A189` Cinnamon     | Borders, rules                 |
-| `--butter`      | `#FFDE8A` Honey        | Accent, marker highlights      |
-| `--on-butter`   | `#24140C` Licorice     | Text on the accent             |
-| `--blue`        | `#9EBEC6` Light Blue   | CTAs (the mockups' pill button) |
-| `--plum`        | `#3D2D2E` Choc. Plum   | Hero band, footer, frames      |
+| Token           | Hex                   | Use                             |
+| --------------- | --------------------- | ------------------------------- |
+| `--paper`       | `#F5F1EA` Cream       | Page background                 |
+| `--paper-deep`  | `#EAE3D4`             | Alternate section bands         |
+| `--card`        | `#FFFFFF` White       | Catalogue cards, form panels    |
+| `--ink`         | `#24140C` Licorice    | Text                            |
+| `--ink-soft`    | `#5F5A41` Olive Night | Labels, captions, card body     |
+| `--rule`        | `#D5D5BC` Pearl       | Hairlines                       |
+| `--rule-strong` | `#B3A189` Cinnamon    | Borders, rules                  |
+| `--butter`      | `#FFDE8A` Honey       | Accent, marker highlights       |
+| `--on-butter`   | `#24140C` Licorice    | Text on the accent              |
+| `--blue`        | `#9EBEC6` Light Blue  | CTAs (the mockups' pill button) |
+| `--plum`        | `#3D2D2E` Choc. Plum  | Hero band, footer, frames       |
 
 `--on-butter` exists so a look can flip the accent to something light
 (butter yellow, say) and set dark text on it without editing component CSS.
@@ -178,13 +208,13 @@ cream-on-Honey (1.16:1) the moment the accent went light again.
 Creative Market font. Swapping in the purchased webfonts is a one-line change
 per role in `:root`:
 
-| Role      | Token      | Stand-in          | Client's pick |
-| --------- | ---------- | ----------------- | ------------- |
-| Titles    | `--script` | Permanent Marker  | Paloma        |
-| Subheads  | `--display`| Libre Bodoni      | Promenade     |
-| Paragraph | `--serif`  | Switzer           | Makking       |
-| Labels    | `--mono`   | IBM Plex Mono     | —             |
-| Notes     | `--hand`   | Kalam             | —             |
+| Role      | Token       | Stand-in         | Client's pick |
+| --------- | ----------- | ---------------- | ------------- |
+| Titles    | `--script`  | Permanent Marker | Paloma        |
+| Subheads  | `--display` | Libre Bodoni     | Promenade     |
+| Paragraph | `--serif`   | Switzer          | Makking       |
+| Labels    | `--mono`    | IBM Plex Mono    | —             |
+| Notes     | `--hand`    | Kalam            | —             |
 
 Design notes: uppercase editorial headlines (`.display-upper`), pill-shaped
 buttons, split hero with a CSS "specimen card" standing in for photography,

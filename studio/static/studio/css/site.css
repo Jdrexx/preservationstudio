@@ -1625,21 +1625,26 @@ a:hover {
 }
 
 /* ============================================================
-   TRACK + SCENE LAYOUT
-   Composition adapted from rabenrifaie.com: a fixed corner UI
-   over full-height scenes navigated horizontally, extremely
-   restrained type, and one idea per scene.
+   TRACK + SCENE LAYOUT — the rabenrifaie.com composition
+   ============================================================
 
-   Rendered in PRESERVATION STUDIO's own colours and copy, not
-   the reference's black/white — and with the client's own type
-   trio instead of PP Eiko / PP Neue Montreal.
+   Structure, read off the reference's live DOM: ONE page. A fixed
+   UI at the viewport edges, and full-viewport scenes (100vw x
+   100svh) sitting side by side in a horizontal track. The page
+   never scrolls vertically — html/body are clipped and the track
+   is the only scroller, moved one viewport at a time.
 
-   Deliberate differences from the reference:
-     · no scroll-jacking. The track is a native horizontal
-       scroller (trackpad, touch, arrow keys, and the on-screen
-       next/prev control all work), so nothing traps the page.
-     · under 900px the scenes stack vertically — a sideways
-       scroller on a phone is hostile.
+   Rendered in PRESERVATION STUDIO's own colours and copy, not the
+   reference's black/white — and with the client's own type trio
+   instead of PP Eiko / PP Neue Montreal.
+
+   Deliberate differences from the reference, both for function:
+     · the track is a native horizontal scroller with snap points,
+       so touch, trackpad, keyboard and the on-screen controls all
+       work — the reference drives it with a transform only.
+     · the scene words are always visible in the scene bar rather
+       than hidden behind the reference's collapsed circle menu.
+       This site's job is to collect applications.
    ============================================================ */
 
 :root {
@@ -1790,6 +1795,23 @@ body.is-track main {
   padding-top: 0;
 }
 
+/* The page itself never scrolls: the reference clips the document and lets
+   the track be the only thing that moves. */
+body.is-track {
+  height: 100svh;
+  overflow: hidden;
+}
+
+body.is-track .site-footer {
+  display: none;
+}
+
+/* Inside the track page the nav lives in the scene bar, so the header keeps
+   only its brand + pill — the reference's top bar. */
+body.is-track .site-header .site-nav {
+  display: none;
+}
+
 .track {
   display: flex;
   overflow-x: auto;
@@ -1798,249 +1820,393 @@ body.is-track main {
   scroll-behavior: smooth;
   height: 100svh;
   scrollbar-width: none;
+  overscroll-behavior-x: contain;
 }
 
 .track::-webkit-scrollbar {
   display: none;
 }
 
+/* One scene = one full viewport, exactly like the reference's sections. */
 .scene {
-  flex: 0 0 auto;
+  position: relative;
+  flex: 0 0 100vw;
+  width: 100vw;
+  height: 100svh;
+  overflow: hidden;
   scroll-snap-align: start;
-  width: min(94vw, 1060px);
-  height: 100%;
   display: flex;
   flex-direction: column;
+  align-items: center;
   justify-content: center;
   gap: 1.15rem;
-  padding: 6.5rem clamp(1.3rem, 4vw, 4.5rem) 5rem;
+  padding: 6.5rem clamp(1.3rem, 5vw, 5rem) 8.5rem;
   border-right: 1px solid var(--rule);
-  position: relative;
 }
 
 .scene:last-child {
   border-right: 0;
 }
 
-.scene > .micro:first-child {
+/* The reference's full-bleed imagery layer, in our colours and quiet enough
+   that type stays readable on top of it. */
+.scene-media {
   position: absolute;
-  top: 5.6rem;
-  left: clamp(1.3rem, 4vw, 4.5rem);
+  inset: 0;
+  z-index: 0;
+  background-color: var(--paper-deep);
+  background-image:
+    radial-gradient(
+      70% 90% at 18% 12%,
+      rgba(255, 222, 138, 0.28),
+      transparent 62%
+    ),
+    radial-gradient(
+      60% 80% at 84% 82%,
+      rgba(158, 190, 198, 0.22),
+      transparent 60%
+    ),
+    linear-gradient(180deg, rgba(61, 45, 46, 0.04), rgba(61, 45, 46, 0.1));
 }
 
-/* ---------- Scene furniture ---------- */
-
-.scene-index {
-  position: fixed;
-  right: clamp(1.3rem, 4vw, 4.5rem);
-  bottom: 1.5rem;
-  z-index: 60;
-  font-family: var(--mono);
-  font-size: 0.66rem;
-  letter-spacing: 0.14em;
-  color: var(--ink-soft);
+.scene:nth-child(even) .scene-media {
+  background-color: var(--paper);
+  background-image:
+    radial-gradient(
+      64% 84% at 82% 16%,
+      rgba(255, 222, 138, 0.22),
+      transparent 60%
+    ),
+    radial-gradient(
+      70% 90% at 12% 86%,
+      rgba(158, 190, 198, 0.2),
+      transparent 62%
+    ),
+    linear-gradient(180deg, rgba(61, 45, 46, 0.03), rgba(61, 45, 46, 0.08));
 }
 
-.scene-nav {
-  position: fixed;
-  left: clamp(1.3rem, 4vw, 4.5rem);
-  bottom: 1.5rem;
-  z-index: 60;
+.scene-inner {
+  position: relative;
+  z-index: 2;
+  width: min(46rem, 92vw);
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 0.6rem;
+  gap: 1.05rem;
+  text-align: center;
 }
 
-.scene-nav button {
-  font-family: var(--mono);
-  font-size: 0.66rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+.scene-inner .mix {
+  max-width: 34ch;
+}
+
+.scene-note {
+  font-family: var(--serif);
+  font-size: 0.98rem;
+  line-height: 1.6;
   color: var(--ink-soft);
-  background: none;
-  border: 1px solid var(--rule-strong);
-  border-radius: 999px;
-  width: 2.1rem;
-  height: 2.1rem;
-  line-height: 1;
-  cursor: pointer;
+  max-width: 52ch;
 }
 
-.scene-nav button:hover:not(:disabled) {
-  background: var(--butter);
-  border-color: var(--butter);
-  color: var(--on-butter);
-}
-
-.scene-nav button:disabled {
-  opacity: 0.35;
-  cursor: default;
-}
-
-/* the reference's "explore" affordance */
-.explore {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.7rem;
-  margin-top: 1.4rem;
-  text-decoration: none;
-  color: var(--ink-soft);
-}
-
-.explore .rule-tick {
-  flex: 0 0 2.6rem;
-  height: 1px;
-  background: var(--rule-strong);
-}
-
-.explore:hover {
-  color: var(--ink);
-}
-
-/* ---------- Ways in: the offerings as a quiet row ---------- */
-
-.rows {
+/* the service row under the hero's pill, straight off the reference */
+.scene-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem clamp(1.4rem, 3vw, 3rem);
-  font-family: var(--serif);
-  font-size: 1rem;
-  color: var(--ink);
+  justify-content: center;
+  gap: 0.5rem clamp(1.1rem, 2.6vw, 2.4rem);
+  list-style: none;
+  margin: 0.4rem 0 0;
+  padding: 0;
 }
 
-.rows a {
+.scene-row a {
+  font-family: var(--serif);
+  font-size: 0.98rem;
   color: var(--ink);
   text-decoration: none;
   border-bottom: 1px solid var(--rule-strong);
   padding-bottom: 0.15rem;
 }
 
-.rows a:hover {
+.scene-row a:hover {
   border-color: var(--ink);
 }
 
-.rows .rows-note {
+.scene-facts {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem clamp(1rem, 2.2vw, 2rem);
+  list-style: none;
+  margin: 0;
+  padding: 0;
   font-family: var(--mono);
   font-size: 0.62rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--ink-soft);
-  display: block;
-  margin-top: 0.35rem;
 }
 
-/* stacked offering detail inside a scene */
-.stack-list {
-  display: grid;
-  gap: 1.5rem;
-  max-width: 40rem;
+.scene-facts b {
+  font-weight: 600;
+  color: var(--ink);
 }
 
-.stack-item h3 {
-  font-family: var(--display);
-  font-size: 1.15rem;
-  margin-bottom: 0.25rem;
+.scene-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem 1.6rem;
 }
 
-.stack-item .stats {
+.scene-links a {
   font-family: var(--mono);
-  font-size: 0.62rem;
+  font-size: 0.64rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--ink-soft);
-  margin-bottom: 0.35rem;
 }
 
-.stack-item p {
+.scene-links a:hover {
+  color: var(--ink);
+}
+
+/* The floating cards: the reference scatters quote cards over the scene. */
+.quote-float {
+  position: absolute;
+  z-index: 2;
+  width: min(15.5rem, 32vw);
+  margin: 0;
+  padding: 1rem 1.1rem;
+  background: var(--card);
+  border: 1px solid var(--rule);
+  box-shadow: 0 10px 30px rgba(36, 20, 12, 0.07);
+}
+
+.quote-float blockquote {
+  font-family: var(--serif);
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: var(--ink);
+}
+
+.quote-float figcaption {
+  margin-top: 0.5rem;
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
   color: var(--ink-soft);
-  font-size: 0.98rem;
+}
+
+.quote-float-a {
+  left: clamp(1.3rem, 4vw, 4.5rem);
+  bottom: clamp(10rem, 20vh, 14rem);
+}
+
+.quote-float-b {
+  right: clamp(1.3rem, 4vw, 4.5rem);
+  bottom: clamp(12rem, 24vh, 17rem);
+}
+
+/* The per-scene pill the reference keeps at the bottom-right. */
+.scene-cta {
+  position: absolute;
+  z-index: 3;
+  right: clamp(1.3rem, 4vw, 4.5rem);
+  bottom: clamp(1.3rem, 3vh, 2rem);
+  background: var(--card);
+}
+
+/* ---------- The scene bar (reference's fixed bottom UI) ---------- */
+
+.scene-bar {
+  position: fixed;
+  inset: auto 0 0 0;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 1.6rem clamp(1rem, 3vw, 2.4rem) 1.1rem;
+  background: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--paper) 94%, transparent) 55%,
+    transparent
+  );
+  pointer-events: none;
+}
+
+.scene-bar > * {
+  pointer-events: auto;
+}
+
+.scene-menu {
+  display: flex;
+  gap: clamp(0.75rem, 1.7vw, 1.6rem);
+  max-width: 94vw;
+  overflow-x: auto;
+  scrollbar-width: none;
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.scene-menu::-webkit-scrollbar {
+  display: none;
+}
+
+.scene-menu a {
+  color: var(--ink-soft);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.scene-menu a:hover,
+.scene-menu a[aria-current="true"] {
+  color: var(--ink);
+}
+
+.scene-controls {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.5rem, 1.4vw, 1rem);
+}
+
+.explore-cluster {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.explore {
+  width: 3rem;
+  height: 3rem;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--ink);
+  border-radius: 50%;
+  background: var(--card);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+}
+
+.explore:hover {
+  background: var(--butter);
+}
+
+.scene-step {
+  width: 2.1rem;
+  height: 2.1rem;
+  border: 1px solid var(--rule-strong);
+  border-radius: 50%;
+  background: none;
+  color: var(--ink-soft);
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.scene-step:hover:not(:disabled) {
+  background: var(--butter);
+  border-color: var(--butter);
+  color: var(--on-butter);
+}
+
+.scene-step:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.scene-index {
+  margin-left: 0.3rem;
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  color: var(--ink-soft);
 }
 
 /* ---------- Quote wall (the reference's scattered testimonials) ---------- */
 
 .quote-wall {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-  gap: 1.8rem 2rem;
-  max-width: 60rem;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1.1rem 1.6rem;
+  margin-top: 0.6rem;
+  text-align: left;
 }
 
 .quote {
   font-family: var(--serif);
-  font-size: 0.95rem;
-  line-height: 1.5;
+  font-size: 0.9rem;
+  line-height: 1.45;
   color: var(--ink);
-}
-
-.quote:nth-child(odd) {
-  transform: translateY(0.7rem);
-}
-
-.quote:nth-child(3n) {
-  transform: translateY(-0.5rem);
+  margin: 0;
 }
 
 .quote cite {
   display: block;
-  margin-top: 0.4rem;
+  margin-top: 0.35rem;
   font-family: var(--mono);
-  font-size: 0.58rem;
+  font-size: 0.55rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   font-style: normal;
   color: var(--ink-soft);
-  opacity: 0.8;
+  opacity: 0.85;
 }
 
-/* ---------- Photo band inside a scene ---------- */
+/* ---------- Scene form (the waitlist) ---------- */
 
-.scene .photo-band {
-  aspect-ratio: 16 / 9;
-  width: 100%;
-  max-width: 34rem;
-  min-height: 0;
-  border: 1px solid var(--rule-strong);
-}
-
-/* ---------- Waitlist inside a scene ---------- */
-
-.scene .inline-form {
+.scene-inner form {
   display: flex;
-  gap: 0.6rem;
   flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.6rem;
   max-width: 30rem;
-  margin-top: 1.3rem;
+  margin-top: 0.2rem;
 }
 
-.scene .inline-form input[type="email"] {
-  flex: 1 1 14rem;
+.scene-inner form input[type="email"] {
+  flex: 1 1 15rem;
+  min-width: 12rem;
 }
 
-/* ---------- Track responsive: scenes stack on small screens ---------- */
+.scene-inner .error {
+  flex: 1 1 100%;
+  color: var(--error);
+  font-size: 0.85rem;
+}
+
+/* ---------- Track responsive ----------
+   One structure at every width: scenes stay one viewport wide and the track
+   still moves sideways, exactly as the reference does. Only the type and the
+   fixed bar tighten up. */
 
 @media (max-width: 900px) {
-  .track {
-    flex-direction: column;
-    height: auto;
-    overflow-x: hidden;
-    scroll-snap-type: none;
-  }
   .scene {
-    width: 100%;
-    height: auto;
-    padding: 5.5rem 1.3rem 3rem;
-    border-right: 0;
-    border-bottom: 1px solid var(--rule);
+    padding: 5.5rem 1.3rem 9rem;
   }
-  .scene > .micro:first-child {
-    position: static;
-  }
-  .scene-index,
-  .scene-nav {
+  .quote-float {
     display: none;
   }
-  .site-header .site-nav {
-    display: none;
+  .scene-cta {
+    right: 1.3rem;
+    bottom: 1.2rem;
+  }
+  .scene-menu {
+    font-size: 0.55rem;
+    letter-spacing: 0.12em;
+    gap: 0.8rem;
   }
 }
 
@@ -2052,32 +2218,11 @@ body.is-track main {
 
 /* ---------- Track layer: element resets ---------- */
 
-/* .explore is a <button> so it can drive the track, not a dead anchor */
-button.explore {
-  background: none;
-  border: 0;
-  padding: 0;
-  font: inherit;
-  cursor: pointer;
-}
-
 h1.mix,
 h2.mix {
   margin: 0;
 }
 
-.scene form {
-  display: flex;
-  gap: 0.6rem;
-  flex-wrap: wrap;
-  align-items: center;
-  max-width: 30rem;
-}
-
-.scene form input[type="email"] {
-  flex: 1 1 14rem;
-}
-
-.scene .pill {
-  align-self: flex-start;
+.scene-inner .pill {
+  margin-top: 0.2rem;
 }

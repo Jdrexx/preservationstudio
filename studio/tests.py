@@ -736,7 +736,7 @@ class TemplateHygieneTests(TestCase):
             lines = path.read_text(encoding="utf-8").splitlines()
             for i, line in enumerate(lines, 1):
                 for m in re.finditer(r"\{#", line):
-                    if "#}" in line[m.end():]:
+                    if "#}" in line[m.end() :]:
                         continue
                     offenders.append(f"{path.name}:{i}")
         self.assertEqual(
@@ -766,6 +766,71 @@ class TemplateHygieneTests(TestCase):
             with self.subTest(page=name):
                 self.assertEqual(resp.status_code, 200)
                 for token in ("{#", "#}", "{%", "{{"):
-                    self.assertNotIn(
-                        token, body, f"{token} leaked into {name}"
-                    )
+                    self.assertNotIn(token, body, f"{token} leaked into {name}")
+
+
+class TrackCompositionTests(TestCase):
+    """The site is ONE page in the rabenrifaie.com composition.
+
+    Read off the reference's live DOM: a fixed UI at the edges over
+    full-viewport scenes (100vw x 100svh) laid out side by side, with the
+    document clipped so nothing scrolls vertically, and one scene per nav
+    item. The CSS half of that contract is checked here too — a template
+    test alone would not notice the layout drifting back to stacked pages.
+    """
+
+    static = Path(__file__).resolve().parent / "static" / "studio"
+
+    # one scene per nav item, in order
+    NAV = ["home", "intensive", "weekend", "sentimental-value", "about", "contact"]
+
+    def home(self):
+        return client().get(reverse("studio:home")).content.decode()
+
+    def css(self):
+        return (self.static / "css" / "site.css").read_text(encoding="utf-8")
+
+    def test_one_scene_per_nav_item(self):
+        html = self.home()
+        self.assertEqual(html.count('class="scene"'), len(self.NAV))
+        for scene_id in self.NAV:
+            with self.subTest(scene=scene_id):
+                self.assertIn('id="%s"' % scene_id, html)
+
+    def test_scene_bar_links_point_at_scenes(self):
+        html = self.home()
+        for scene_id in self.NAV:
+            with self.subTest(scene=scene_id):
+                self.assertIn('href="#%s" data-scene-link' % scene_id, html)
+
+    def test_document_is_clipped_and_the_track_is_the_only_scroller(self):
+        css = self.css()
+        body = css.split("body.is-track {", 1)[1].split("}", 1)[0]
+        self.assertIn("height: 100svh", body)
+        self.assertIn("overflow: hidden", body)
+        scene = css.split("\n.scene {", 1)[1].split("}", 1)[0]
+        self.assertIn("width: 100vw", scene)
+        self.assertIn("height: 100svh", scene)
+
+    def test_scenes_stay_one_viewport_wide_on_small_screens(self):
+        """One structure at every width, as the reference has it."""
+        block = self.css().split("/* ---------- Track responsive", 1)[1]
+        block = block.split("@media (max-width: 900px) {", 1)[1]
+        block = block.split("@media (prefers-reduced-motion", 1)[0]
+        self.assertNotIn("flex-direction: column", block)
+        self.assertNotIn("height: auto", block)
+
+    def test_every_scene_keeps_a_heading_and_a_destination(self):
+        html = self.home()
+        self.assertEqual(html.count('class="scene-cta pill"'), len(self.NAV))
+        self.assertEqual(html.count("<h1"), 1)
+        self.assertEqual(html.count("<h2"), len(self.NAV) - 1)
+        self.assertIn("studio/js/track", html)
+
+    def test_track_controls_are_present(self):
+        html = self.home()
+        for hook in ("data-explore", "data-scene-now", "data-scene-total"):
+            with self.subTest(hook=hook):
+                self.assertIn(hook, html)
+        self.assertIn("data-track-prev", html)
+        self.assertIn("data-track-next", html)
