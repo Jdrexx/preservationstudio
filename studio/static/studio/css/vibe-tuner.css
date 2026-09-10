@@ -20,7 +20,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.14em;
-  color: var(--on-plum);
+  color: var(--on-butter);
   background: var(--butter);
   border: 1px solid var(--ink);
   border-radius: 3px;
@@ -112,6 +112,35 @@
   grid-template-columns: 1fr 1fr;
   gap: 0.45rem 0.7rem;
 }
+
+/* Look presets — recreations of the client's links */
+.vibe-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.vibe-preset {
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: var(--card);
+  border: 1px solid var(--rule-strong);
+  border-radius: 3px;
+  padding: 0.45rem 0.65rem;
+  cursor: pointer;
+}
+.vibe-preset:hover {
+  background: var(--butter-soft);
+}
+.vibe-preset.is-active {
+  background: var(--butter);
+  border-color: var(--butter);
+  color: var(--on-butter);
+}
+
 .vibe-swatch {
   display: flex;
   align-items: center;
@@ -250,7 +279,7 @@
   text-transform: uppercase;
   letter-spacing: 0.1em;
   background: var(--butter);
-  color: var(--on-plum);
+  color: var(--on-butter);
   border: 1px solid var(--ink);
   border-radius: 3px;
   padding: 0.4rem 0.8rem;

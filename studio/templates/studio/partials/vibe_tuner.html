@@ -9,6 +9,11 @@
   </header>
   <div class="vibe-body">
     <section class="vibe-sec">
+      <h4>Looks</h4>
+      <div class="vibe-presets" id="vibe-presets"></div>
+      <p class="vibe-hint" id="vibe-preset-note">Recreations of the client's links — the Etsy template, Asher's Canva mockup, the written brief, and his three font picks through free stand-ins. Pick one, then tune anything on top of it.</p>
+    </section>
+    <section class="vibe-sec">
       <h4>Palette</h4>
       <div class="vibe-swatches" id="vibe-tokens"></div>
     </section>
@@ -18,6 +23,7 @@
         <select id="vibe-sel-display">
           <option value="fraunces">Fraunces</option>
           <option value="playfair">Playfair Display</option>
+          <option value="librebodoni">Libre Bodoni</option>
           <option value="cormorant">Cormorant Garamond</option>
           <option value="gloock">Gloock</option>
           <option value="italiana">Italiana</option>
@@ -32,6 +38,7 @@
           <option value="sourceserif">Source Serif 4</option>
           <option value="cormorant">Cormorant Garamond</option>
           <option value="inter">Inter</option>
+          <option value="switzer">Switzer</option>
           <option value="spacegrotesk">Space Grotesk</option>
           <option value="archivo">Archivo</option>
           <option value="fraunces">Fraunces</option>
@@ -50,6 +57,8 @@
         <select id="vibe-sel-hand">
           <option value="kalam">Kalam</option>
           <option value="caveat">Caveat</option>
+          <option value="permanentmarker">Permanent Marker</option>
+          <option value="kaushanscript">Kaushan Script</option>
           <option value="dancingscript">Dancing Script</option>
           <option value="pacifico">Pacifico</option>
           <option value="satisfy">Satisfy</option>
@@ -126,4 +135,4 @@
   } catch (e) {}
 })();
 </script>
-<script src="{% static 'studio/js/vibe-tuner.js' %}?v=3"></script>
+<script src="{% static 'studio/js/vibe-tuner.js' %}?v=5"></script>

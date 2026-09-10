@@ -121,27 +121,34 @@ All styling is driven by CSS variables in the `:root` block of
 **Vibe tuner library** — the `?vibe=1` tuner offers every family below as a
 Display / Body / Mono / Notes pick (all self-hosted, latin-only woff2):
 
-| Stack   | Families                                                                                                            |
-| ------- | ------------------------------------------------------------------------------------------------------------------- |
-| Display | Fraunces, Playfair Display, Cormorant Garamond, Gloock, Italiana, Bricolage Grotesque, Georgia                      |
-| Body    | Newsreader, Libre Caslon Text, Source Serif 4, Cormorant Garamond, Inter, Space Grotesk, Archivo, Fraunces, Georgia |
-| Mono    | IBM Plex Mono, JetBrains Mono, Space Mono, Courier New                                                              |
-| Notes   | Kalam, Caveat, Dancing Script, Pacifico, Satisfy, Yellowtail, Grand Hotel                                           |
+| Stack   | Families                                                                                                                     |
+| ------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| Display | Fraunces, Playfair Display, Libre Bodoni, Cormorant Garamond, Gloock, Italiana, Bricolage Grotesque, Georgia                 |
+| Body    | Newsreader, Libre Caslon Text, Source Serif 4, Cormorant Garamond, Inter, Switzer, Space Grotesk, Archivo, Fraunces, Georgia |
+| Mono    | IBM Plex Mono, JetBrains Mono, Space Mono, Courier New                                                                       |
+| Notes   | Kalam, Caveat, Permanent Marker, Kaushan Script, Dancing Script, Pacifico, Satisfy, Yellowtail, Grand Hotel                  |
 
-**Free stand-ins for the client's Creative Market picks** (import now, swap
-for the purchased woff2s later without touching the tuner):
+**Free stand-ins for the client's Creative Market picks** — picked off the
+actual specimen sheets, not by name similarity (import now, swap for the
+purchased woff2s later without touching the tuner):
 
-| Creative Market font           | Free matches already in the tuner                                         |
-| ------------------------------ | ------------------------------------------------------------------------- |
-| Makking (variable grotesk)     | Bricolage Grotesque, Space Grotesk, Archivo                               |
-| Promenade (calligraphic serif) | Gloock, Playfair Display, Cormorant Garamond, Italiana, Libre Caslon Text |
-| Paloma (hand-painted brush)    | Yellowtail, Pacifico, Grand Hotel, Dancing Script                         |
+| Creative Market font                 | What the specimen actually is                                        | Closest free match (in the tuner)                        |
+| ------------------------------------ | -------------------------------------------------------------------- | -------------------------------------------------------- |
+| **Promenade** — a calligraphic serif | Didone-grade contrast, sharp wedge serifs, ~10° italic               | **Libre Bodoni**, Playfair Display, Cormorant Garamond   |
+| **Makking** — variable sans grotesk  | neo-grotesk: single-storey `a`, double-storey `g`, wide weight range | **Switzer**, Inter, Bricolage Grotesque, Archivo         |
+| **Paloma** — hand-painted font       | flat-brush, letters **unjoined**, slight right slant, medium/bold    | **Permanent Marker**, Kaushan Script, Yellowtail, Caveat |
 
-> **Adding a purchased font (e.g. Creative Market webfont):** drop the woff2
+All five new files are free for commercial use and self-hosted like the rest:
+Libre Bodoni / Permanent Marker / Kaushan Script are Google Fonts (OFL),
+Switzer is Fontshare (ITF Free Font License).
+
+> **Adding a purchased font (e.g. a Creative Market webfont):** drop the woff2
 > into `studio/static/studio/fonts/`, add one `@font-face` per family in
 > `fonts.css`, add an `<option>` in `partials/vibe_tuner.html` for its stack,
 > and mirror it in the matching `STACKS` map in `js/vibe-tuner.js`. Bump the
-> `?v=` on `vibe-tuner.js` so browsers reload it.
+> `?v=` on `vibe-tuner.js` so browsers reload it. Then update the
+> `client-picks` look in the `PRESETS` array. `DesignLibraryTests` fails on
+> whichever of those five steps you skipped.
 
 **Palette** (Bold Red editorial — integrated from the "Bold Red" luxury
 course-creator template design; token names unchanged so the vibe tuner
@@ -156,14 +163,22 @@ keeps working):
 | `--ink-soft`    | `#5C5248`              | Labels, captions            |
 | `--rule-strong` | `#C0B29B` Beige        | Borders, rules              |
 | `--butter`      | `#A63A2E` **Bold Red** | Accent, pill CTAs           |
+| `--on-butter`   | `#FDF8EF` Cream        | Text on the accent          |
 | `--blue`        | `#3F5A44` Forest       | Weekend card, sponsor band  |
 | `--plum`        | `#8A332F` Maroon       | Footer, "Meet" band, frames |
+
+`--on-butter` exists so a look can flip the accent to something light
+(butter yellow, say) and set dark text on it without editing component CSS.
+Every button/annotation that sits on the accent reads it instead of a
+hard-coded cream.
 
 Design notes: uppercase editorial headlines (`.display-upper`), pill-shaped
 buttons, split hero with a CSS "specimen card" standing in for photography,
 two-column value band with flat SVG motifs, maroon "Meet the studio" band
-with a polaroid collage. All template component styles live in the
-"BOLD RED editorial layer" section at the end of `site.css`.
+with a polaroid collage, and the "Is this for you?" grid on the Intensive
+page (recreated from the client's Canva mockup). All template component
+styles live in the "BOLD RED editorial layer" section at the end of
+`site.css`.
 
 ## Vibe tuner (?vibe=1)
 
@@ -171,6 +186,10 @@ A hidden design room for tuning the look live. Visitors never see it.
 
 - **Open it:** append `?vibe=1` to any page URL — e.g. `/?vibe=1`. A
   "Tune Vibe" button appears bottom-right.
+- **Looks (presets):** one-click recreations of what the client actually sent
+  over. Each is a complete state — palette + all four stacks + the dials — so
+  switching never leaves a stray value behind. Clicking one drops the same
+  values into every picker below it, so you can keep tuning from there.
 - **What you can tune:** every palette color (color pickers), the four type
   families, the Fraunces dials (WONK, SOFT, optical size, weight), and the
   handwritten note size + tilt.
@@ -182,6 +201,15 @@ A hidden design room for tuning the look live. Visitors never see it.
 - **Lock it in permanently:** hit **Export CSS** — copy the `:root` block it
   generates and paste it over the one in `site.css` (bump the `?v=` on
   `site.css` in `base.html` so browsers pick it up).
+
+**The four looks** (source recorded in the panel note for each):
+
+| Look                       | Recreates                                                                                                                                           |
+| -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Bold Red — template        | The "Bold Red" Squarespace template (RowMarketCo, Etsy). Ships as the site default.                                                                 |
+| Asher's Canva mockup       | Palette sampled live off Asher's Canva design — cream `#F5F1EA`, brick `#842B2C`, light orange `#EEDBBC`, greige `#D1C8B7`, navy `#182C59`.         |
+| Archive / Research Library | The written brief: archive-library minimalism, warm neutral field, butter-yellow + light-blue pop. Amber accent, dark text on it via `--on-butter`. |
+| Asher's picks (free)       | His three Creative Market fonts through the free stand-ins — Libre Bodoni / Switzer / Permanent Marker.                                             |
 
 Tuner files: `vibe-tuner.css` / `vibe-tuner.js` / `partials/vibe_tuner.html` —
 all gated behind `?vibe=1` in `base.html`.

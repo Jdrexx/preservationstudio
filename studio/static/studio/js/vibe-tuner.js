@@ -19,6 +19,7 @@
     ["rule-strong", "Rule strong"],
     ["butter", "Honey"],
     ["butter-soft", "Honey soft"],
+    ["on-butter", "On honey"],
     ["blue", "Blue"],
     ["blue-soft", "Blue soft"],
     ["plum", "Plum"],
@@ -33,6 +34,7 @@
       cormorant: '"Cormorant Garamond", Georgia, serif',
       gloock: '"Gloock", Georgia, serif',
       italiana: '"Italiana", Georgia, serif',
+      librebodoni: '"Libre Bodoni", "Playfair Display", Georgia, serif',
       bricolage: '"Bricolage Grotesque", "Space Grotesk", sans-serif',
       georgia: "Georgia, serif",
     },
@@ -42,6 +44,7 @@
       sourceserif: '"Source Serif 4", Georgia, serif',
       cormorant: '"Cormorant Garamond", Georgia, serif',
       inter: '"Inter", "Helvetica Neue", Arial, sans-serif',
+      switzer: '"Switzer", "Inter", "Helvetica Neue", Arial, sans-serif',
       spacegrotesk: '"Space Grotesk", "Helvetica Neue", sans-serif',
       archivo: '"Archivo", "Helvetica Neue", Arial, sans-serif',
       fraunces: '"Fraunces", Georgia, serif',
@@ -61,6 +64,8 @@
       satisfy: '"Satisfy", cursive',
       yellowtail: '"Yellowtail", cursive',
       grandhotel: '"Grand Hotel", cursive',
+      kaushanscript: '"Kaushan Script", "Yellowtail", cursive',
+      permanentmarker: '"Permanent Marker", "Kaushan Script", cursive',
     },
   };
 
@@ -78,6 +83,166 @@
     ["fx-wght", "Display weight", 100, 900, 1, "num"],
     ["hand-size", "Note size", 0.8, 1.6, 0.05, "rem"],
     ["hand-rotate", "Note tilt", -5, 5, 0.1, "deg"],
+  ];
+
+  /* ---------- Looks ----------
+     Full recreations of what the client actually linked, as one-click
+     states. Each preset is complete (palette + four stacks + dials) so
+     applying one never leaves a stray value from the look before it.
+     Every `note` records where the look came from. */
+
+  var PLEX = '"IBM Plex Mono", "Courier New", ui-monospace, monospace';
+  var SANS = '"Newsreader", Georgia, "Times New Roman", serif';
+
+  var PRESETS = [
+    {
+      id: "bold-red",
+      label: "Bold Red — template",
+      note: 'Ships as the site default. From the "Bold Red" Squarespace template Asher linked (RowMarketCo, Etsy): cream paper, brick-red accent, maroon bands.',
+      tokens: {
+        paper: "#f2ecdf",
+        "paper-deep": "#e7dfd0",
+        card: "#fbf6ec",
+        ink: "#201915",
+        "ink-soft": "#5c5248",
+        "ink-faint": "#978b7c",
+        rule: "#ddd3c1",
+        "rule-strong": "#c0b29b",
+        butter: "#a63a2e",
+        "butter-soft": "#f2dbd4",
+        "on-butter": "#fdf8ef",
+        blue: "#3f5a44",
+        "blue-soft": "#dde4db",
+        plum: "#8a332f",
+        "on-plum": "#f5eee1",
+        error: "#a6402e",
+      },
+      stacks: {
+        "--display": '"Fraunces", Georgia, serif',
+        "--serif": SANS,
+        "--mono": PLEX,
+        "--hand": '"Kalam", "Caveat", cursive',
+      },
+      sliders: {
+        "--fx-opsz": "110",
+        "--fx-wght": "560",
+        "--fx-soft": "60",
+        "--fx-wonk": "0.60",
+        "--hand-size": "1.15rem",
+        "--hand-rotate": "-1.6deg",
+      },
+    },
+    {
+      id: "canva-mockup",
+      label: "Asher's Canva mockup",
+      note: "Palette read straight off Asher's Canva design: cream #F5F1EA field, brick red #842B2C, light-orange #EEDBBC bands, greige #D1C8B7 rules, navy #182C59 secondary. Flatter, bolder blocking than the template.",
+      tokens: {
+        paper: "#f5f1ea",
+        "paper-deep": "#eedbbc",
+        card: "#ffffff",
+        ink: "#17130f",
+        "ink-soft": "#5f5a52",
+        "ink-faint": "#9a938a",
+        rule: "#e4dcce",
+        "rule-strong": "#d1c8b7",
+        butter: "#842b2c",
+        "butter-soft": "#f0dcd5",
+        "on-butter": "#fdf8ef",
+        blue: "#182c59",
+        "blue-soft": "#dce3f0",
+        plum: "#6e2324",
+        "on-plum": "#f5f1ea",
+        error: "#a6402e",
+      },
+      stacks: {
+        "--display": '"Fraunces", Georgia, serif',
+        "--serif": SANS,
+        "--mono": PLEX,
+        "--hand": '"Kalam", "Caveat", cursive',
+      },
+      sliders: {
+        "--fx-opsz": "124",
+        "--fx-wght": "600",
+        "--fx-soft": "35",
+        "--fx-wonk": "0.35",
+        "--hand-size": "1.2rem",
+        "--hand-rotate": "-1.2deg",
+      },
+    },
+    {
+      id: "archive",
+      label: "Archive / Research Library",
+      note: "The written brief: minimal archive-library vibes, warm neutral field with a butter-yellow and light-blue pop. Magazine (Fraunces) / Institution (IBM Plex Mono) / Note-taking (Kalam). Amber accent needs dark button text — on-honey is set for it.",
+      tokens: {
+        paper: "#f4f0e6",
+        "paper-deep": "#eae3d4",
+        card: "#fbf8f1",
+        ink: "#22201c",
+        "ink-soft": "#584f44",
+        "ink-faint": "#8c8171",
+        rule: "#dcd3c1",
+        "rule-strong": "#c3b79f",
+        butter: "#c08a2e",
+        "butter-soft": "#faedcb",
+        "on-butter": "#241c0c",
+        blue: "#5c7fa3",
+        "blue-soft": "#dbe5ef",
+        plum: "#2e2a24",
+        "on-plum": "#f4f0e6",
+        error: "#a6402e",
+      },
+      stacks: {
+        "--display": '"Fraunces", Georgia, serif',
+        "--serif": SANS,
+        "--mono": PLEX,
+        "--hand": '"Kalam", "Caveat", cursive',
+      },
+      sliders: {
+        "--fx-opsz": "90",
+        "--fx-wght": "480",
+        "--fx-soft": "25",
+        "--fx-wonk": "0.25",
+        "--hand-size": "1.1rem",
+        "--hand-rotate": "-1deg",
+      },
+    },
+    {
+      id: "client-picks",
+      label: "Asher's picks (free)",
+      note: "His three Creative Market fonts through the closest free stand-ins: Promenade (calligraphic serif, titles) → Libre Bodoni; Makking (grotesk, paragraph) → Switzer; Paloma (hand-painted brush) → Permanent Marker. Swap in the purchased woff2s and only this preset changes.",
+      tokens: {
+        paper: "#f2ecdf",
+        "paper-deep": "#e7dfd0",
+        card: "#fbf6ec",
+        ink: "#201915",
+        "ink-soft": "#5c5248",
+        "ink-faint": "#978b7c",
+        rule: "#ddd3c1",
+        "rule-strong": "#c0b29b",
+        butter: "#a63a2e",
+        "butter-soft": "#f2dbd4",
+        "on-butter": "#fdf8ef",
+        blue: "#3f5a44",
+        "blue-soft": "#dde4db",
+        plum: "#8a332f",
+        "on-plum": "#f5eee1",
+        error: "#a6402e",
+      },
+      stacks: {
+        "--display": '"Libre Bodoni", "Playfair Display", Georgia, serif',
+        "--serif": '"Switzer", "Inter", "Helvetica Neue", Arial, sans-serif',
+        "--mono": PLEX,
+        "--hand": '"Permanent Marker", "Kaushan Script", cursive',
+      },
+      sliders: {
+        "--fx-opsz": "110",
+        "--fx-wght": "500",
+        "--fx-soft": "20",
+        "--fx-wonk": "0.1",
+        "--hand-size": "1.25rem",
+        "--hand-rotate": "-2deg",
+      },
+    },
   ];
 
   var root = document.documentElement;
@@ -113,11 +278,19 @@
 
   function detectStack(kind, val) {
     var map = STACKS[kind];
-    val = (val || "").toLowerCase();
+    // Compare only the FIRST family of each stack. Searching the whole
+    // string picks up fallbacks — "Libre Bodoni", "Playfair Display", …
+    // would resolve to Playfair before Libre Bodoni was ever checked.
+    function head(stack) {
+      return (stack || "")
+        .split(",")[0]
+        .replace(/["']/g, "")
+        .trim()
+        .toLowerCase();
+    }
+    var wanted = head(val);
     for (var key in map) {
-      var probe = map[key].toLowerCase();
-      var first = probe.split(",")[0].replace(/["']/g, "").trim();
-      if (val.indexOf(first) !== -1) return key;
+      if (head(map[key]) === wanted) return key;
     }
     return Object.keys(map)[0];
   }
@@ -207,6 +380,62 @@
       out.textContent = unit === "num100" ? Math.round(v) : v;
       save();
     });
+  });
+
+  /* ---------- looks (presets) ---------- */
+
+  function syncControls(st) {
+    TOKENS.forEach(function (pair) {
+      var input = swatches.querySelector('input[data-token="' + pair[0] + '"]');
+      if (!input || !st.tokens || !st.tokens[pair[0]]) return;
+      input.value = st.tokens[pair[0]];
+      input.parentNode.querySelector("code").textContent = st.tokens[pair[0]];
+    });
+    ["display", "body", "mono", "hand"].forEach(function (kind) {
+      var sel = document.getElementById("vibe-sel-" + kind);
+      var stack = st.stacks && st.stacks[STACK_VARS[kind]];
+      if (stack) sel.value = detectStack(kind, stack);
+    });
+    SLIDERS.forEach(function (spec) {
+      var name = spec[0];
+      var unit = spec[5];
+      var raw = st.sliders && st.sliders["--" + name];
+      if (raw === undefined) return;
+      var value = unit === "num100" ? parseFloat(raw) * 100 : parseFloat(raw);
+      document.getElementById("vibe-" + name).value = value;
+      document.getElementById("out-" + name).textContent =
+        unit === "num100" ? Math.round(value) : value;
+    });
+  }
+
+  function applyState(st) {
+    var key;
+    if (st.tokens) for (key in st.tokens) setVar("--" + key, st.tokens[key]);
+    if (st.stacks) for (key in st.stacks) setVar(key, st.stacks[key]);
+    if (st.sliders) for (key in st.sliders) setVar("--" + key, st.sliders[key]);
+  }
+
+  var presetWrap = document.getElementById("vibe-presets");
+  var presetNote = document.getElementById("vibe-preset-note");
+
+  PRESETS.forEach(function (preset) {
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "vibe-preset";
+    btn.textContent = preset.label;
+    btn.addEventListener("click", function () {
+      state.tokens = JSON.parse(JSON.stringify(preset.tokens));
+      state.stacks = JSON.parse(JSON.stringify(preset.stacks));
+      state.sliders = JSON.parse(JSON.stringify(preset.sliders));
+      applyState(state);
+      syncControls(state);
+      save();
+      Array.prototype.forEach.call(presetWrap.children, function (el) {
+        el.classList.toggle("is-active", el === btn);
+      });
+      presetNote.textContent = preset.note;
+    });
+    presetWrap.appendChild(btn);
   });
 
   /* ---------- drawer / fab ---------- */

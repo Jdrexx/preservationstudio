@@ -18,6 +18,7 @@
   --rule: #ddd3c1;
   --rule-strong: #c0b29b; /* warm beige border */
   --butter: #a63a2e; /* BOLD RED — primary accent */
+  --on-butter: #fdf8ef; /* text/fg on the accent (dark for light accents) */
   --butter-soft: #f2dbd4; /* soft red tint band */
   --blue: #3f5a44; /* Forest — secondary accent */
   --blue-soft: #dde4db;
@@ -922,7 +923,7 @@ a:hover {
 .btn-yellow {
   background: var(--butter);
   border-color: var(--butter);
-  color: #fdf8ef;
+  color: var(--on-butter);
 }
 .btn-yellow:hover {
   background: var(--plum);
@@ -1045,7 +1046,7 @@ a:hover {
   font-family: var(--hand);
   font-size: 1.05rem;
   background: var(--butter);
-  color: #fdf8ef;
+  color: var(--on-butter);
   padding: 0.1em 0.7em 0.2em;
   border-radius: 3px;
   transform: rotate(-3deg);
@@ -1200,6 +1201,37 @@ a:hover {
   padding-top: 0.55rem;
 }
 
+/* ---------- "Is this for you?" grid ----------
+   Recreated from Asher's Canva mockup (Intensive page): a grid of
+   bold lead-ins, each with the visitor's own words underneath. */
+
+.for-you {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  gap: 1.3rem;
+  margin-top: 1.8rem;
+}
+.for-you-item {
+  background: var(--card);
+  border: 1px solid var(--rule-strong);
+  border-top: 3px solid var(--butter);
+  padding: 1.4rem 1.5rem 1.6rem;
+}
+.for-you-item h3 {
+  font-size: 1.14rem;
+  line-height: 1.28;
+  margin-bottom: 0.65rem;
+  color: var(--ink);
+}
+.for-you-item p {
+  font-size: 0.97rem;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+.for-you-item p + p {
+  margin-top: 0.55rem;
+}
+
 /* ---------- Bold Red responsive ---------- */
 
 @media (max-width: 860px) {
@@ -1218,5 +1250,8 @@ a:hover {
   }
   .polaroid-ghost-b {
     right: 0.2rem;
+  }
+  .for-you {
+    grid-template-columns: 1fr;
   }
 }

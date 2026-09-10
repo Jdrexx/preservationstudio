@@ -15,6 +15,8 @@ Nested page structure under test:
 """
 
 from io import BytesIO
+from pathlib import Path
+import re
 from unittest import mock
 
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -490,3 +492,227 @@ class ContactTests(TestCase):
         msg = ContactMessage.objects.get()
         self.assertEqual(msg.kind, "sponsorship")
         self.assertIn("fund a seat", msg.message)
+
+
+class SubmissionEmailConfigTests(TestCase):
+    """The boot check that keeps a silently-dead email config out of prod.
+
+    Sending is best-effort, so a From address the SMTP backend rejects would
+    otherwise fail invisibly on every submission.
+    """
+
+    def run_check(self, **settings_overrides):
+        from django.core.checks import run_checks
+
+        with self.settings(**settings_overrides):
+            return [e for e in run_checks() if e.id.startswith("studio.E")]
+
+    def test_quiet_when_notifications_unset(self):
+        """The current live config (no notify address) must never error."""
+        self.assertEqual(self.run_check(NOTIFY_EMAIL=""), [])
+
+    def test_default_from_address_is_valid(self):
+        """The shipped default must survive the SMTP backend's parser."""
+        from django.conf import settings
+
+        errors = self.run_check(
+            NOTIFY_EMAIL="alerts@example.com", EMAIL_HOST="smtp.example.com"
+        )
+        self.assertEqual(errors, [], f"default From rejected: {errors}")
+        self.assertEqual(
+            settings.DEFAULT_FROM_EMAIL,
+            "Preservation Studio <no-reply@preservation.studio>",
+        )
+
+    def test_unquoted_period_in_display_name_is_an_error(self):
+        """'preservation.studio <...>' raises ValueError at send time."""
+        errors = self.run_check(
+            NOTIFY_EMAIL="alerts@example.com",
+            EMAIL_HOST="smtp.example.com",
+            DEFAULT_FROM_EMAIL="preservation.studio <no-reply@preservation.studio>",
+        )
+        self.assertEqual([e.id for e in errors], ["studio.E002"])
+        self.assertIn("period in 'phrase'", errors[0].msg)
+        self.assertIn("Quote a display name", errors[0].hint)
+
+    def test_quoted_period_is_accepted(self):
+        errors = self.run_check(
+            NOTIFY_EMAIL="alerts@example.com",
+            EMAIL_HOST="smtp.example.com",
+            DEFAULT_FROM_EMAIL='"preservation.studio" <no-reply@preservation.studio>',
+        )
+        self.assertEqual(errors, [])
+
+    def test_missing_mail_host_is_an_error(self):
+        errors = self.run_check(NOTIFY_EMAIL="alerts@example.com", EMAIL_HOST="")
+        self.assertEqual([e.id for e in errors], ["studio.E001"])
+
+    def test_from_address_survives_the_real_smtp_backend_parser(self):
+        """Same call the SMTP backend makes in _send() — no mock, no socket."""
+        from django.core.mail.backends.smtp import EmailBackend
+
+        from django.conf import settings
+
+        backend = EmailBackend()
+        for address in (
+            settings.DEFAULT_FROM_EMAIL,
+            "Preservation Studio <no-reply@preservation.studio>",
+            '"preservation.studio" <no-reply@preservation.studio>',
+        ):
+            with self.subTest(address=address):
+                self.assertTrue(backend.prep_address(address))
+        with self.assertRaises(ValueError):
+            backend.prep_address("preservation.studio <no-reply@preservation.studio>")
+
+
+class IsThisForYouTests(TestCase):
+    """The 'Is this for you?' grid, recreated from Asher's Canva mockup."""
+
+    LEADS = [
+        "I want to learn a trade.",
+        "I want to make something that lasts.",
+        "I want to finally frame the things I've been saving.",
+        "I want to make things with my hands.",
+        "I want to understand the stories behind what we keep.",
+        "I want to frame my own work.",
+    ]
+
+    def test_intensive_page_carries_the_grid(self):
+        resp = client().get(reverse("studio:intensive"))
+        self.assertContains(resp, "Is this for you?")
+        self.assertContains(resp, 'class="for-you"')
+        for lead in self.LEADS:
+            with self.subTest(lead=lead):
+                self.assertContains(resp, lead)
+
+    def test_each_lead_has_supporting_copy(self):
+        resp = client().get(reverse("studio:intensive"))
+        self.assertEqual(
+            resp.content.decode().count('class="for-you-item"'), len(self.LEADS)
+        )
+
+    def test_section_numbers_stay_sequential(self):
+        html = client().get(reverse("studio:intensive")).content.decode()
+        numbers = re.findall(r"№ (\d\d) — ", html)
+        self.assertEqual(numbers, ["01", "02", "03", "04", "05"])
+
+
+class DesignLibraryTests(TestCase):
+    """The self-hosted font library and the tuner's looks must stay in sync.
+
+    Guards the documented workflow for swapping a free stand-in for a
+    purchased webfont: drop the woff2 in, add the @font-face, add the
+    option, mirror it in STACKS — and this suite tells you which step
+    you skipped.
+    """
+
+    static = Path(__file__).resolve().parent / "static" / "studio"
+
+    SYSTEM = {
+        "Georgia",
+        "Times New Roman",
+        "Arial",
+        "Helvetica Neue",
+        "Courier New",
+        "ui-monospace",
+        "monospace",
+        "sans-serif",
+        "serif",
+        "cursive",
+    }
+
+    def read(self, *parts):
+        return self.static.joinpath(*parts).read_text(encoding="utf-8")
+
+    def declared_families(self):
+        return set(
+            re.findall(r'font-family:\s*"([^"]+)"', self.read("css", "fonts.css"))
+        )
+
+    def js_block(self, marker, end="\n  ];"):
+        js = self.read("js", "vibe-tuner.js")
+        return js.split(marker, 1)[1].split(end, 1)[0]
+
+    def test_every_font_file_referenced_exists(self):
+        refs = re.findall(r'url\("\.\./fonts/([^"]+)"\)', self.read("css", "fonts.css"))
+        self.assertGreater(len(refs), 25)
+        for name in refs:
+            with self.subTest(font=name):
+                self.assertTrue((self.static / "fonts" / name).is_file(), name)
+
+    def test_no_orphan_font_files_on_disk(self):
+        css = self.read("css", "fonts.css")
+        for path in sorted((self.static / "fonts").glob("*.woff2")):
+            with self.subTest(font=path.name):
+                self.assertIn(path.name, css)
+
+    def test_every_tuner_stack_family_is_available(self):
+        declared = self.declared_families()
+        stacks = self.js_block("var STACKS =", "\n  };")
+        # Every stack string may carry fallbacks ("Georgia, serif") — only the
+        # first family in each is the one that has to actually be available.
+        firsts = {
+            chunk.split(",")[0].replace('"', "").replace("'", "").strip()
+            for chunk in re.findall(r'"([A-Z][^"]*)"', stacks)
+        }
+        self.assertTrue(firsts)
+        for family in sorted(firsts - self.SYSTEM):
+            with self.subTest(family=family):
+                self.assertIn(family, declared)
+
+    def test_every_tuner_select_option_resolves_to_a_stack(self):
+        html = self.read(
+            "..", "..", "templates", "studio", "partials", "vibe_tuner.html"
+        )
+        for kind in ("display", "body", "mono", "hand"):
+            stacks = (
+                self.js_block("var STACKS =", "\n  };")
+                .split(kind + ": {", 1)[1]
+                .split("},", 1)[0]
+            )
+            options = re.findall(
+                r'<option value="(\w+)">',
+                html.split('id="vibe-sel-' + kind + '"', 1)[1].split("</select>", 1)[0],
+            )
+            self.assertTrue(options, kind)
+            for key in options:
+                with self.subTest(kind=kind, key=key):
+                    self.assertIn(key + ":", stacks)
+
+    def test_every_look_preset_is_complete(self):
+        token_names = re.findall(r'\["([a-z\-]+)", "', self.js_block("var TOKENS ="))
+        slider_names = [
+            "--" + name
+            for name in re.findall(r'\["([a-z\-]+)", "', self.js_block("var SLIDERS ="))
+        ]
+        self.assertEqual(len(token_names), 16)
+        self.assertEqual(len(slider_names), 6)
+
+        chunks = (
+            self.read("js", "vibe-tuner.js")
+            .split("var PRESETS =", 1)[1]
+            .split('id: "')[1:]
+        )
+        self.assertEqual(len(chunks), 4)
+        for chunk in chunks:
+            preset = chunk.split('"', 1)[0]
+            tokens = chunk.split("tokens: {", 1)[1].split("},", 1)[0]
+            sliders = chunk.split("sliders: {", 1)[1].split("},", 1)[0]
+            stacks = chunk.split("stacks: {", 1)[1].split("},", 1)[0]
+            with self.subTest(preset=preset):
+                for name in token_names:
+                    self.assertRegex(
+                        tokens, r'"?%s"?: "#[0-9a-f]{6}"' % re.escape(name)
+                    )
+                for name in slider_names:
+                    self.assertIn('"%s"' % name, sliders)
+                for var in ("--display", "--serif", "--mono", "--hand"):
+                    self.assertIn(var, stacks)
+
+    def test_on_butter_is_a_real_token(self):
+        """--on-butter replaced a hard-coded #fdf8ef so a light accent works."""
+        site = self.read("css", "site.css")
+        self.assertIn("--on-butter:", site)
+        rule = site.split(".btn-yellow {")[-1].split("}", 1)[0]
+        self.assertIn("color: var(--on-butter)", rule)
+        self.assertIn('"on-butter"', self.read("js", "vibe-tuner.js"))

@@ -232,3 +232,56 @@
   font-style: normal;
   font-display: swap;
 }
+
+/* Free stand-ins for the client's three Creative Market picks — chosen
+   from the actual specimen sheets, not by name-similarity guessing:
+     Promenade  calligraphic display serif, Didone contrast, sharp wedge
+                serifs, ~10° italic  -> Libre Bodoni
+     Makking    neo-grotesk, single-storey a, double-storey g, wide
+                weight range         -> Switzer
+     Paloma     hand-painted flat-brush script, letters unjoined,
+                slight right slant, medium/bold -> Permanent Marker
+                (Kaushan Script as the joined brush-script alternative)
+   All free for commercial use: Libre Bodoni / Permanent Marker =
+   Google Fonts (OFL), Kaushan Script = Google Fonts (OFL),
+   Switzer = Fontshare ITF Free Font License. Self-hosted like the rest. */
+
+@font-face {
+  font-family: "Libre Bodoni";
+  src: url("../fonts/librebodoni-var.woff2") format("woff2");
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Switzer";
+  src: url("../fonts/switzer-w400.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Switzer";
+  src: url("../fonts/switzer-w700.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Kaushan Script";
+  src: url("../fonts/kaushanscript-w400.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Permanent Marker";
+  src: url("../fonts/permanentmarker-w400.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
