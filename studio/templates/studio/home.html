@@ -44,10 +44,8 @@ Deliberate departures, all for safety rather than style:
 
 <div class="welcome" id="welcome" role="dialog" aria-modal="true" aria-labelledby="welcome-name">
   <div class="welcome-inner">
-    <div class="welcome-stage">
-      <div class="welcome-bar" id="welcome-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Opening the studio"><span></span></div>
-      <p class="welcome-name" id="welcome-name">preservation<span class="wordmark-dot">.</span>studio</p>
-    </div>
+    <p class="welcome-name" id="welcome-name">preservation<span class="wordmark-dot">.</span>studio</p>
+    <div class="welcome-visually-hidden" id="welcome-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Opening the studio"></div>
     <button type="button" class="pill welcome-enter" id="welcome-enter" disabled>Welcome</button>
   </div>
   <p class="welcome-count" aria-hidden="true"><span id="welcome-count">0</span></p>
@@ -197,4 +195,4 @@ Deliberate departures, all for safety rather than style:
 
 {% endblock %}
 {% block scripts %}<script src="{% static 'studio/js/track.js' %}?v=4"></script>
-<script src="{% static 'studio/js/welcome.js' %}?v=1"></script>{% endblock %}
+<script src="{% static 'studio/js/welcome.js' %}?v=2"></script>{% endblock %}

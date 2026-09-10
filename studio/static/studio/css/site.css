@@ -2206,12 +2206,23 @@ h2.mix {
    ============================================================
 
    Composition read off rabenrifaie.com's live DOM: a full-bleed
-   near-black surface (rgb(8,8,8)) with a small horizontal progress
-   bar dead centre (132x40, flat, no radius) that fills while a
-   percentage counts up bottom-right in an ITALIC SERIF (24px,
-   PP Eiko Italic Light). At 100% the bar is replaced by the studio
-   name in that same italic serif, with a thin pill-outlined
-   "Welcome" beneath it — click and the site opens.
+   near-black surface (rgb(8,8,8)) with a percentage counting up
+   bottom-right in an ITALIC SERIF (24px, PP Eiko Italic Light),
+   and — the part that carries the screen — the LOADING BAR IS THE
+   STUDIO NAME. Their bar is a 132x40 white plane scaled from the
+   centre (transform-origin at its middle) under a black panel
+   masked by an SVG of the wordmark's own letterforms, so the
+   title's letters are what fills in as the page loads. At 100% a
+   thin pill-outlined "Welcome" appears beneath it — click and the
+   site opens.
+
+   We do the same thing with one element instead of a mask file:
+   the wordmark is painted in two background layers both clipped to
+   its own glyphs (background-clip: text) — a dim one that is always
+   there, and a solid one sized by --fill and anchored centre, so it
+   grows outward through the letters exactly as theirs does. No
+   mask asset, no duplicated text node, and the letters stay real
+   selectable text.
 
    Ours is that composition in our own surface and type: plum
    instead of black, the wordmark in Playfair italic (our
@@ -2258,51 +2269,66 @@ body.is-welcome .site-header {
   pointer-events: none;
 }
 
+/* For the progress role: the visual is the wordmark, but a progressbar
+   needs a value a screen reader can read. */
+.welcome-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
 .welcome-inner {
   display: grid;
   justify-items: center;
   gap: 1.6rem;
 }
 
-/* Bar and name share one grid cell, so swapping them moves nothing. */
 .welcome-stage {
   display: grid;
   place-items: center;
   min-height: 2.5rem;
 }
 
-.welcome-bar {
-  grid-area: 1 / 1;
-  width: 8.25rem;
-  height: 2.5rem;
-  background: color-mix(in srgb, var(--paper) 20%, transparent);
-  position: relative;
-  overflow: hidden;
-  transition: opacity 0.4s ease;
-}
-
-.welcome-bar span {
-  position: absolute;
-  inset: 0 auto 0 0;
-  width: 0;
-  background: var(--paper);
-}
-
+/* THE BAR: the wordmark, filling with itself.
+   Two layers, both clipped to the glyphs — a dim one that is always
+   visible (the empty track) and a solid one whose width is --fill,
+   centred, so a full bar grows outward from the middle letters. */
 .welcome-name {
-  grid-area: 1 / 1;
+  --fill: 0%;
   margin: 0;
   font-family: var(--display-italic);
   font-style: italic;
   font-weight: 400;
   font-size: clamp(1.5rem, 2.6vw, 2rem);
   line-height: 1.1;
-  color: var(--paper);
-  opacity: 0;
-  transition: opacity 0.5s ease;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  background-image:
+    linear-gradient(
+      color-mix(in srgb, var(--paper) 20%, transparent),
+      color-mix(in srgb, var(--paper) 20%, transparent)
+    ),
+    linear-gradient(var(--paper), var(--paper));
+  background-repeat: no-repeat;
+  background-position:
+    0 0,
+    50% 50%;
+  background-size:
+    100% 100%,
+    var(--fill) 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
 }
 
 .welcome-name .wordmark-dot {
   color: var(--butter);
+  -webkit-text-fill-color: var(--butter);
 }
 
 .welcome-enter {
@@ -2318,16 +2344,8 @@ body.is-welcome .site-header {
     color 0.15s ease;
 }
 
-.welcome.is-ready .welcome-bar {
-  opacity: 0;
-}
-
-.welcome.is-ready .welcome-name,
 .welcome.is-ready .welcome-enter {
   opacity: 1;
-}
-
-.welcome.is-ready .welcome-enter {
   pointer-events: auto;
 }
 
@@ -2360,8 +2378,6 @@ body.is-welcome .site-header {
 @media (prefers-reduced-motion: reduce) {
   .welcome,
   .welcome.is-leaving,
-  .welcome-bar,
-  .welcome-name,
   .welcome-enter {
     animation: none;
     transition: none;

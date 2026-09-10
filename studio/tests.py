@@ -866,6 +866,43 @@ class WelcomeGateTests(TestCase):
         self.assertIn('id="welcome-enter"', html)
         self.assertIn(">Welcome</button>", html)
 
+    def test_the_bar_is_the_wordmark_itself(self):
+        """The reference's bar is its title's letterforms, not a rectangle.
+
+        Read off their DOM: a white plane scaled from the centre under a black
+        panel masked by an SVG of the wordmark, so the title is what fills in.
+        Ours paints the wordmark in two layers clipped to its own glyphs, the
+        solid one sized by --fill.
+        """
+        css = self.css()
+        name = css.split(".welcome-name {", 1)[1].split("}", 1)[0]
+        self.assertIn("background-clip: text", name)
+        self.assertIn("-webkit-background-clip: text", name)
+        self.assertIn("var(--fill) 100%", name)
+        # grown from the middle, as their centre-origin transform does
+        self.assertIn("50% 50%", name)
+        self.assertIn("--fill: 0%", name)
+        # no rectangular track/fill left anywhere
+        self.assertEqual(css.count(".welcome-bar"), 0)
+        self.assertNotIn('class="welcome-bar"', self.home())
+
+    def test_the_bar_element_is_real_text(self):
+        """Real selectable text, but not the page's h1 — the gate is transient."""
+        html = self.home()
+        self.assertIn('<p class="welcome-name" id="welcome-name">preservation', html)
+        css = self.css()
+        name = css.split(".welcome-name {", 1)[1].split("}", 1)[0]
+        self.assertNotIn("font-size: 0", name)
+
+    def test_progress_is_reported_for_screen_readers(self):
+        """The visible bar is the wordmark, so the value rides on a hidden node."""
+        html = self.home()
+        self.assertIn('class="welcome-visually-hidden"', html)
+        self.assertIn('role="progressbar"', html)
+        css = self.css()
+        hidden = css.split(".welcome-visually-hidden {", 1)[1].split("}", 1)[0]
+        self.assertIn("clip-path: inset(50%)", hidden)
+
     def test_gate_carries_the_studio_name_not_the_reference_s(self):
         html = self.home()
         self.assertIn('id="welcome-name"', html)

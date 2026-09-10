@@ -44,11 +44,22 @@ reference's live DOM rather than guessed from a screenshot:
 ### The welcome gate
 
 The home page opens on the reference's entry screen, read off its live DOM: a
-full-bleed near-black surface (`rgb(8,8,8)`) with a small flat progress bar
-dead centre (132x40, no radius) that fills while a percentage counts up
-bottom-right in an _italic serif_ (24px, PP Eiko Italic Light). At 100% the bar
-is replaced by the studio name in that same italic serif, with a thin
-pill-outlined "Welcome" beneath it — click and the site opens.
+full-bleed near-black surface (`rgb(8,8,8)`), a percentage counting up
+bottom-right in an _italic serif_ (24px, PP Eiko Italic Light), and — the part
+that carries the screen — **a loading bar shaped like the studio's own title**.
+
+Their bar is not a rectangle: it is a 132x40 white plane, scaled from its
+centre (`transform-origin` at the middle), sitting under a black panel masked
+by an SVG of the wordmark's letterforms. So the title's letters _are_ the bar —
+they fill in from the middle outward as the page loads. At 100% a thin
+pill-outlined "Welcome" appears beneath and you click to enter.
+
+We do the same thing with one element instead of a mask asset: the wordmark is
+painted in two background layers, both clipped to its own glyphs
+(`background-clip: text`) — a dim one always present (the empty track) and a
+solid one sized by `--fill` and anchored centre, so it grows outward through
+the letters exactly as theirs does. No mask file, no duplicated text node, and
+the letters remain real selectable text.
 
 Ours is that composition in our surface and type: `--plum` instead of black,
 the wordmark in Playfair italic (our `--display-italic`, the job the
@@ -56,11 +67,18 @@ reference's Eiko italic does), the counter in the same face, the pill filling
 Honey on hover/focus. Markup lives at the top of `home.html`, states in
 `css/site.css` ("WELCOME GATE"), behaviour in `js/welcome.js`.
 
-| State        | What is on screen                                                     |
-| ------------ | --------------------------------------------------------------------- |
-| counting     | bar filling, counter ticking, `Welcome` disabled and transparent      |
-| `is-ready`   | bar faded out, wordmark + `Welcome` shown, button enabled and focused |
-| `is-leaving` | fading out, then the node is **removed** — not hidden                 |
+| State        | What is on screen                                                                                                             |
+| ------------ | ----------------------------------------------------------------------------------------------------------------------------- |
+| counting     | the wordmark at 20% opacity with the solid layer growing from the centre; counter ticking; `Welcome` disabled and transparent |
+| `is-ready`   | wordmark fully lit, `Welcome` shown, enabled and focused                                                                      |
+| `is-leaving` | fading out, then the node is **removed** — not hidden                                                                         |
+
+Measured off the built page: `--fill` tracks the counter (11% → 89%), two
+background layers at `100% 100%` and `<pct> 100%`, positions `0 0` and
+`50% 50%`, `background-clip: text`, `-webkit-text-fill-color: transparent`.
+Pixel check at `--fill: 50%` — the middle half of the word renders at full
+cream (241/255) with both ends still dim (88/255); at `0%` nothing is lit; at
+`100%` all of it.
 
 Four deliberate departures from the reference, all safety rather than style:
 
@@ -75,9 +93,11 @@ Four deliberate departures from the reference, all safety rather than style:
 - **`prefers-reduced-motion` skips the count and the fade** — the gate is
   ready immediately.
 
-It appears on every load of the track page (as the reference does) and on no
-other route. To show it once per browser session instead, wrap the
-`countUp()` call in a `sessionStorage` check.
+Because the visible bar is the wordmark, the `role="progressbar"` value rides
+on a visually-hidden node (`.welcome-visually-hidden`) so the count is still
+announced. The gate appears on every load of the track page (as the reference
+does) and on no other route. To show it once per browser session instead, wrap
+the `countUp()` call in a `sessionStorage` check.
 
 The program pages above stay as real destinations (the scenes link to them via
 their bottom-right pill), so the long-form content — the "Is this for you?"

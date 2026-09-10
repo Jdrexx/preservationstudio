@@ -36,7 +36,6 @@
   if (!gate) return;
 
   var bar = document.getElementById("welcome-bar");
-  var fill = bar ? bar.querySelector("span") : null;
   var name = document.getElementById("welcome-name");
   var count = document.getElementById("welcome-count");
   var enter = document.getElementById("welcome-enter");
@@ -56,7 +55,9 @@
   function setPercent(ratio) {
     var pct = Math.round(ratio * 100);
     if (count) count.textContent = pct;
-    if (fill) fill.style.width = pct + "%";
+    // The bar IS the wordmark: --fill sizes the solid layer that is clipped to
+    // its glyphs, anchored centre so it grows outward through the letters.
+    if (name) name.style.setProperty("--fill", pct + "%");
     if (bar) bar.setAttribute("aria-valuenow", pct);
   }
 
