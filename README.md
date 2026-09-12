@@ -187,7 +187,7 @@ python manage.py runserver
 ## Client placeholders to replace
 
 - Contact email is set to `hello@preservation.studio` (footer, contact, forms).
-- Instagram handle is set to `@preservation.studio`.
+- Instagram handle is set to `@Preservation Studio` (`https://www.instagram.com/preservationstudio`).
 - The Venmo / payment link in the intensive application is not wired up yet —
   the form currently records fee status only.
 - About page portrait is a styled placeholder frame — drop in a real photo when ready.
