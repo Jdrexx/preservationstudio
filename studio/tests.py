@@ -856,15 +856,16 @@ class TrackCompositionTests(TestCase):
         self.assertIn("studio/js/track", html)
 
     def test_home_scene_links_no_sentimental_value(self):
-        """Only the Intensive and Weekend pages are linked from the home
-        scene; the Sentimental Value series lives in the scene bar and its
-        own scene, not in the opening screen's copy."""
+        """The home scene links the Weekend page only; the Intensive lives in
+        the scene bar and its own scene, and the Sentimental Value series in
+        the scene bar, its scene, and the standalone page — not in the
+        opening screen's copy."""
         html = self.home()
         home_scene = html.split('<section class="scene" id="home"', 1)[1].split(
             "</section>", 1
         )[0]
-        self.assertIn('href="/intensive/"', home_scene)
         self.assertIn('href="/weekend/"', home_scene)
+        self.assertNotIn('href="/intensive/"', home_scene)
         self.assertNotIn("/sentimental-value/", home_scene)
 
     def test_track_controls_are_present(self):
