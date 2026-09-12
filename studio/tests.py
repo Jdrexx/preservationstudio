@@ -829,12 +829,9 @@ class TrackCompositionTests(TestCase):
 
     def test_scene_bar_links_point_at_scenes(self):
         html = self.home()
-        # The Sentimental Value scene exists and is still reachable (arrows,
-        # explore, deep link), but it deliberately has no scene-bar link.
-        for scene_id in ("home", "intensive", "weekend", "about", "contact"):
+        for scene_id in self.NAV:
             with self.subTest(scene=scene_id):
                 self.assertIn('href="#%s" data-scene-link' % scene_id, html)
-        self.assertNotIn('href="#sentimental-value" data-scene-link', html)
 
     def test_document_is_clipped_and_the_track_is_the_only_scroller(self):
         css = self.css()
@@ -855,10 +852,24 @@ class TrackCompositionTests(TestCase):
 
     def test_every_scene_keeps_a_heading_and_a_destination(self):
         html = self.home()
-        self.assertEqual(html.count('class="scene-cta pill"'), len(self.NAV))
+        # The home scene's CTA pill was dropped with its Sentimental Value
+        # link; its destinations now live in the scene-row only.
+        self.assertEqual(html.count('class="scene-cta pill"'), len(self.NAV) - 1)
         self.assertEqual(html.count("<h1"), 1)
         self.assertEqual(html.count("<h2"), len(self.NAV) - 1)
         self.assertIn("studio/js/track", html)
+
+    def test_home_scene_links_no_sentimental_value(self):
+        """Only the Intensive and Weekend pages are linked from the home
+        scene; the Sentimental Value series lives in the scene bar and its
+        own scene, not in the opening screen's copy."""
+        html = self.home()
+        home_scene = html.split('<section class="scene" id="home"', 1)[1].split(
+            "</section>", 1
+        )[0]
+        self.assertIn('href="/intensive/"', home_scene)
+        self.assertIn('href="/weekend/"', home_scene)
+        self.assertNotIn("/sentimental-value/", home_scene)
 
     def test_track_controls_are_present(self):
         html = self.home()
