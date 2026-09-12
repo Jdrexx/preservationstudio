@@ -474,6 +474,19 @@ a:hover {
 .field {
   margin-bottom: 1.35rem;
 }
+
+/* two answer boxes on one line (intensive application name row) */
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 1.2rem;
+}
+
+@media (max-width: 560px) {
+  .field-row {
+    grid-template-columns: 1fr;
+  }
+}
 .field label {
   display: block;
   font-family: var(--mono);

@@ -25,8 +25,10 @@
 
       <div class="form-section">
         <h3>Application</h3>
-        {% include "studio/partials/field.html" with field=form.first_name %}
-        {% include "studio/partials/field.html" with field=form.last_name %}
+        <div class="field-row">
+          {% include "studio/partials/field.html" with field=form.first_name %}
+          {% include "studio/partials/field.html" with field=form.last_name %}
+        </div>
         {% include "studio/partials/field.html" with field=form.email %}
         {% include "studio/partials/field.html" with field=form.phone %}
         {% include "studio/partials/field.html" with field=form.instagram_or_website %}
