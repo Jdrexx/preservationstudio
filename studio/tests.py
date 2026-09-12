@@ -664,7 +664,7 @@ class DesignLibraryTests(TestCase):
         html = self.read(
             "..", "..", "templates", "studio", "partials", "vibe_tuner.html"
         )
-        for kind in ("display", "body", "mono", "hand"):
+        for kind in ("display", "script", "body", "mono", "hand"):
             stacks = (
                 self.js_block("var STACKS =", "\n  };")
                 .split(kind + ": {", 1)[1]
@@ -686,7 +686,7 @@ class DesignLibraryTests(TestCase):
             for name in re.findall(r'\["([a-z\-]+)", "', self.js_block("var SLIDERS ="))
         ]
         self.assertEqual(len(token_names), 16)
-        self.assertEqual(len(slider_names), 7)
+        self.assertEqual(len(slider_names), 8)
 
         chunks = (
             self.read("js", "vibe-tuner.js")
@@ -706,7 +706,7 @@ class DesignLibraryTests(TestCase):
                     )
                 for name in slider_names:
                     self.assertIn('"%s"' % name, sliders)
-                for var in ("--display", "--serif", "--mono", "--hand"):
+                for var in ("--display", "--serif", "--mono", "--hand", "--script"):
                     self.assertIn(var, stacks)
 
     def test_on_butter_is_a_real_token(self):
@@ -731,7 +731,9 @@ class DesignLibraryTests(TestCase):
                     self.assertIn("var(--ls-tune", value)
         # the dial itself: present in the panel, the SLIDERS table, the
         # export block's slider list, and complete in every preset
-        html = self.read("..", "..", "templates", "studio", "partials", "vibe_tuner.html")
+        html = self.read(
+            "..", "..", "templates", "studio", "partials", "vibe_tuner.html"
+        )
         self.assertIn('id="vibe-ls-tune"', html)
         self.assertIn('id="out-ls-tune"', html)
         js = self.read("js", "vibe-tuner.js")
@@ -744,6 +746,51 @@ class DesignLibraryTests(TestCase):
             with self.subTest(preset=preset):
                 sliders = chunk.split("sliders: {", 1)[1].split("},", 1)[0]
                 self.assertIn('"--ls-tune"', sliders)
+
+    def test_tuner_meeting_surface_is_complete(self):
+        """The meeting-day surface: the script (hero/CTA) stack, headline
+        leading dial, live contrast readout, save-a-look, and pre-paint
+        WONK migration all exist and are wired end to end."""
+        site = self.read("css", "site.css")
+        js = self.read("js", "vibe-tuner.js")
+        html = self.read(
+            "..", "..", "templates", "studio", "partials", "vibe_tuner.html"
+        )
+
+        # headline leading: token in :root, calc on h1-h3, slider + preset keys
+        self.assertIn("--lh-tune: 0;", site)
+        self.assertIn("line-height: calc(1.12 + var(--lh-tune, 0));", site)
+        self.assertIn('id="vibe-lh-tune"', html)
+        self.assertIn('"lh-tune"', self.js_block("var SLIDERS ="))
+        self.assertIn("unitless", self.js_block("var SLIDERS ="))
+        self.assertIn('"--lh-tune"', self.js_block("function buildExport"))
+        self.assertEqual(js.count('"--lh-tune": "0"'), 5)
+
+        # script stack: select + STACKS + STACK_VARS + export + every preset
+        self.assertIn('id="vibe-sel-script"', html)
+        self.assertIn("script: {", self.js_block("var STACKS ="))
+        self.assertIn('script: "--script"', js)
+        self.assertIn("--script", self.js_block("function buildExport"))
+        for chunk in js.split('id: "')[1:]:
+            preset = chunk.split('"', 1)[0]
+            with self.subTest(preset=preset):
+                stacks = chunk.split("stacks: {", 1)[1].split("},", 1)[0]
+                self.assertIn('"--script"', stacks)
+
+        # contrast readout
+        self.assertIn('id="vibe-contrast"', html)
+        self.assertIn("CONTRAST_PAIRS", js)
+        self.assertIn("contrastRatio", js)
+        self.assertIn("renderContrast()", js)
+
+        # save-a-look
+        self.assertIn('id="vibe-save-name"', html)
+        self.assertIn('id="vibe-save-btn"', html)
+        self.assertIn('id="vibe-saved"', html)
+        self.assertIn('"ps-vibe-saved-v1"', js)
+
+        # pre-paint WONK migration for pre-fix localStorage saves (in the html pre-paint script)
+        self.assertIn("Math.round(vv) / 100", html)
 
 
 class TemplateHygieneTests(TestCase):
@@ -827,9 +874,12 @@ class TrackCompositionTests(TestCase):
 
     def test_scene_bar_links_point_at_scenes(self):
         html = self.home()
-        for scene_id in self.NAV:
+        # The Sentimental Value scene exists and is still reachable (arrows,
+        # explore, deep link), but it deliberately has no scene-bar link.
+        for scene_id in ("home", "intensive", "weekend", "about", "contact"):
             with self.subTest(scene=scene_id):
                 self.assertIn('href="#%s" data-scene-link' % scene_id, html)
+        self.assertNotIn('href="#sentimental-value" data-scene-link', html)
 
     def test_document_is_clipped_and_the_track_is_the_only_scroller(self):
         css = self.css()
