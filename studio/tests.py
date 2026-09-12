@@ -849,23 +849,23 @@ class TrackCompositionTests(TestCase):
     def test_every_scene_keeps_a_heading_and_a_destination(self):
         html = self.home()
         # The home scene's CTA pill was dropped with its Sentimental Value
-        # link; its destinations now live in the scene-row only.
+        # link; only the Apply pill links out of it now.
         self.assertEqual(html.count('class="scene-cta pill"'), len(self.NAV) - 1)
         self.assertEqual(html.count("<h1"), 1)
         self.assertEqual(html.count("<h2"), len(self.NAV) - 1)
         self.assertIn("studio/js/track", html)
 
-    def test_home_scene_links_no_sentimental_value(self):
-        """The home scene links the Weekend page only; the Intensive lives in
-        the scene bar and its own scene, and the Sentimental Value series in
-        the scene bar, its scene, and the standalone page — not in the
-        opening screen's copy."""
+    def test_home_scene_links_only_the_apply_pill(self):
+        """The home scene links nothing but the Apply CTA; the program pages
+        and the Sentimental Value series live in the scene bar and their own
+        scenes, not in the opening screen's copy."""
         html = self.home()
         home_scene = html.split('<section class="scene" id="home"', 1)[1].split(
             "</section>", 1
         )[0]
-        self.assertIn('href="/weekend/"', home_scene)
+        self.assertIn('href="/intensive/apply/"', home_scene)
         self.assertNotIn('href="/intensive/"', home_scene)
+        self.assertNotIn('href="/weekend/"', home_scene)
         self.assertNotIn("/sentimental-value/", home_scene)
 
     def test_track_controls_are_present(self):
