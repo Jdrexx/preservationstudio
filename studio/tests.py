@@ -1003,6 +1003,22 @@ class WelcomeGateTests(TestCase):
                 self.assertNotIn('id="welcome"', html)
                 self.assertNotIn("welcome.js", html)
 
+    def test_returning_visitors_skip_the_gate(self):
+        """The gate is an entry ritual, not a modal: once dismissed it does
+        not replay on the wordmark return or a refresh within the session."""
+        js = self.js()
+        self.assertIn("sessionStorage", js)
+        self.assertIn("ps-gate-seen", js)
+        self.assertIn("setItem(SEEN_KEY", js)
+
+    def test_wordmark_returns_to_the_opening_scene(self):
+        """The wordmark jumps to the opening scene instead of reloading —
+        and never while the gate is up."""
+        track = (self.static / "js" / "track.js").read_text(encoding="utf-8")
+        self.assertIn(".site-header .wordmark", track)
+        self.assertIn("goTo(0)", track)
+        self.assertIn('contains("is-welcome")', track)
+
     def test_script_is_loaded_after_the_track(self):
         html = self.home()
         self.assertIn("studio/js/welcome", html)

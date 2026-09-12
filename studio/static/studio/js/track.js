@@ -144,6 +144,19 @@
     });
   });
 
+  // The wordmark returns to the opening scene without reloading the page —
+  // so the welcome gate does not replay on the way home. The gate still
+  // owns the page while it is up, so it is ignored until dismissed.
+  var wordmark = document.querySelector(".site-header .wordmark");
+  if (wordmark) {
+    wordmark.addEventListener("click", function (e) {
+      if (document.body.classList.contains("is-welcome")) return;
+      e.preventDefault();
+      goTo(0);
+      setHash(scenes[0].id);
+    });
+  }
+
   document.querySelectorAll("[data-track-prev]").forEach(function (b) {
     b.addEventListener("click", function () {
       step(-1, false);

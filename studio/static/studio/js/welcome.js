@@ -47,6 +47,23 @@
   var FADE_MS = 600;
   var open = true;
 
+  // The gate is an entry ritual, not a modal: once a visitor has dismissed
+  // it, coming back to the track (wordmark, back button, refresh) skips
+  // straight in for the rest of the session.
+  var SEEN_KEY = "ps-gate-seen";
+  var seen = false;
+  try {
+    seen = window.sessionStorage && sessionStorage.getItem(SEEN_KEY) === "1";
+  } catch (err) {
+    seen = false;
+  }
+  if (seen) {
+    if (gate.parentNode) gate.parentNode.removeChild(gate);
+    var first = document.querySelector("[data-scene-link]");
+    if (first) first.focus({ preventScroll: true });
+    return;
+  }
+
   // Tell the stylesheet the script is alive: this cancels the failsafe
   // animation that would otherwise clear the gate on its own.
   gate.classList.add("is-live");
@@ -96,6 +113,12 @@
   function finish() {
     if (gate.parentNode) gate.parentNode.removeChild(gate);
     body.classList.remove("is-welcome");
+    // The ritual is over for this session: returning visitors skip it.
+    try {
+      window.sessionStorage.setItem(SEEN_KEY, "1");
+    } catch (err) {
+      /* storage disabled — the gate will simply show again, acceptable */
+    }
     // Land focus somewhere real, so the track is usable from the keyboard.
     var first = document.querySelector("[data-scene-link]");
     if (first) first.focus({ preventScroll: true });
