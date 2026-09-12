@@ -140,8 +140,6 @@ class HomePageTests(TestCase):
     def test_brief_intro_copy_present(self):
         resp = client().get(reverse("studio:home"))
         self.assertContains(resp, "Come out knowing how to frame the things")
-        self.assertContains(resp, "The photo that made it through three moves.")
-        self.assertContains(resp, "The letter you've read a hundred times.")
 
     def test_offering_cards_present(self):
         resp = client().get(reverse("studio:home"))
@@ -731,9 +729,7 @@ class DesignLibraryTests(TestCase):
                     self.assertIn("var(--ls-tune", value)
         # the dial itself: present in the panel, the SLIDERS table, the
         # export block's slider list, and complete in every preset
-        html = self.read(
-            "..", "..", "templates", "studio", "partials", "vibe_tuner.html"
-        )
+        html = self.read("..", "..", "templates", "studio", "partials", "vibe_tuner.html")
         self.assertIn('id="vibe-ls-tune"', html)
         self.assertIn('id="out-ls-tune"', html)
         js = self.read("js", "vibe-tuner.js")

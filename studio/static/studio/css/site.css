@@ -1950,44 +1950,6 @@ body.is-track .site-header .site-nav {
   color: var(--ink);
 }
 
-/* The floating cards: the reference scatters quote cards over the scene. */
-.quote-float {
-  position: absolute;
-  z-index: 2;
-  width: min(15.5rem, 32vw);
-  margin: 0;
-  padding: 1rem 1.1rem;
-  background: var(--card);
-  border: 1px solid var(--rule);
-  box-shadow: 0 10px 30px rgba(36, 20, 12, 0.07);
-}
-
-.quote-float blockquote {
-  font-family: var(--serif);
-  font-size: 0.88rem;
-  line-height: 1.45;
-  color: var(--ink);
-}
-
-.quote-float figcaption {
-  margin-top: 0.5rem;
-  font-family: var(--mono);
-  font-size: 0.55rem;
-  letter-spacing: calc(0.16em + var(--ls-tune, 0em));
-  text-transform: uppercase;
-  color: var(--ink-soft);
-}
-
-.quote-float-a {
-  left: clamp(1.3rem, 4vw, 4.5rem);
-  bottom: clamp(10rem, 20vh, 14rem);
-}
-
-.quote-float-b {
-  right: clamp(1.3rem, 4vw, 4.5rem);
-  bottom: clamp(12rem, 24vh, 17rem);
-}
-
 /* The per-scene pill the reference keeps at the bottom-right. */
 .scene-cta {
   position: absolute;
@@ -2174,9 +2136,6 @@ body.is-track .site-header .site-nav {
 @media (max-width: 900px) {
   .scene {
     padding: 5.5rem 1.3rem 9rem;
-  }
-  .quote-float {
-    display: none;
   }
   .scene-cta {
     right: 1.3rem;
