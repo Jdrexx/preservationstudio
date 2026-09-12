@@ -191,26 +191,6 @@ a:hover {
   color: var(--butter);
 }
 
-.site-nav {
-  display: flex;
-  gap: 1.4rem;
-  font-family: var(--mono);
-  font-size: 0.74rem;
-  text-transform: uppercase;
-  letter-spacing: calc(0.12em + var(--ls-tune, 0em));
-  flex-wrap: wrap;
-}
-.site-nav a {
-  text-decoration: none;
-  color: var(--ink-soft);
-  padding-block: 0.2rem;
-}
-.site-nav a:hover {
-  color: var(--ink);
-  text-decoration: underline;
-  text-underline-offset: 4px;
-}
-
 /* ---------- Sections ---------- */
 
 .section {
@@ -879,9 +859,6 @@ a:hover {
     flex-direction: column;
     align-items: flex-start;
   }
-  .site-nav {
-    gap: 1rem;
-  }
   .hero {
     padding-block: 3.5rem 2.8rem;
   }
@@ -982,11 +959,6 @@ a:hover {
 .site-header {
   border-top: 4px solid var(--plum);
 }
-.site-nav a[aria-current="page"] {
-  color: var(--butter);
-  font-weight: 700;
-}
-
 /* ---------- Hero: split editorial layout ---------- */
 
 .hero {
@@ -1674,32 +1646,6 @@ a:hover {
   letter-spacing: calc(0.01em + var(--ls-tune, 0em));
 }
 
-.site-header .header-right {
-  display: flex;
-  align-items: center;
-  gap: clamp(1rem, 2.4vw, 2.2rem);
-}
-
-.site-header .site-nav {
-  display: flex;
-  gap: clamp(0.9rem, 1.8vw, 1.7rem);
-  font-family: var(--mono);
-  font-size: 0.66rem;
-  letter-spacing: calc(0.15em + var(--ls-tune, 0em));
-  text-transform: uppercase;
-  flex-wrap: wrap;
-}
-
-.site-header .site-nav a {
-  color: var(--ink-soft);
-  text-decoration: none;
-}
-
-.site-header .site-nav a:hover,
-.site-header .site-nav a[aria-current="page"] {
-  color: var(--ink);
-}
-
 /* ---------- Pills (the reference's button vocabulary) ---------- */
 
 .pill {
@@ -1798,12 +1744,6 @@ body.is-track {
 }
 
 body.is-track .site-footer {
-  display: none;
-}
-
-/* Inside the track page the nav lives in the scene bar, so the header keeps
-   only its brand + pill — the reference's top bar. */
-body.is-track .site-header .site-nav {
   display: none;
 }
 
